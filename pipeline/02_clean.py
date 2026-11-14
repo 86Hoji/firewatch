@@ -115,6 +115,14 @@ def run_country(cfg, man, country):
         mask = con.execute("SELECT * FROM static_mask").df()
         mask.to_parquet(REF / "static_mask" / f"{country}.parquet", index=False)
         by_platform = dict(con.execute("SELECT platform, count(*) FROM clean GROUP BY 1 ORDER BY 1").fetchall())
+        daily = con.execute(ingest.daily_counts_sql("clean")).df()
+        (AGG / "country_day").mkdir(parents=True, exist_ok=True)
+        daily.to_parquet(AGG / "country_day" / f"{country}.parquet", index=False)
+        thr, outage = ingest.outage_threshold(cfg, country, daily)
+        outage["outage_days"] = int(con.execute(f"SELECT count(*) FROM ({ingest.outage_days_sql('clean', thr)})")
+                                    .fetchall()[0][0])
+        log.info("  S-NPP outage threshold %d (typical day %.0f NOAA-20 detections) -> %d outage days",
+                 thr, outage["typical_daily_noaa20"], outage["outage_days"])
         span = con.execute("SELECT min(date), max(date) FROM clean").fetchall()[0]
         if level == "cell":
             out = PROCESSED / "hotspots" / f"country={country}"
@@ -124,7 +132,6 @@ def run_country(cfg, man, country):
             con.execute(f"""COPY (SELECT {cols} FROM clean ORDER BY src_order) TO '{out.as_posix()}'
                             (FORMAT parquet, PARTITION_BY (sensor, year))""")
         else:
-            thr = cfg["calibration"]["snpp_gap_min_noaa20"]
             cm = con.execute(ingest.country_month_query("clean", thr)).df()
             cm.insert(0, "country", country)
             (AGG / "country_month").mkdir(parents=True, exist_ok=True)
@@ -133,7 +140,7 @@ def run_country(cfg, man, country):
         con.close()
         ingest.remove_work(path)
     return {"role": files["role"].iloc[0], "level": level, "files": per_file, "steps": steps,
-            "static_mask_cells": len(mask), "rows_by_platform": by_platform,
+            "static_mask_cells": len(mask), "rows_by_platform": by_platform, "outage": outage,
             "first_date": str(span[0]), "last_date": str(span[1])}
 
 

@@ -71,6 +71,159 @@ agricultural burns (UZ, TM, IND, KG/TJ) need a large one, because VIIRS' finer p
 badly, and whether a local refit fixes it.
 
 ### Not done yet / known
-* The S-NPP outage threshold (20 NOAA-20 detections per day) is still one number for all countries; KGZ/TJK have
-  0–1 outage days because of it. To revisit in C3/C4.
+* ~~The S-NPP outage threshold is one number for all countries~~ — fixed after C1, see "Outage threshold per country".
 * `data/raw/modis/` (yearly MODIS zips) is not used.
+
+## Outage threshold per country (asked at C1 review)
+
+An S-NPP "outage day" = S-NPP reported nothing while NOAA-20 saw at least *threshold* detections in the same country
+(so S-NPP was off, not "no fires"). One fixed threshold (20) is right for Kazakhstan but means "never" for Kyrgyzstan
+(a typical day has 2 detections) and "almost always" for Australia (2,228). Now:
+
+`threshold = max(5, round(20 × typical_c / typical_KAZ))`, typical = median daily NOAA-20 detections on days with
+at least one detection, since 2018-04-01 (`config.yaml: outage`). Kazakhstan is unchanged (20), so Phase B is unchanged.
+
+| country | typical day | threshold | outage days |
+|---|---|---|---|
+| KAZ | 87 | 20 | 56 |
+| UZB | 18 | 5 | 64 |
+| TKM | 18 | 5 | 64 |
+| KGZ | 2 | 5 (floor) | 20 |
+| TJK | 2 | 5 (floor) | 29 |
+| PRT | 4 | 5 (floor) | 60 |
+| IND | 653 | 150 | 27 |
+| USA | 758 | 174 | 61 |
+| AUS | 2,228 | 512 | 62 |
+
+The floor of 5 stops one stray detection from declaring an outage. Most countries land on 55–65 days, as expected:
+S-NPP outages are satellite-wide, so they should be the *same days* everywhere (cross-check below).
+
+**Cross-check** (`pipeline/outage_check.py` → `reports/outage_check.json`). S-NPP outages hit the whole satellite,
+so a real outage day must be an outage everywhere. Reference: 59 "global" days since 2018-04 where S-NPP saw nothing
+in any of 9 countries while NOAA-20 saw fires in at least half of them (Brazil was still re-ingesting). For each
+country, "found" = how many global days its rule catches, "true" = how many of its outage days are global:
+
+| country | fixed 20: days / found / true | per country: days / found / true |
+|---|---|---|
+| KAZ | 56 / 88% / 93% | same (threshold 20) |
+| USA | 61 / 100% / 97% | same |
+| UZB | 27 / **39%** / 85% | 64 / **90%** / 83% |
+| TKM | 37 / **51%** / 81% | 64 / **86%** / 80% |
+| AUS | 65 / 100% / 91% | 62 / 95% / 90% |
+| IND | 49 / 78% / 94% | 27 / **46%** / 100% |
+| PRT | 14 / 22% / 93% | 60 / 42% / **42%** |
+| KGZ | 1 / 2% / 100% | 20 / 14% / **40%** |
+| TJK | 0 / 0% / — | 29 / 7% / **14%** |
+
+What this says, honestly:
+* **Works** for mid-size countries: UZ and TM now catch ~90% of real outages instead of 40–50%, without more
+  false ones. KZ/USA unchanged; AUS about the same.
+* **Too strict for India**: fires there are very seasonal, so the "typical fire day" (653) is a peak-season number;
+  off-season outages have fewer NOAA-20 detections than 150 and are missed.
+* **Cannot work for tiny countries** (KGZ, TJK, PRT): with 2–4 detections on a typical day, "S-NPP 0 while NOAA-20 ≥ 5"
+  happens by chance (different overpass times, clouds), so 60–86% of their "outage days" are fake. No threshold fixes
+  this — there is too little signal per country.
+
+**Recommendation (not applied, needs your OK):** since outages are satellite-wide, use the global outage-day list
+(computed from all countries together) for every country, and keep the per-country rule only as a fallback for dates
+before the global list or when a country is processed alone. Impact today is small: KGZ/TJK are totals-only (annual
+check in C4), PRT is transfer-only, and the train/test countries (KZ, UZ, TM) are already close to the global list.
+
+## C2 — static-source mask, honest test
+
+Question: FIRMS NRT has no `type` column (gas flares / industry = type 2), so for recent data we drop "static" cells
+with our own mask. Does that mask work on data it has never seen?
+
+Method (`pipeline/static_mask_check.py`, report `reports/static_mask_check.md`): build the mask **only from archive
+rows before 2025-01-01**, then test on archive rows 2025-01 … 2026-07, where the true `type` is known.
+
+| country | precision | recall | what that means |
+|---|---|---|---|
+| KAZ | 88.6% | 96.1% | catches almost all flares; ~1 in 9 masked detections was a real fire |
+| UZB | 84.2% | 76.4% | misses a quarter of type-2 detections (see below) |
+| TKM | 82.3% | 95.0% | good recall, but 1 in 6 masked detections was a real fire |
+
+If the mask **replaced** `type` (monthly cell-day totals, 2025-01…2026-07): KAZ −3% (S-NPP, median month 7%),
+TKM −18% (VIIRS: the "persistent" rule removes real recurring agricultural fires), UZB MODIS +35%.
+
+**Finding — a new heat source in Uzbekistan.** The UZB miss is not a mask bug: a site near 38.1°N 67.3°E starts in
+2025 (14,644 VIIRS detections in 2025–26). It did not exist before 2025, so no mask built from history can know it.
+FIRMS itself disagrees between sensors there: MODIS calls 78% of it type 2, VIIRS 92% type 0. It passes the VIIRS type
+filter and inflates UZ 2025–26 VIIRS counts — C4 must keep this in mind (UZ test period).
+
+**Recommendation (not applied — it would change KZ cleaning counts, so it needs your OK):** use only the "type-2
+share" rule (precision 92% on KZ, totals within ±2%, TKM −6% instead of −18%) and rebuild the mask from the most
+recent years on every data refresh, so new sites like the Uzbek one are picked up.
+
+## C3 — regions, intervals at the right level, one source of truth
+
+### ADM1 per cell (`pipeline/regions.py`)
+Each H3 cell gets an oblast from `data/boundaries/{ISO3}_ADM1.geojson`: centre inside a polygon → that region; else
+the nearest region within 10 km (border rivers, simplified coastlines); else `outside`. KZ: 240,798 inside,
+1,217 nearest, 24 outside (`reports/adm1_assignment.json`). Columns `adm1_id/adm1_name/adm1_method/adm1_dist_km` are
+in `cell_month_all.parquet`. Leave-one-region-out (T3) now uses real oblasts, not H3 res-1 hexagons, and counts
+months with zero fires too.
+
+### The interval bug and the fix (`pipeline/intervals.py`)
+The baseline sized the 90% interval by the **country** prediction and then applied it to any area. A country month
+of 2,000 cell-days has a small relative error; an oblast month of 30 does not. Result: only **44%** of region-months
+fell inside the "90%" interval.
+
+Fix — size the interval at the level being predicted (conformal: edges = percentiles of real held-out errors):
+* **country**: as before (leave-one-year-out errors, relative width shrinks with size);
+* **region**: leave-one-region-out errors `log(1+actual) − log(1+pred)`, percentiles computed **separately for
+  predictions of similar size** (bins 0, ≤5, 5–20, 20–100, 100–500, >500 cell-days/month; `config.yaml: intervals`).
+
+All coverage numbers are cross-fitted: the interval for a held-out region is fitted on the *other* regions only.
+
+| test | before | after |
+|---|---|---|
+| T3 leave-one-region-out, all region-months | 44% | **91%** |
+| median region | 46% | 95% |
+| worst regions (Kyzylorda, Aktobe, Mangystau) | 16–29% | 73–74% |
+| T1 backcast, country | 94% | 94% |
+| T2 holdout 2020+, country | 83% | 83% (drift, see Phase B) |
+| T4 leave-one-year-out, country | 90% | 90% |
+
+**Finding — small predictions are biased low.** 504 of 1,536 region-months have prediction 0 (MODIS saw nothing),
+yet VIIRS saw fires in 56% of them; the interval edges for small predictions are shifted up (a "0" prediction gets
+[0, 14]). This is physics, not a bug: VIIRS' 375 m pixels see small fires MODIS cannot — the same reason the
+VIIRS/MODIS ratio is higher in small-fire countries (C1 table). The interval reports it honestly.
+
+### One source of truth
+`experiments.py` (model selection) writes `reports/model_card.json`: selected model, its link/columns, production
+name, train country, test scores, the single LORO number and both interval parameter sets. `05_calibrate`,
+`06_harmonize`, `07_validate` read it; `config.yaml` no longer has `selected_model` / `interval_method` (deleted, so
+nobody can hand-type a different one). 06 refuses to run if the card and the fitted model disagree. The per-region
+error is computed once (experiments T3) and 07 reads it: **18.5%** median MAE over the 13 oblasts with ≥1% of MODIS
+activity — the same number in `model_card.json`, `model_comparison.md` and `validation.md`.
+
+Selected: **C2 — Terra∪Aqua, Poisson log-link** (score 10.63: T1 6.9%, T3 18.5%, T4 6.5%; C1 10.97, C0 11.79).
+
+### Per-region error (KZ, leave-one-region-out 2012–2019, selected model)
+
+| region | share of MODIS | MAE % | bias % | coverage before → after |
+|---|---|---|---|---|
+| Kostanay | 12.7% | 10.0 | +0.2 | 67% → 97% |
+| Karaganda | 12.2% | 12.9 | +2.3 | 49% → 95% |
+| North Kazakhstan | 12.2% | 10.2 | +2.6 | 60% → 96% |
+| Akmola | 10.4% | 12.0 | +5.5 | 64% → 100% |
+| Kyzylorda | 10.1% | 21.8 | +1.5 | 29% → 73% |
+| Almaty Region | 8.3% | 13.0 | −4.0 | 58% → 97% |
+| Aktobe | 7.7% | 18.5 | −15.1 | 23% → 74% |
+| East Kazakhstan | 7.7% | 14.1 | −1.3 | 52% → 91% |
+| West Kazakhstan | 6.0% | 19.9 | +13.5 | 36% → 97% |
+| Pavlodar | 4.2% | 20.9 | −15.2 | 21% → 92% |
+| Jambyl | 3.8% | 18.9 | +6.7 | 44% → 91% |
+| South Kazakhstan | 2.5% | 24.3 | −7.4 | 49% → 91% |
+| Atyrau | 2.1% | 24.8 | −7.6 | 32% → 95% |
+| Mangystau* | 0.1% | 84.2 | −83.2 | 16% → 74% |
+| Almaty city* | 0.0% | 84.9 | −82.8 | 35% → 100% |
+| Astana city* | 0.0% | 70.7 | −48.4 | 65% → 99% |
+
+\* < 1% of activity: shown, not in the median (a few fires a year; percentage errors are meaningless there).
+The geoBoundaries file has the 16 pre-2022 units (no Abai/Jetisu/Ulytau) — fine for 2012–2019.
+
+### Regression
+KZ ingestion, cleaning, hotspots, cell-months, and T1/T2/T4 of all 8 candidate models: identical to Phase B.
+Changed by design (excluded in `regression_check.py`): LORO and intervals. 36 tests pass.

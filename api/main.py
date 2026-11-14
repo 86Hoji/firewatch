@@ -56,8 +56,12 @@ def load_state(agg=AGG, ref=REF, processed=PROCESSED):
     # S-NPP outage days (same rule as 03_grid): NOAA-20 points stand in for S-NPP on the map
     try:
         src = f"read_parquet('{S.hotspots}/**/*.parquet', hive_partitioning = true)"
-        S.gap_dates = [str(d) for (d,) in S.con.execute(
-            outage_days_sql(src, CFG["calibration"]["snpp_gap_min_noaa20"])).fetchall()]
+        try:
+            from pipeline.ingest import outage_threshold
+            thr = outage_threshold(CFG, CFG["train_country"])[0]
+        except SystemExit:
+            thr = CFG["outage"]["reference_threshold"]
+        S.gap_dates = [str(d) for (d,) in S.con.execute(outage_days_sql(src, thr)).fetchall()]
     except duckdb.Error:
         S.gap_dates = []
     S.regions = {}

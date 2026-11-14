@@ -1,0 +1,56 @@
+{
+  "KAZ": {
+    "cells": {
+      "inside": 240798,
+      "nearest": 1217,
+      "outside": 24
+    },
+    "modis_cell_days": {
+      "inside": 648966,
+      "nearest": 3029,
+      "outside": 41
+    }
+  },
+  "UZB": {
+    "cells": {
+      "inside": 15409,
+      "nearest": 443,
+      "outside": 2
+    },
+    "modis_cell_days": {
+      "inside": 40263,
+      "nearest": 903,
+      "outside": 2
+    }
+  },
+  "TKM": {
+    "cells": {
+      "inside": 14233,
+      "nearest": 253
+    },
+    "modis_cell_days": {
+      "inside": 35325,
+      "nearest": 651
+    }
+  },
+  "KGZ": {
+    "cells": {
+      "inside": 5059,
+      "nearest": 135
+    },
+    "modis_cell_days": {
+      "inside": 9496,
+      "nearest": 285
+    }
+  },
+  "TJK": {
+    "cells": {
+      "inside": 2595,
+      "nearest": 169
+    },
+    "modis_cell_days": {
+      "inside": 2297,
+      "nearest": 224
+    }
+  }
+}

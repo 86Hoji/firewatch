@@ -1,0 +1,10 @@
+=== 07_validate
+2026-11-15 01:09:50,109 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 01:09:50,674 validate INFO temporal holdout
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: overflow encountered in exp
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: invalid value encountered in multiply
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+2026-11-15 01:09:54,808 validate INFO jump test
+2026-11-15 01:10:00,094 validate INFO wrote reports/validation.md
+=== 07_validate done in 17.0s

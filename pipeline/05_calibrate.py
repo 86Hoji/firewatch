@@ -1,4 +1,6 @@
-"""Fit MODIS->VIIRS S-NPP coefficients (ratio and log-log), choose model on the temporal holdout."""
+"""Fit MODIS->VIIRS S-NPP coefficients for every candidate; the production model comes from reports/model_card.json."""
+import json
+
 import numpy as np
 import pandas as pd
 
@@ -26,6 +28,14 @@ def load_cell_month(country=None, cfg=None):
         cm["land_cover"] = "all"
         log.info("no land cover file, strata = month/season/region")
     return cm
+
+
+def read_model_card():
+    """The selected model, written by pipeline/experiments.py (single source of truth)."""
+    p = REPORTS / "model_card.json"
+    if not p.exists():
+        raise SystemExit("reports/model_card.json missing: run `python -m pipeline.run_all experiments` first")
+    return json.loads(p.read_text(encoding="utf-8"))
 
 
 def last_full_year(cm):
@@ -72,7 +82,7 @@ def main():
     coefs, draws = fit_all(cm, cfg)
     ho = holdout_eval(cm, coefs, draws, cfg, y1)
     v1 = min(ho, key=lambda k: ho[k]["mae_pct_of_mean"])
-    best = cfg["calibration"].get("selected_model") or v1
+    best = read_model_card()["production_model"]
     for k, v in ho.items():
         log.info("holdout %s: MAE%%=%.1f bias=%.1f%% R=%.3f PI cov=%.0f%% CI cov=%.0f%%", k, v["mae_pct_of_mean"],
                  v["bias_total_pct"], v["pearson_r"], 100 * v["coverage"], 100 * v["coverage_ci"])
@@ -84,9 +94,9 @@ def main():
             for m, dd in draws.items() for k, v in dd.items() if len(v)]
     pd.concat(rows, ignore_index=True).to_parquet(AGG / "coefficient_draws.parquet", index=False)
     write_json(REPORTS / "model_selection.json", {
-        "criterion": "v2: reports/model_protocol.md (backcast, LORO, LOYO); v1: holdout MAE % of mean",
+        "criterion": "reports/model_card.json (experiments.py: backcast, ADM1 LORO, LOYO); v1: holdout MAE % of mean",
         "holdout_years": [cfg["calibration"]["holdout_start"], y1], "results": ho,
-        "selected": best, "v1_choice": v1, "interval_method": cfg["calibration"].get("interval_method", "season")})
+        "selected": best, "v1_choice": v1, "interval_method": "negative_binomial (see model_card.json)"})
 
 
 if __name__ == "__main__":

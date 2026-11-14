@@ -1,5 +1,5 @@
 {
-  "criterion": "v2: reports/model_protocol.md (backcast, LORO, LOYO); v1: holdout MAE % of mean",
+  "criterion": "reports/model_card.json (experiments.py: backcast, ADM1 LORO, LOYO); v1: holdout MAE % of mean",
   "holdout_years": [
     2020,
     2025
@@ -41,5 +41,5 @@
   },
   "selected": "poisson_log",
   "v1_choice": "poisson_log",
-  "interval_method": "hetero"
+  "interval_method": "negative_binomial (see model_card.json)"
 }

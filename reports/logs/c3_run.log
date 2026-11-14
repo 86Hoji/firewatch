@@ -1,0 +1,46 @@
+=== experiments
+2026-11-15 01:02:42,171 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 01:02:48,026 experiments INFO C0 Terra\u222aAqua, ratio                      score 11.79 | T1 8.9 T3 18.5 T4 8.0 | T2 14.8 bias -9.3
+2026-11-15 01:02:52,755 experiments INFO C1 Terra\u222aAqua, OLS log1p (v1)             score 10.97 | T1 7.8 T3 18.8 T4 6.4 | T2 10.6 bias -2.3
+2026-11-15 01:02:58,752 experiments INFO C2 Terra\u222aAqua, Poisson log-link           score 10.63 | T1 6.9 T3 18.5 T4 6.5 | T2 10.3 bias -2.2
+2026-11-15 01:03:04,275 experiments INFO C3 Terra\u222aAqua day+night, ratio            score 12.24 | T1 7.9 T3 21.3 T4 7.5 | T2 13.3 bias -4.1
+2026-11-15 01:03:08,519 experiments INFO C4 Aqua, ratio                            score 14.62 | T1 10.8 T3 23.1 T4 10.0 | T2 18.3 bias -12.8
+2026-11-15 01:03:14,169 experiments INFO C5 Aqua day+night, ratio                  score 14.59 | T1 10.0 T3 24.1 T4 9.6 | T2 18.3 bias -7.6
+2026-11-15 01:03:20,757 experiments INFO C6 Aqua, Poisson log-link                 score 14.71 | T1 11.7 T3 21.3 T4 11.1 | T2 16.2 bias -2.8
+2026-11-15 01:03:32,538 experiments INFO C7 Aqua day+night, Poisson log-link       score 15.77 | T1 12.5 T3 23.5 T4 11.3 | T2 16.4 bias 2.1
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: overflow encountered in exp
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: invalid value encountered in multiply
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+2026-11-15 01:03:34,324 experiments INFO coverage before {'T3_loro_region': 0.438, 'T1_backcast_country': 0.938, 'T2_holdout_country': 0.833, 'T4_loyo_country': 0.896}
+2026-11-15 01:03:34,324 experiments INFO coverage after  {'T3_loro_region': 0.912, 'T1_backcast_country': 0.938, 'T2_holdout_country': 0.833, 'T4_loyo_country': 0.896}
+2026-11-15 01:03:34,326 experiments INFO selected C2 -> production model poisson_log; LORO MAE 18.5%
+=== experiments done in 57.8s
+=== 05_calibrate
+2026-11-15 01:03:34,660 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 01:08:43,553 calibrate INFO holdout ratio: MAE%=14.8 bias=-9.3% R=0.979 PI cov=72% CI cov=24%
+2026-11-15 01:08:43,553 calibrate INFO holdout loglog: MAE%=10.6 bias=-2.3% R=0.983 PI cov=85% CI cov=24%
+2026-11-15 01:08:43,553 calibrate INFO holdout poisson_log: MAE%=10.3 bias=-2.2% R=0.984 PI cov=83% CI cov=19%
+2026-11-15 01:08:43,553 calibrate INFO selected model: poisson_log
+=== 05_calibrate done in 309.3s
+=== 06_harmonize
+2026-11-15 01:08:44,057 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 01:08:49,016 harmonize INFO cell-months in: 855761, out: 855761; pre-2012 MODIS 399562 -> harmonized 687877
+=== 06_harmonize done in 5.5s
+=== 07_validate
+2026-11-15 01:08:51,310 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 01:08:51,977 validate INFO temporal holdout
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\hp\OneDrive\Документы\firewatch\pipeline\run_all.py", line 19, in <module>
+    main(sys.argv[1:])
+  File "C:\Users\hp\OneDrive\Документы\firewatch\pipeline\run_all.py", line 14, in main
+    importlib.import_module(f"pipeline.{s}").main()
+  File "C:\Users\hp\OneDrive\Документы\firewatch\pipeline\07_validate.py", line 385, in main
+    M["temporal_holdout"] = temporal_holdout(cm, coefs, draws, cfg, y1, best)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\OneDrive\Документы\firewatch\pipeline\07_validate.py", line 48, in temporal_holdout
+    lo, hi = intervals.bounds(ho_best["pred"], iv["country"])
+             ^^^^^^^^^
+NameError: name 'intervals' is not defined

@@ -95,6 +95,13 @@
         "SNPP": 1405957,
         "Terra": 563897
       },
+      "outage": {
+        "threshold": 20,
+        "typical_daily_noaa20": 87.0,
+        "reference_country": "KAZ",
+        "reference_typical_daily_noaa20": 87.0,
+        "outage_days": 56
+      },
       "first_date": "2000-11-01",
       "last_date": "2026-11-13"
     },
@@ -188,6 +195,13 @@
         "NOAA21": 32999,
         "SNPP": 140502,
         "Terra": 26069
+      },
+      "outage": {
+        "threshold": 5,
+        "typical_daily_noaa20": 18.0,
+        "reference_country": "KAZ",
+        "reference_typical_daily_noaa20": 87.0,
+        "outage_days": 64
       },
       "first_date": "2000-11-02",
       "last_date": "2026-11-13"
@@ -283,6 +297,13 @@
         "SNPP": 141151,
         "Terra": 20045
       },
+      "outage": {
+        "threshold": 5,
+        "typical_daily_noaa20": 18.0,
+        "reference_country": "KAZ",
+        "reference_typical_daily_noaa20": 87.0,
+        "outage_days": 64
+      },
       "first_date": "2000-11-02",
       "last_date": "2026-11-13"
     },
@@ -376,6 +397,13 @@
         "NOAA21": 3895,
         "SNPP": 16605,
         "Terra": 5699
+      },
+      "outage": {
+        "threshold": 5,
+        "typical_daily_noaa20": 2.0,
+        "reference_country": "KAZ",
+        "reference_typical_daily_noaa20": 87.0,
+        "outage_days": 20
       },
       "first_date": "2000-11-02",
       "last_date": "2026-11-13"
@@ -471,6 +499,13 @@
         "SNPP": 6955,
         "Terra": 1423
       },
+      "outage": {
+        "threshold": 5,
+        "typical_daily_noaa20": 2.0,
+        "reference_country": "KAZ",
+        "reference_typical_daily_noaa20": 87.0,
+        "outage_days": 29
+      },
       "first_date": "2000-11-01",
       "last_date": "2026-11-07"
     },
@@ -564,6 +599,13 @@
         "NOAA21": 26765,
         "SNPP": 105549,
         "Terra": 36471
+      },
+      "outage": {
+        "threshold": 5,
+        "typical_daily_noaa20": 4.0,
+        "reference_country": "KAZ",
+        "reference_typical_daily_noaa20": 87.0,
+        "outage_days": 60
       },
       "first_date": "2000-11-06",
       "last_date": "2026-11-13"
@@ -659,6 +701,13 @@
         "SNPP": 6319301,
         "Terra": 517736
       },
+      "outage": {
+        "threshold": 150,
+        "typical_daily_noaa20": 653.0,
+        "reference_country": "KAZ",
+        "reference_typical_daily_noaa20": 87.0,
+        "outage_days": 27
+      },
       "first_date": "2000-11-01",
       "last_date": "2026-11-13"
     },
@@ -753,6 +802,13 @@
         "SNPP": 6022891,
         "Terra": 1333091
       },
+      "outage": {
+        "threshold": 174,
+        "typical_daily_noaa20": 758.0,
+        "reference_country": "KAZ",
+        "reference_typical_daily_noaa20": 87.0,
+        "outage_days": 61
+      },
       "first_date": "2000-11-01",
       "last_date": "2026-11-13"
     },
@@ -846,6 +902,13 @@
         "NOAA21": 4301865,
         "SNPP": 15894877,
         "Terra": 2814720
+      },
+      "outage": {
+        "threshold": 512,
+        "typical_daily_noaa20": 2228.5,
+        "reference_country": "KAZ",
+        "reference_typical_daily_noaa20": 87.0,
+        "outage_days": 62
       },
       "first_date": "2000-11-01",
       "last_date": "2026-11-13"

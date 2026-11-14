@@ -12,11 +12,12 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 import pandas as pd  # noqa: E402
 
-from pipeline import ingest  # noqa: E402
-from pipeline.common import AGG, PROCESSED, REPORTS, ensure_dirs, get_logger, load_config  # noqa: E402
+from pipeline import ingest, regions  # noqa: E402
+from pipeline.common import AGG, PROCESSED, REPORTS, ensure_dirs, get_logger, load_config, write_json  # noqa: E402
 from pipeline.ingest import GROUPS, cell_month_query, outage_fill  # noqa: E402,F401  (re-exported for tests)
 
 log = get_logger("grid")
+ADM1_LOG = {}
 
 
 def hotspots_src(country):
@@ -26,7 +27,7 @@ def hotspots_src(country):
 
 def build(con, cfg, country):
     src = hotspots_src(country)
-    thr = cfg["calibration"]["snpp_gap_min_noaa20"]
+    thr, _ = ingest.outage_threshold(cfg, country)
     n_in = con.execute(f"SELECT count(*) FROM {src}").fetchall()[0][0]
     cm = con.execute(cell_month_query(src)).df()
     # days when S-NPP saw nothing country-wide but NOAA-20 did -> outage, filled later from NOAA-20
@@ -34,7 +35,11 @@ def build(con, cfg, country):
     cm = cm.merge(gap, on=["h3_cell", "year", "month"], how="left")
     cm["n_viirs_noaa20_gap"] = cm["n_viirs_noaa20_gap"].fillna(0).astype("int64")
     cells = ingest.cells_table(con, cm["h3_cell"].unique(), cfg["grid"]["coarse_res"])
+    adm = regions.assign(cfg, country, cells)
+    cells = cells.merge(adm[["h3_cell", "adm1_id", "adm1_name", "adm1_method", "adm1_dist_km"]], on="h3_cell")
     cm = cm.merge(cells, on="h3_cell")
+    ADM1_LOG[country] = {"cells": regions.summary(adm),
+                         "modis_cell_days": cm.groupby("adm1_method")["n_modis"].sum().astype(int).to_dict()}
     cm.insert(0, "country", country)
     cmon = con.execute(ingest.country_month_query(src, thr)).df()
     cmon.insert(0, "country", country)
@@ -79,6 +84,8 @@ def main():
     allcm.to_parquet(AGG / "cell_month_all.parquet", index=False)
     train = cfg["train_country"]
     plot_raw(allcm[allcm["country"] == train], train)
+    write_json(REPORTS / "adm1_assignment.json", ADM1_LOG)
+    log.info("ADM1 assignment: %s", ADM1_LOG)
     log.info("wrote cell_month_all.parquet (%d rows, %d countries)", len(allcm), allcm["country"].nunique())
 
 

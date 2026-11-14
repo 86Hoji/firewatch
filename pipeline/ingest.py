@@ -173,18 +173,23 @@ def static_mask_sql(cfg, src, before=None):
         FROM (SELECT h3_cell FROM by_type UNION SELECT h3_cell FROM by_persist) ORDER BY h3_cell"""
 
 
+def confident(con, cfg, src="raw", table="t1"):
+    """Known platform + confidence filter + H3 cell, the first cleaning steps (also used by the mask check)."""
+    res = int(cfg["grid"]["h3_res"])
+    con.execute(f"""CREATE OR REPLACE TABLE {table} AS
+        SELECT *, CAST(year(date) AS INTEGER) AS year, CAST(month(date) AS INTEGER) AS month,
+               h3_latlng_to_cell_string(lat, lon, {res}) AS h3_cell
+        FROM {src} WHERE platform IS NOT NULL AND {conf_ok_sql(cfg)}""")
+
+
 def clean(con, cfg, src="raw"):
     """Cleaning steps on table/view `src` -> tables `clean` and `static_mask`; returns the step log.
 
     Order (identical to the baseline): unknown platform -> confidence -> H3 cell -> static mask (from SP rows) ->
     type != keep_type dropped -> NRT rows (no type) in masked cells dropped -> exact duplicates (first by source
     order kept) -> NRT rows on a day that has SP data for the same satellite dropped."""
-    res = int(cfg["grid"]["h3_res"])
     n_raw, n_plat = con.execute(f"SELECT count(*), count(platform) FROM {src}").fetchall()[0]
-    con.execute(f"""CREATE OR REPLACE TABLE t1 AS
-        SELECT *, CAST(year(date) AS INTEGER) AS year, CAST(month(date) AS INTEGER) AS month,
-               h3_latlng_to_cell_string(lat, lon, {res}) AS h3_cell
-        FROM {src} WHERE platform IS NOT NULL AND {conf_ok_sql(cfg)}""")
+    confident(con, cfg, src)
     con.execute(f"CREATE OR REPLACE TABLE static_mask AS {static_mask_sql(cfg, 't1')}")
     con.execute(f"""CREATE OR REPLACE VIEW t2 AS SELECT * FROM t1 WHERE {type_ok_sql(cfg)}""")
     con.execute("""CREATE OR REPLACE VIEW t3 AS SELECT * FROM t2
@@ -251,6 +256,36 @@ def country_month_query(src, min_n20):
                count(DISTINCT h3_cell) AS n_active_cells, (SELECT count(*) FROM gap
                WHERE year(date) = cd.year AND month(date) = cd.month) AS n_outage_days
         FROM cd GROUP BY year, month ORDER BY year, month"""
+
+
+def daily_counts_sql(src):
+    """Detections per day and satellite (points): the input of the outage threshold and outage checks."""
+    plats = ["SNPP", "NOAA20", "NOAA21", "Terra", "Aqua"]
+    cols = ", ".join(f"count(*) FILTER (WHERE platform = '{p}') AS n_{p.lower()}" for p in plats)
+    return f"SELECT date, {cols} FROM {src} GROUP BY date ORDER BY date"
+
+
+def outage_threshold(cfg, country, daily=None):
+    """Per-country S-NPP outage threshold (see config `outage`). Returns (threshold, info dict)."""
+    from pipeline.common import AGG
+    o = cfg["outage"]
+
+    def typical(df):
+        d = df[(pd.to_datetime(df["date"]) >= pd.Timestamp(o["typical_from"])) & (df["n_noaa20"] > 0)]
+        return float(d["n_noaa20"].median()) if len(d) else 0.0
+
+    def read(c):
+        p = AGG / "country_day" / f"{c}.parquet"
+        if not p.exists():
+            raise SystemExit(f"{p} missing: run 02_clean for {c} first (reference country goes first)")
+        return pd.read_parquet(p)
+
+    t_c = typical(read(country) if daily is None else daily)
+    ref = o["reference_country"]
+    t_ref = t_c if (country == ref and daily is not None) else typical(read(ref))
+    thr = max(int(o["min_threshold"]), int(round(o["reference_threshold"] * t_c / t_ref))) if t_ref else int(o["min_threshold"])
+    return thr, {"threshold": thr, "typical_daily_noaa20": t_c, "reference_country": ref,
+                 "reference_typical_daily_noaa20": t_ref}
 
 
 def cells_table(con, cells, coarse_res):

@@ -3,9 +3,12 @@
 Compares against the snapshot in reports/phase_b/ (taken before Phase C):
   cleaning steps, hotspots per platform-year, yearly cell-month sums, country_month == sum of cell_month,
   and (if the full pipeline ran) every headline metric in metrics.json / model_comparison.json.
+Changed on purpose in C3, so not compared: leave-one-region-out (H3 res-1 hexagons -> ADM1 regions, zero months
+included) and the interval method/coverage (CHANGED_BY_DESIGN). Keys new since Phase B are allowed.
 Exit code 1 on any difference.   python -m pipeline.regression_check
 """
 import json
+import re
 import sys
 
 import duckdb
@@ -15,6 +18,8 @@ import pandas as pd
 from pipeline.common import AGG, PROCESSED, REPORTS, load_config
 
 SNAP = REPORTS / "phase_b"
+CHANGED_BY_DESIGN = re.compile(r"^(intervals|regions|spatial_cv|spatial_cv_median)\.|T3_loro|\.score$|"
+                               r"^(criterion|interval_method)$")
 
 
 def _flat(d, prefix=""):
@@ -35,6 +40,8 @@ def compare_json(name, rtol=1e-9):
         _flat(json.loads((REPORTS / name).read_text(encoding="utf-8")))
     bad = []
     for k in sorted(set(a) | set(b)):
+        if CHANGED_BY_DESIGN.search(k) or k not in a:
+            continue
         x, y = a.get(k), b.get(k)
         if isinstance(x, (int, float)) and isinstance(y, (int, float)) and not isinstance(x, bool):
             if not np.isclose(x, y, rtol=rtol, atol=1e-12, equal_nan=True):
@@ -88,7 +95,7 @@ def main():
             print("DIFF", *f)
         print(f"FAILED: {len(fails)} differences")
         sys.exit(1)
-    print("OK: identical to Phase B")
+    print("OK: identical to Phase B (except the C3 changes by design: LORO regions, intervals)")
 
 
 if __name__ == "__main__":

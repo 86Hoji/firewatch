@@ -62,6 +62,31 @@ cleaning:
     min_months_per_year: 8   # cell active in >= N months of a year -> persistent
     min_years_persistent: 2
 
+# S-NPP outage day = no S-NPP detection in the country but >= threshold NOAA-20 detections. The threshold scales with
+# the country's typical day: reference_threshold * median(daily NOAA-20 | day has any) / same for reference_country,
+# never below min_threshold (tiny countries: S-NPP missing 1-2 small fires is not an outage).
+outage:
+  reference_country: KAZ
+  reference_threshold: 20
+  min_threshold: 5
+  typical_from: "2018-04-01"    # NOAA-20 era
+
+# C2: honest test of the static mask (build before split, test on archive rows split..test_end)
+mask_check:
+  countries: [KAZ, UZB, TKM]
+  split: "2025-01-01"
+  test_end: "2026-07-31"
+
+# C3: 90% intervals for regions = percentiles of leave-one-region-out errors, per predicted-size bin
+intervals:
+  region_bin_edges: [5, 20, 100, 500]   # bins: 0, (0,5], (5,20], (20,100], (100,500], >500 cell-days/month
+  min_bin_n: 30                         # a sparser bin borrows from the next-smaller bins
+
+# C3: ADM1 region per H3 cell (centre in polygon, else nearest within nearest_km, else 'outside')
+regions:
+  boundaries_dir: data/boundaries
+  nearest_km: 10
+
 grid:
   h3_res: 7
   coarse_res: 5          # used by the API for very large polygons
@@ -75,19 +100,15 @@ calibration:
   terra_only_until: "2002-06"     # inclusive, Aqua data starts July 2002
   terra_aqua_period: [2003, 2011]
   noaa20_period: [2018, 2019]
-  snpp_gap_min_noaa20: 20   # NOAA-20 detections on a day with zero S-NPP -> S-NPP outage day
   interval_level: 0.90
   loglog_min_points: 12     # min (year, month) points to fit log-log regression in a stratum
   models: [ratio, loglog, poisson_log]
-  # chosen by reports/model_protocol.md (v2: backcast + LORO + LOYO, drift-free); null = v1 rule (holdout MAE)
-  selected_model: poisson_log
-  interval_method: hetero    # season | hetero, chosen by the same protocol
+  # the selected model is NOT set here: pipeline/experiments.py writes it to reports/model_card.json
 
 validation:
   pre_jump: [2009, 2011]
   post_jump: [2012, 2014]
-  subregion_h3_res: 1
-  subregion_min_share: 0.03
+  loro_min_share: 0.01      # ADM1 regions below 1% of MODIS activity are shown but not in the LORO median
   known_events:
     - name: Kostanay forest and steppe fires (Auliekol)
       year: 2022

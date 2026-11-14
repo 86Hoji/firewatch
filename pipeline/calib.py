@@ -218,7 +218,7 @@ def loyo_intervals(cm, v_col, m_col, years, cfg, model, totals=None):
         res.append(g)
     r = pd.concat(res)
     r["season"] = r["month"].map(SEASONS)
-    if cfg["calibration"].get("interval_method", "season") == "hetero":
+    if cfg["calibration"].get("interval_method", "hetero") == "hetero":
         med = r.groupby("land_cover")["pred"].transform("median")
         r["z"] = r["r"] * np.sqrt(r["pred"] / med)
         q = r.groupby("land_cover")["z"].quantile([lo, hi]).unstack()

@@ -1,0 +1,90 @@
+2026-11-15 00:20:30,993 clean INFO KAZ (cell, train): [847148, 847158, 847199, 847159, 847181, 847180]
+2026-11-15 00:20:33,588 ingest INFO   847148 fire_archive_M-C61_847148.csv          777034 rows
+2026-11-15 00:20:34,542 ingest INFO   847158 fire_archive_M-C61_847158.csv          258020 rows
+2026-11-15 00:20:35,411 ingest INFO   847199 fire_archive_M-C61_847199.csv          221560 rows
+2026-11-15 00:20:35,456 ingest INFO   847199 fire_nrt_M-C61_847199.csv                4449 rows
+2026-11-15 00:20:37,942 ingest INFO   847159 fire_archive_SV-C2_847159.csv          933875 rows
+2026-11-15 00:20:40,124 ingest INFO   847181 fire_archive_SV-C2_847181.csv          833595 rows
+2026-11-15 00:20:40,271 ingest INFO   847181 fire_nrt_SV-C2_847181.csv               29625 rows
+2026-11-15 00:20:42,483 ingest INFO   847180 fire_archive_J1V-C2_847180.csv         830218 rows
+2026-11-15 00:20:42,659 ingest INFO   847180 fire_nrt_J1V-C2_847180.csv              31181 rows
+ 99% ▕█████████████████████████████████████▌▏ (<1 second remaining)     100% ▕██████████████████████████████████████▏ (00:00:03.10 elapsed)     
+ 94% ▕███████████████████████████████████▋  ▏ (<1 second remaining)      96% ▕████████████████████████████████████▍ ▏ (<1 second remaining)      99% ▕█████████████████████████████████████▌▏ (<1 second remaining)     100% ▕██████████████████████████████████████▏ (00:00:04.73 elapsed)     
+2026-11-15 00:20:52,631 ingest INFO   unknown_platform          3919557 ->    3919557
+2026-11-15 00:20:52,631 ingest INFO   confidence                3919557 ->    3667872
+2026-11-15 00:20:52,631 ingest INFO   type_not_vegetation       3667872 ->    3185020
+2026-11-15 00:20:52,631 ingest INFO   nrt_static_mask           3185020 ->    3171270
+2026-11-15 00:20:52,631 ingest INFO   exact_duplicates          3171270 ->    3171270
+2026-11-15 00:20:52,631 ingest INFO   nrt_overlaps_sp           3171270 ->    3171270
+2026-11-15 00:20:53,020 clean INFO   S-NPP outage threshold 20 (typical day 87 NOAA-20 detections) -> 56 outage days
+2026-11-15 00:20:55,485 clean INFO UZB (cell, test): [847909, 847912, 847910, 847911]
+2026-11-15 00:20:56,014 ingest INFO   847909 fire_archive_M-C61_847909.csv           97386 rows
+2026-11-15 00:20:56,040 ingest INFO   847909 fire_nrt_M-C61_847909.csv                 335 rows
+2026-11-15 00:20:56,895 ingest INFO   847912 fire_archive_SV-C2_847912.csv          268472 rows
+2026-11-15 00:20:56,939 ingest INFO   847912 fire_nrt_SV-C2_847912.csv                3532 rows
+2026-11-15 00:20:57,477 ingest INFO   847910 fire_archive_J1V-C2_847910.csv         139330 rows
+2026-11-15 00:20:57,518 ingest INFO   847910 fire_nrt_J1V-C2_847910.csv               3773 rows
+2026-11-15 00:20:58,152 ingest INFO   847911 fire_archive_J2V-C2_847911.csv          52198 rows
+2026-11-15 00:20:58,207 ingest INFO   847911 fire_nrt_J2V-C2_847911.csv               3379 rows
+2026-11-15 00:20:59,712 ingest INFO   unknown_platform           568405 ->     568405
+2026-11-15 00:20:59,712 ingest INFO   confidence                 568405 ->     524484
+2026-11-15 00:20:59,712 ingest INFO   type_not_vegetation        524484 ->     317233
+2026-11-15 00:20:59,712 ingest INFO   nrt_static_mask            317233 ->     311155
+2026-11-15 00:20:59,712 ingest INFO   exact_duplicates           311155 ->     311155
+2026-11-15 00:20:59,712 ingest INFO   nrt_overlaps_sp            311155 ->     311155
+2026-11-15 00:20:59,815 clean INFO   S-NPP outage threshold 5 (typical day 18 NOAA-20 detections) -> 64 outage days
+2026-11-15 00:21:00,152 clean INFO TKM (cell, stress): [848066, 848011, 848009, 848010]
+2026-11-15 00:21:00,510 ingest INFO   848066 fire_archive_M-C61_848066.csv           69898 rows
+2026-11-15 00:21:00,531 ingest INFO   848066 fire_nrt_M-C61_848066.csv                 220 rows
+2026-11-15 00:21:01,641 ingest INFO   848011 fire_archive_SV-C2_848011.csv          372292 rows
+2026-11-15 00:21:01,706 ingest INFO   848011 fire_nrt_SV-C2_848011.csv               10081 rows
+2026-11-15 00:21:02,496 ingest INFO   848009 fire_archive_J1V-C2_848009.csv         224479 rows
+2026-11-15 00:21:02,553 ingest INFO   848009 fire_nrt_J1V-C2_848009.csv              11132 rows
+2026-11-15 00:21:03,193 ingest INFO   848010 fire_archive_J2V-C2_848010.csv          87967 rows
+2026-11-15 00:21:03,264 ingest INFO   848010 fire_nrt_J2V-C2_848010.csv              10385 rows
+2026-11-15 00:21:04,757 ingest INFO   unknown_platform           786454 ->     786454
+2026-11-15 00:21:04,757 ingest INFO   confidence                 786454 ->     752750
+2026-11-15 00:21:04,757 ingest INFO   type_not_vegetation        752750 ->     327205
+2026-11-15 00:21:04,757 ingest INFO   nrt_static_mask            327205 ->     305188
+2026-11-15 00:21:04,757 ingest INFO   exact_duplicates           305188 ->     305188
+2026-11-15 00:21:04,757 ingest INFO   nrt_overlaps_sp            305188 ->     305188
+2026-11-15 00:21:04,809 clean INFO   S-NPP outage threshold 5 (typical day 18 NOAA-20 detections) -> 64 outage days
+2026-11-15 00:21:05,155 clean INFO KGZ (cell, extra): [847969, 847972, 847970, 847971]
+2026-11-15 00:21:05,289 ingest INFO   847969 fire_archive_M-C61_847969.csv           14829 rows
+2026-11-15 00:21:05,310 ingest INFO   847969 fire_nrt_M-C61_847969.csv                  76 rows
+2026-11-15 00:21:05,459 ingest INFO   847972 fire_archive_SV-C2_847972.csv           31749 rows
+2026-11-15 00:21:05,478 ingest INFO   847972 fire_nrt_SV-C2_847972.csv                 624 rows
+2026-11-15 00:21:05,570 ingest INFO   847970 fire_archive_J1V-C2_847970.csv          17094 rows
+2026-11-15 00:21:05,591 ingest INFO   847970 fire_nrt_J1V-C2_847970.csv                753 rows
+2026-11-15 00:21:05,642 ingest INFO   847971 fire_archive_J2V-C2_847971.csv           5959 rows
+2026-11-15 00:21:05,662 ingest INFO   847971 fire_nrt_J2V-C2_847971.csv                706 rows
+2026-11-15 00:21:06,202 ingest INFO   unknown_platform            71790 ->      71790
+2026-11-15 00:21:06,202 ingest INFO   confidence                  71790 ->      67198
+2026-11-15 00:21:06,202 ingest INFO   type_not_vegetation         67198 ->      42759
+2026-11-15 00:21:06,202 ingest INFO   nrt_static_mask             42759 ->      42112
+2026-11-15 00:21:06,202 ingest INFO   exact_duplicates            42112 ->      42112
+2026-11-15 00:21:06,202 ingest INFO   nrt_overlaps_sp             42112 ->      42112
+2026-11-15 00:21:06,238 clean INFO   S-NPP outage threshold 5 (typical day 2 NOAA-20 detections) -> 20 outage days
+2026-11-15 00:21:06,475 clean INFO TJK (cell, extra): [847982, 847996, 847994, 847995]
+2026-11-15 00:21:06,591 ingest INFO   847982 fire_archive_M-C61_847982.csv            3906 rows
+2026-11-15 00:21:06,661 ingest INFO   847982 fire_nrt_M-C61_847982.csv                  21 rows
+2026-11-15 00:21:06,801 ingest INFO   847996 fire_archive_SV-C2_847996.csv           11742 rows
+2026-11-15 00:21:06,822 ingest INFO   847996 fire_nrt_SV-C2_847996.csv                 297 rows
+2026-11-15 00:21:06,892 ingest INFO   847994 fire_archive_J1V-C2_847994.csv           7669 rows
+2026-11-15 00:21:06,904 ingest INFO   847994 fire_nrt_J1V-C2_847994.csv                315 rows
+2026-11-15 00:21:06,957 ingest INFO   847995 fire_archive_J2V-C2_847995.csv           3140 rows
+2026-11-15 00:21:06,975 ingest INFO   847995 fire_nrt_J2V-C2_847995.csv                358 rows
+2026-11-15 00:21:07,173 ingest INFO   unknown_platform            27448 ->      27448
+2026-11-15 00:21:07,173 ingest INFO   confidence                  27448 ->      25617
+2026-11-15 00:21:07,173 ingest INFO   type_not_vegetation         25617 ->      16733
+2026-11-15 00:21:07,173 ingest INFO   nrt_static_mask             16733 ->      16280
+2026-11-15 00:21:07,173 ingest INFO   exact_duplicates            16280 ->      16280
+2026-11-15 00:21:07,173 ingest INFO   nrt_overlaps_sp             16280 ->      16280
+2026-11-15 00:21:07,208 clean INFO   S-NPP outage threshold 5 (typical day 2 NOAA-20 detections) -> 29 outage days
+  2% ▕▊                                     ▏ (~1.7 minutes remaining)    3% ▕█▏                                    ▏ (~1.7 minutes remaining)    4% ▕█▌                                    ▏ (~1.3 minutes remaining)    5% ▕█▉                                    ▏ (~1.1 minutes remaining)    6% ▕██▎                                   ▏ (~54 seconds remaining)     7% ▕██▋                                   ▏ (~44 seconds remaining)     9% ▕███▍                                  ▏ (~37 seconds remaining)     9% ▕███▍                                  ▏ (~31 seconds remaining)    11% ▕████▏                                 ▏ (~26 seconds remaining)    12% ▕████▌                                 ▏ (~23 seconds remaining)    12% ▕████▌                                 ▏ (~20 seconds remaining)    14% ▕█████▎                                ▏ (~18 seconds remaining)    14% ▕█████▎                                ▏ (~17 seconds remaining)    15% ▕█████▋                                ▏ (~15 seconds remaining)    16% ▕██████                                ▏ (~14 seconds remaining)    17% ▕██████▍                               ▏ (~13 seconds remaining)    18% ▕██████▊                               ▏ (~12 seconds remaining)    19% ▕███████▏                              ▏ (~12 seconds remaining)    20% ▕███████▌                              ▏ (~11 seconds remaining)    21% ▕███████▉                              ▏ (~11 seconds remaining)    22% ▕████████▎                             ▏ (~11 seconds remaining)    23% ▕████████▋                             ▏ (~11 seconds remaining)    24% ▕█████████                             ▏ (~11 seconds remaining)    25% ▕█████████▌                            ▏ (~11 seconds remaining)    26% ▕█████████▉                            ▏ (~11 seconds remaining)    27% ▕██████████▎                           ▏ (~11 seconds remaining)    28% ▕██████████▋                           ▏ (~11 seconds remaining)    29% ▕███████████                           ▏ (~11 seconds remaining)    30% ▕███████████▍                          ▏ (~11 seconds remaining)    30% ▕███████████▍                          ▏ (~10 seconds remaining)    30% ▕███████████▍                          ▏ (~9 seconds remaining)     31% ▕███████████▊                          ▏ (~9 seconds remaining)     32% ▕████████████▏                         ▏ (~9 seconds remaining)     33% ▕████████████▌                         ▏ (~9 seconds remaining)     34% ▕████████████▉                         ▏ (~9 seconds remaining)     34% ▕████████████▉                         ▏ (~8 seconds remaining)     35% ▕█████████████▎                        ▏ (~8 seconds remaining)     36% ▕█████████████▋                        ▏ (~8 seconds remaining)     37% ▕██████████████                        ▏ (~8 seconds remaining)     38% ▕██████████████▍                       ▏ (~8 seconds remaining)     39% ▕██████████████▊                       ▏ (~8 seconds remaining)     40% ▕███████████████▏                      ▏ (~8 seconds remaining)     41% ▕███████████████▌                      ▏ (~8 seconds remaining)     42% ▕███████████████▉                      ▏ (~8 seconds remaining)    100% ▕██████████████████████████████████████▏ (00:00:12.55 elapsed)     
+2026-11-15 00:21:24,780 grid INFO KAZ: hotspots 3171270, S-NPP outage days 56, cell-months 855761, cells 242039
+2026-11-15 00:21:27,106 grid INFO UZB: hotspots 311155, S-NPP outage days 64, cell-months 111725, cells 15854
+2026-11-15 00:21:29,320 grid INFO TKM: hotspots 305188, S-NPP outage days 64, cell-months 112989, cells 14486
+2026-11-15 00:21:30,558 grid INFO KGZ: hotspots 42112, S-NPP outage days 20, cell-months 21316, cells 5194
+2026-11-15 00:21:31,635 grid INFO TJK: hotspots 16280, S-NPP outage days 29, cell-months 8024, cells 2764
+2026-11-15 00:21:34,377 grid INFO wrote cell_month_all.parquet (1109815 rows, 5 countries)

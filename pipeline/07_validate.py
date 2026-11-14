@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 
-from pipeline import calib  # noqa: E402
+from pipeline import calib, intervals  # noqa: E402
 from pipeline.common import AGG, REF, REPORTS, SEASONS, ensure_dirs, get_logger, load_config, write_json  # noqa: E402
 from pipeline.metrics import pettitt, series_metrics, step_test  # noqa: E402
 from scipy import stats  # noqa: E402
@@ -44,6 +44,11 @@ def temporal_holdout(cm, coefs, draws, cfg, y1, best):
         out["holdout"][model] = m
         if model == best:
             ho_best = ho
+    iv = CAL.read_model_card()["intervals"]
+    lo, hi = intervals.bounds(ho_best["pred"], iv["country"])
+    out["holdout"][best]["coverage_baseline_method"] = out["holdout"][best]["coverage"]
+    out["holdout"][best]["coverage"] = float(np.mean((ho_best["actual"] >= lo) & (ho_best["actual"] <= hi)))
+    ho_best = ho_best.assign(low=lo, high=hi)
     for s, g in ho_best.groupby(ho_best["month"].map(SEASONS)):
         out["holdout_by_season"][s] = series_metrics(g["actual"], g["pred"], g["low"], g["high"])
     for y, g in ho_best.groupby("year"):
@@ -72,39 +77,39 @@ def temporal_holdout(cm, coefs, draws, cfg, y1, best):
     return out
 
 
-def subregions(cm, cfg):
-    res = cfg["validation"]["subregion_h3_res"]
-    cells = pd.DataFrame({"h3_cell": cm["h3_cell"].unique()})
-    cells["sub"] = [h3.cell_to_parent(c, res) for c in cells["h3_cell"]]
-    w = cm.merge(cells, on="h3_cell").groupby("sub")["n_modis"].sum()
-    small = w[w / w.sum() < cfg["validation"]["subregion_min_share"]].index
-    cells.loc[cells["sub"].isin(small), "sub"] = "merged_small"
-    return cm.merge(cells, on="h3_cell")
-
-
-def spatial_cv(cm, cfg, y1):
-    """Leave-one-region-out. The log-log multiplier is set by whole-region MODIS totals (input data, as in
-    production); VIIRS of the held-out region is never used for fitting."""
-    d = subregions(cm, cfg)
-    tot = calib.regional_totals(cm, "n_modis")
+def spatial_cv():
+    """Leave-one-ADM1-region-out: the result of pipeline/experiments.py for the selected model (one number,
+    computed once). Adds the before/after interval coverage per region."""
+    mc = json.loads((REPORTS / "model_comparison.json").read_text(encoding="utf-8"))
+    sel = mc["selected"]
+    t3 = mc["results"][sel]["T3_loro"]
+    cov = {r["sub"]: r for r in mc["intervals"]["per_region"]}
     rows = []
-    for s in sorted(d["sub"].unique()):
-        train, test = d[d["sub"] != s], d[d["sub"] == s]
-        coefs, _ = CAL.fit_all(train, cfg, totals=tot)
-        lat, lon = h3.cell_to_latlng(s) if s != "merged_small" else (np.nan, np.nan)
-        for model in cfg["calibration"]["models"]:
-            p = predict_months(test, coefs, model, (cfg["calibration"]["period"][0], y1), tot)
-            m = series_metrics(p["actual"], p["pred"], p["low"], p["high"])
-            rows.append({"subregion": s, "model": model, "center_lat": lat, "center_lon": lon,
-                         "modis_cell_days": int(test["n_modis"].sum()), **m})
-    return pd.DataFrame(rows)
+    for r in t3["by_subregion"]:
+        c = cov.get(r["sub"], {})
+        rows.append({"subregion": r["sub"], "name": r["adm1_name"], "share": r["share"], "included": r["included"],
+                     "modis_cell_days": int(r["n_modis"]), "mae_pct_of_mean": r["mae_pct_of_mean"],
+                     "bias_total_pct": r["bias_total_pct"], "pearson_r": r["pearson_r"],
+                     "coverage_before": c.get("coverage_before"), "coverage": c.get("coverage_after")})
+    iv = mc["intervals"]
+    median = {"mae_pct_of_mean": t3["mae_pct_of_mean"], "bias_total_pct": t3["bias_total_pct"],
+              "pearson_r": t3["pearson_r"], "coverage": iv["coverage_after"]["T3_loro_region"],
+              "coverage_before": iv["coverage_before"]["T3_loro_region"],
+              "regions_included": t3["regions_included"], "regions_total": t3["regions_total"]}
+    return rows, median
 
 
 def jump_test(cm, cfg, y1):
     v = cfg["validation"]
     cut = cfg["calibration"]["period"][0]
     a = cm[cm["year"].between(2001, y1)].groupby("year")[
-        ["p_modis", "p_viirs_snpp", "n_modis", "n_viirs_snpp", "n_harm", "n_harm_low", "n_harm_high"]].sum()
+        ["p_modis", "p_viirs_snpp", "n_modis", "n_viirs_snpp", "n_harm"]].sum()
+    iv = CAL.read_model_card()["intervals"]
+    mm = monthly(cm[cm["year"].between(2001, y1)], ["n_harm"])
+    mm["lo"], mm["hi"] = intervals.bounds(mm["n_harm"], iv["country"])
+    band = mm.groupby("year")[["lo", "hi"]].sum()
+    a["n_harm_low"] = np.where(a.index < cut, band["lo"].reindex(a.index), a["n_harm"])
+    a["n_harm_high"] = np.where(a.index < cut, band["hi"].reindex(a.index), a["n_harm"])
     pre = a.index < cut
     series = {
         "naive_points": np.where(pre, a["p_modis"], a["p_viirs_snpp"]),
@@ -136,7 +141,7 @@ def jump_test(cm, cfg, y1):
     ax[0].set_title(f"BEFORE · naive splice — jump ×{out['naive_points']['step_ratio']:.2f} at 2012\n"
                     f"(MODIS alone changes ×{ref:.2f})", loc="left")
     ax[1].fill_between(years, a["n_harm_low"], a["n_harm_high"], color=BAND, alpha=.7, lw=0, step="mid",
-                       label="90% interval (calibrated years)")
+                       label="90% interval (calibrated years; monthly bounds summed)")
     ax[1].bar(years[pre], series["harmonized"][pre], color=HARM, alpha=.55, width=.8, label="MODIS → S-NPP equivalent")
     ax[1].bar(years[~pre], series["harmonized"][~pre], color=HARM, width=.8, label="VIIRS S-NPP")
     ax[1].set_title(f"AFTER · harmonized cell-days — ×{out['harmonized']['step_ratio']:.2f} at 2012\n"
@@ -272,8 +277,10 @@ def write_report(M, cfg):
               f"[model_comparison.md](model_comparison.md). Selected **{sel}** ({mc['specs'][sel]['label']}): "
               f"backcast 2016–19→2012–15 MAE {fmt(r['T1_backcast']['mae_pct_of_mean'])}%, leave-one-region-out "
               f"{fmt(r['T3_loro']['mae_pct_of_mean'])}%, leave-one-year-out {fmt(r['T4_loyo']['mae_pct_of_mean'])}%. "
-              f"Intervals: **{iv['selected']}**, coverage of the nominal 90% on drift-free tests "
-              f"{fmt(100 * iv[iv['selected']]['coverage'], 0)}%.", ""]
+              f"90% intervals sized at the predicted level: country coverage (leave-one-year-out) "
+              f"{fmt(100 * iv['coverage_after']['T4_loyo_country'], 0)}%, region coverage (leave-one-region-out) "
+              f"{fmt(100 * iv['coverage_before']['T3_loro_region'], 0)}% before → "
+              f"{fmt(100 * iv['coverage_after']['T3_loro_region'], 0)}% after.", ""]
     L += ["## 1. Temporal holdout", "",
          "| model | period | MAE | MAE % mean | bias % | median rel. bias % | Pearson R | Spearman ρ | coverage (pred. 90%) | coverage (bootstrap CI) |",
          "|---|---|---|---|---|---|---|---|---|---|"]
@@ -289,21 +296,24 @@ def write_report(M, cfg):
     for y, r in M["temporal_holdout"]["holdout_by_year"].items():
         L.append(f"| {y} | {fmt(r['actual'], 0)} | {fmt(r['pred'], 0)} | {fmt(r['bias_pct'])} |")
     L += ["", "![holdout](holdout.png)", "",
-          "Intervals. `n_harm_low/high` = prediction interval: leave-one-year-out residuals log(VIIRS/pred) of regional "
-          "monthly totals inside 2012–2019, 5th–95th percentile per season (cross-conformal). `n_harm_ci_*` = bootstrap "
-          "over years of the coefficients only, so it is expected to under-cover single months. Intervals are calibrated "
-          "for regional monthly totals; for small areas true uncertainty is wider.", "",
-          "## 2. Spatial cross-validation (leave-one-region-out)", "",
-          f"Subregions: H3 res {cfg['validation']['subregion_h3_res']} parents; ones with < "
-          f"{100 * cfg['validation']['subregion_min_share']:.0f}% of MODIS cell-days merged. Calibrated without the region, "
-          f"tested on it over {c['period'][0]}–{M['last_full_year']}. Log-log multipliers use whole-region MODIS totals "
-          "(input data, exactly as in production). Median over subregions: "
-          + "; ".join(f"{k}: MAE {fmt(v['mae_pct_of_mean'])}%, bias {fmt(v['bias_total_pct'])}%, coverage "
-                      f"{fmt(100 * v['coverage'], 0)}%" for k, v in M['spatial_cv_median'].items()) + ".", "",
-          "| subregion | model | center | MODIS cell-days | MAE % mean | bias % | R | coverage |", "|---|---|---|---|---|---|---|---|"]
+          "Intervals (since C3): sized at the level being predicted. Country totals: leave-one-year-out log errors, "
+          "width shrinking with size (coverage above). Regions: percentiles of leave-one-region-out errors for "
+          "predictions of similar size (section 2). `n_harm_ci_*` = bootstrap over years of the coefficients only, "
+          "expected to under-cover single months.", "",
+          "## 2. Spatial cross-validation (leave-one-ADM1-region-out)", "",
+          f"Computed once in `experiments.py` (T3) for the selected model: fit {c['period'][0]}–{c['period'][1]} without "
+          f"the region, predict it over the same years. Multipliers use whole-country MODIS totals (input data, as in "
+          f"production). Median over the {M['spatial_cv_median'][best]['regions_included']} regions with ≥ "
+          f"{100 * cfg['validation']['loro_min_share']:.0f}% of MODIS activity: MAE "
+          f"{fmt(M['spatial_cv_median'][best]['mae_pct_of_mean'])}%, bias {fmt(M['spatial_cv_median'][best]['bias_total_pct'])}%. "
+          f"Coverage of the 90% interval over all region-months: before {fmt(100 * M['spatial_cv_median'][best]['coverage_before'], 0)}%"
+          f", after {fmt(100 * M['spatial_cv_median'][best]['coverage'], 0)}%.", "",
+          "| region | name | share of MODIS | in median | MAE % mean | bias % | R | coverage before | coverage after |",
+          "|---|---|---|---|---|---|---|---|---|"]
     for r in M["spatial_cv"]:
-        L.append(f"| `{r['subregion']}` | {r['model']} | {fmt(r['center_lat'])}, {fmt(r['center_lon'])} | {r['modis_cell_days']} | "
-                 f"{fmt(r['mae_pct_of_mean'])} | {fmt(r['bias_total_pct'])} | {fmt(r['pearson_r'], 3)} | {fmt(100 * r['coverage'], 0)}% |")
+        L.append(f"| `{r['subregion']}` | {r['name']} | {fmt(100 * r['share'])}% | {'yes' if r['included'] else 'no'} | "
+                 f"{fmt(r['mae_pct_of_mean'])} | {fmt(r['bias_total_pct'])} | {fmt(r['pearson_r'], 3)} | "
+                 f"{fmt(100 * r['coverage_before'], 0)}% | {fmt(100 * r['coverage'], 0)}% |")
     L += ["", "## 3. The 2012 jump", "",
           f"Step ratio = mean({cfg['validation']['post_jump'][0]}–{cfg['validation']['post_jump'][1]}) / "
           f"mean({cfg['validation']['pre_jump'][0]}–{cfg['validation']['pre_jump'][1]}) of annual totals. "
@@ -361,7 +371,7 @@ def main():
     ensure_dirs()
     cfg = load_config()
     cm = CAL.load_cell_month()
-    harm = pd.read_parquet(AGG / "cell_month.parquet", columns=["h3_cell", "year", "month", "n_harm", "n_harm_low", "n_harm_high"])
+    harm = pd.read_parquet(AGG / "cell_month.parquet", columns=["h3_cell", "year", "month", "n_harm"])
     cm = cm.drop(columns=[c for c in ("n_harm", "n_harm_low", "n_harm_high") if c in cm]).merge(harm, on=["h3_cell", "year", "month"])
     coef_t = pd.read_parquet(AGG / "coefficients.parquet")
     dr = pd.read_parquet(AGG / "coefficient_draws.parquet")
@@ -375,11 +385,9 @@ def main():
     M = {"selected_model": best, "last_full_year": y1}
     log.info("temporal holdout")
     M["temporal_holdout"] = temporal_holdout(cm, coefs, draws, cfg, y1, best)
-    log.info("spatial CV")
-    cv = spatial_cv(cm, cfg, y1)
-    M["spatial_cv"] = cv.to_dict(orient="records")
-    M["spatial_cv_median"] = cv.groupby("model")[["mae_pct_of_mean", "bias_total_pct", "pearson_r", "coverage"]] \
-        .median().to_dict(orient="index")
+    rows, med = spatial_cv()
+    M["spatial_cv"] = rows
+    M["spatial_cv_median"] = {best: med}
     log.info("jump test")
     M["jump"] = jump_test(cm, cfg, y1)
     M["seasonality"] = seasonality(cm, cfg, y1)

@@ -1,0 +1,17 @@
+=== experiments
+2026-11-15 00:30:54,885 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 00:31:01,100 experiments INFO C0 Terra\u222aAqua, ratio                      score 11.79 | T1 8.9 T3 18.5 T4 8.0 | T2 14.8 bias -9.3
+2026-11-15 00:31:05,939 experiments INFO C1 Terra\u222aAqua, OLS log1p (v1)             score 10.97 | T1 7.8 T3 18.8 T4 6.4 | T2 10.6 bias -2.3
+2026-11-15 00:31:13,302 experiments INFO C2 Terra\u222aAqua, Poisson log-link           score 10.63 | T1 6.9 T3 18.5 T4 6.5 | T2 10.3 bias -2.2
+2026-11-15 00:31:19,051 experiments INFO C3 Terra\u222aAqua day+night, ratio            score 12.24 | T1 7.9 T3 21.3 T4 7.5 | T2 13.3 bias -4.1
+2026-11-15 00:31:23,467 experiments INFO C4 Aqua, ratio                            score 14.62 | T1 10.8 T3 23.1 T4 10.0 | T2 18.3 bias -12.8
+2026-11-15 00:31:29,134 experiments INFO C5 Aqua day+night, ratio                  score 14.59 | T1 10.0 T3 24.1 T4 9.6 | T2 18.3 bias -7.6
+2026-11-15 00:31:35,401 experiments INFO C6 Aqua, Poisson log-link                 score 14.71 | T1 11.7 T3 21.3 T4 11.1 | T2 16.2 bias -2.8
+2026-11-15 00:31:45,489 experiments INFO C7 Aqua day+night, Poisson log-link       score 15.77 | T1 12.5 T3 23.5 T4 11.3 | T2 16.4 bias 2.1
+C:\Users\hp\OneDrive\Документы\firewatch\.venv\Lib\site-packages\pandas\core\arraylike.py:438: RuntimeWarning: overflow encountered in exp
+  result = getattr(ufunc, method)(*inputs, **kwargs)
+2026-11-15 00:31:48,411 experiments INFO intervals: kappa_country 0.0342 (model error 18.5%), kappa_region 50.0000 (707.1%)
+2026-11-15 00:31:48,411 experiments INFO coverage before {'T3_loro_region': 0.411, 'T1_backcast_country': 0.938, 'T2_holdout_country': 0.833}
+2026-11-15 00:31:48,411 experiments INFO coverage after  {'T4_loyo_country': 0.885, 'T1_backcast_country': 0.812, 'T2_holdout_country': 0.806, 'T3_loro_region': 0.74}
+2026-11-15 00:31:48,419 experiments INFO selected C2 -> production model poisson_log; LORO MAE 18.5%
+=== experiments done in 59.4s

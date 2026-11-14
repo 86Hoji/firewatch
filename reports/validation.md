@@ -12,7 +12,7 @@ Calibration 2012–2019, holdout 2020–2025. Unit: H3 res 7 cell-days, VIIRS S-
 
 ## 0. Model choice
 
-Protocol fixed before running: [model_protocol.md](model_protocol.md); all candidates: [model_comparison.md](model_comparison.md). Selected **C2** (Terra∪Aqua, Poisson log-link): backcast 2016–19→2012–15 MAE 6.9%, leave-one-region-out 15.6%, leave-one-year-out 6.5%. Intervals: **hetero**, coverage of the nominal 90% on drift-free tests 90%.
+Protocol fixed before running: [model_protocol.md](model_protocol.md); all candidates: [model_comparison.md](model_comparison.md). Selected **C2** (Terra∪Aqua, Poisson log-link): backcast 2016–19→2012–15 MAE 6.9%, leave-one-region-out 18.5%, leave-one-year-out 6.5%. 90% intervals sized at the predicted level: country coverage (leave-one-year-out) 90%, region coverage (leave-one-region-out) 44% before → 91% after.
 
 ## 1. Temporal holdout
 
@@ -47,38 +47,30 @@ Holdout by year (watch for MODIS orbit drift):
 
 ![holdout](holdout.png)
 
-Intervals. `n_harm_low/high` = prediction interval: leave-one-year-out residuals log(VIIRS/pred) of regional monthly totals inside 2012–2019, 5th–95th percentile per season (cross-conformal). `n_harm_ci_*` = bootstrap over years of the coefficients only, so it is expected to under-cover single months. Intervals are calibrated for regional monthly totals; for small areas true uncertainty is wider.
+Intervals (since C3): sized at the level being predicted. Country totals: leave-one-year-out log errors, width shrinking with size (coverage above). Regions: percentiles of leave-one-region-out errors for predictions of similar size (section 2). `n_harm_ci_*` = bootstrap over years of the coefficients only, expected to under-cover single months.
 
-## 2. Spatial cross-validation (leave-one-region-out)
+## 2. Spatial cross-validation (leave-one-ADM1-region-out)
 
-Subregions: H3 res 1 parents; ones with < 3% of MODIS cell-days merged. Calibrated without the region, tested on it over 2012–2025. Log-log multipliers use whole-region MODIS totals (input data, exactly as in production). Median over subregions: loglog: MAE 17.1%, bias -3.5%, coverage 42%; poisson_log: MAE 17.3%, bias -2.9%, coverage 40%; ratio: MAE 16.7%, bias -0.7%, coverage 38%.
+Computed once in `experiments.py` (T3) for the selected model: fit 2012–2019 without the region, predict it over the same years. Multipliers use whole-country MODIS totals (input data, as in production). Median over the 13 regions with ≥ 1% of MODIS activity: MAE 18.5%, bias 0.2%. Coverage of the 90% interval over all region-months: before 44%, after 91%.
 
-| subregion | model | center | MODIS cell-days | MAE % mean | bias % | R | coverage |
-|---|---|---|---|---|---|---|---|
-| `8110bffffffffff` | ratio | 52.8, 48.9 | 42593 | 23.9 | 11.9 | 0.987 | 38% |
-| `8110bffffffffff` | loglog | 52.8, 48.9 | 42593 | 22.7 | 12.9 | 0.993 | 26% |
-| `8110bffffffffff` | poisson_log | 52.8, 48.9 | 42593 | 22.8 | 13.0 | 0.993 | 28% |
-| `81203ffffffffff` | ratio | 46.0, 71.5 | 132264 | 13.7 | -1.1 | 0.986 | 62% |
-| `81203ffffffffff` | loglog | 46.0, 71.5 | 132264 | 12.8 | -1.1 | 0.986 | 51% |
-| `81203ffffffffff` | poisson_log | 46.0, 71.5 | 132264 | 12.8 | -0.8 | 0.987 | 50% |
-| `81207ffffffffff` | ratio | 49.3, 82.8 | 74753 | 15.4 | -0.2 | 0.983 | 49% |
-| `81207ffffffffff` | loglog | 49.3, 82.8 | 74753 | 15.0 | 1.6 | 0.984 | 40% |
-| `81207ffffffffff` | poisson_log | 49.3, 82.8 | 74753 | 15.4 | 1.4 | 0.982 | 40% |
-| `81213ffffffffff` | ratio | 50.0, 60.8 | 149246 | 14.0 | -4.8 | 0.990 | 35% |
-| `81213ffffffffff` | loglog | 50.0, 60.8 | 149246 | 13.8 | -8.1 | 0.988 | 42% |
-| `81213ffffffffff` | poisson_log | 50.0, 60.8 | 149246 | 12.9 | -8.0 | 0.991 | 39% |
-| `81217ffffffffff` | ratio | 54.2, 72.2 | 174426 | 17.9 | 5.0 | 0.990 | 33% |
-| `81217ffffffffff` | loglog | 54.2, 72.2 | 174426 | 8.8 | -5.9 | 0.996 | 48% |
-| `81217ffffffffff` | poisson_log | 54.2, 72.2 | 174426 | 9.3 | -4.9 | 0.995 | 44% |
-| `8121bffffffffff` | ratio | 41.9, 61.7 | 33730 | 15.5 | 5.5 | 0.985 | 55% |
-| `8121bffffffffff` | loglog | 41.9, 61.7 | 33730 | 19.1 | 10.0 | 0.985 | 43% |
-| `8121bffffffffff` | poisson_log | 41.9, 61.7 | 33730 | 19.1 | 10.5 | 0.984 | 42% |
-| `812c7ffffffffff` | ratio | 45.0, 51.5 | 21765 | 32.6 | -15.2 | 0.982 | 27% |
-| `812c7ffffffffff` | loglog | 45.0, 51.5 | 21765 | 28.2 | -16.0 | 0.984 | 27% |
-| `812c7ffffffffff` | poisson_log | 45.0, 51.5 | 21765 | 27.9 | -16.2 | 0.984 | 27% |
-| `merged_small` | ratio | —, — | 23259 | 28.9 | -23.4 | 0.969 | 37% |
-| `merged_small` | loglog | —, — | 23259 | 25.1 | -19.2 | 0.972 | 42% |
-| `merged_small` | poisson_log | —, — | 23259 | 25.0 | -17.6 | 0.968 | 41% |
+| region | name | share of MODIS | in median | MAE % mean | bias % | R | coverage before | coverage after |
+|---|---|---|---|---|---|---|---|---|
+| `KZ-KUS` | Kostanay Region | 12.7% | yes | 10.0 | 0.2 | 0.992 | 67% | 97% |
+| `KZ-KAR` | Karaganda Region | 12.2% | yes | 12.9 | 2.3 | 0.992 | 49% | 95% |
+| `KZ-SEV` | North Kazakhstan Region | 12.2% | yes | 10.2 | 2.6 | 0.998 | 60% | 96% |
+| `KZ-AKM` | Akmola Region | 10.4% | yes | 12.0 | 5.5 | 0.997 | 64% | 100% |
+| `KZ-KZY` | Kyzylorda Region | 10.1% | yes | 21.8 | 1.5 | 0.975 | 29% | 73% |
+| `KZ-ALM` | Almaty Region | 8.3% | yes | 13.0 | -4.0 | 0.989 | 58% | 97% |
+| `KZ-AKT` | Aktobe Region | 7.7% | yes | 18.5 | -15.1 | 0.989 | 23% | 74% |
+| `KZ-VOS` | East Kazakhstan Region | 7.7% | yes | 14.1 | -1.3 | 0.983 | 52% | 91% |
+| `KZ-ZAP` | West Kazakhstan Region | 6.0% | yes | 19.9 | 13.5 | 0.994 | 36% | 97% |
+| `KZ-PAV` | Pavlodar Region | 4.2% | yes | 20.9 | -15.2 | 0.984 | 21% | 92% |
+| `KZ-ZHA` | Jambyl Region | 3.8% | yes | 18.9 | 6.7 | 0.983 | 44% | 91% |
+| `KZ-YUZ` | South Kazakhstan Region | 2.5% | yes | 24.3 | -7.4 | 0.955 | 49% | 91% |
+| `KZ-ATY` | Atyrau Region | 2.1% | yes | 24.8 | -7.6 | 0.974 | 32% | 95% |
+| `KZ-MAN` | Mangystau Region | 0.1% | no | 84.2 | -83.2 | 0.526 | 16% | 74% |
+| `KZ-ALA` | Almaty | 0.0% | no | 84.9 | -82.8 | 0.612 | 35% | 100% |
+| `KZ-AST` | Astana | 0.0% | no | 70.7 | -48.4 | 0.721 | 65% | 99% |
 
 ## 3. The 2012 jump
 
