@@ -7,6 +7,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from api import main as api
+from pipeline import intervals
 
 
 @pytest.fixture(scope="module")
@@ -87,3 +88,23 @@ def test_point_radius_and_export(client):
     lines = r.text.strip().splitlines()
     assert lines[0].startswith("date,time,lat,lon,sensor,platform")
     assert len(lines) == 2 and ",1.0," in lines[1]
+
+
+IV = {"level": 0.9,
+      "country": {"method": "hetero_log_ratio", "q_lo": -0.2, "q_hi": 0.2, "median_pred": 10.0},
+      "region": {"method": "binned_log1p", "inner_edges": [5.0, 20.0],
+                 "q_lo": [0.0, -0.5, -0.3, -0.2], "q_hi": [2.0, 1.5, 0.8, 0.4]}}
+
+
+def test_intervals_sized_on_area_total_not_summed(client, monkeypatch):
+    monkeypatch.setitem(api.S.meta, "intervals", IV)
+    whole = client.post("/api/calendar", json={}).json()
+    lo, hi = intervals.bounds([whole["values"][0][0]], IV["country"])      # 2010-01, both cells: 8
+    assert (whole["low"][0][0], whole["high"][0][0]) == (lo[0], hi[0])
+    small = client.post("/api/calendar", json={"bbox": [69.5, 49.5, 70.5, 50.5]}).json()
+    lo, hi = intervals.bounds([small["values"][0][0]], IV["region"])       # cell a only: 2
+    assert (small["low"][0][0], small["high"][0][0]) == (lo[0], hi[0])
+    assert whole["low"][3][0] == whole["values"][3][0] == whole["high"][3][0]   # 2013: observed VIIRS
+    y2010 = {y["year"]: y for y in client.post("/api/yearly", json={}).json()["years"]}[2010]
+    lo, hi = intervals.bounds(whole["values"][0], IV["country"])
+    assert (y2010["low"], y2010["high"]) == (lo.sum(), hi.sum())

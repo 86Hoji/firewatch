@@ -18,6 +18,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, field_validator, model_validator
 from shapely.geometry import box, shape
 
+from pipeline import intervals
 from pipeline.common import AGG, PROCESSED, REF, REPORTS, ROOT, load_config, outage_days_sql
 
 CFG = load_config()
@@ -216,9 +217,32 @@ def grid(q: Query):
     f["source"] = np.where(f["value"].isna(), None, np.where(f["year"] < S.cut, "MODIS_calibrated", "VIIRS_SNPP"))
     if q.mode != "harmonized":
         f["source"] = np.where(f["value"].isna(), None, q.mode)
+    if q.mode == "harmonized":
+        area_intervals(f, cells)
     f["partial"] = (f["year"] == last.year) & (f["month"] == last.month) & \
                    (last.day < calendar.monthrange(last.year, last.month)[1])
     return f, cells, last
+
+
+
+def area_intervals(f, cells):
+    """90% interval sized on the AREA's monthly total, not summed over cells (see pipeline/06_harmonize.py).
+
+    Per-cell bounds are made for one cell-month alone; their sum is far too wide (a cell predicted at 2 gets [0, 32]).
+    Whole data region -> country parameters, any smaller area -> region parameters (both from meta.json).
+    2012+ is observed VIIRS: low = high = value. Without intervals in meta.json (older runs) the summed
+    per-cell columns are kept as they are.
+    """
+    iv = S.meta.get("intervals")
+    if not iv:
+        return
+    params = iv["country"] if cells is None or len(cells) >= len(S.cells) else iv["region"]
+    ok = f["n_harm"].notna()
+    pre = ok & (f["year"] < S.cut)
+    lo, hi = intervals.bounds(f.loc[pre, "n_harm"], params)
+    f.loc[pre, "n_harm_low"], f.loc[pre, "n_harm_high"] = lo, hi
+    post = ok & (f["year"] >= S.cut)
+    f.loc[post, "n_harm_low"] = f.loc[post, "n_harm_high"] = f.loc[post, "n_harm"]
 
 
 def _clean(v, nd=2):
