@@ -1,0 +1,8 @@
+=== 07_validate
+2026-11-14 16:24:43,016 calibrate INFO no land cover file, strata = month/season/region
+2026-11-14 16:24:44,134 validate INFO temporal holdout
+2026-11-14 16:24:49,965 validate INFO spatial CV
+2026-11-14 19:07:17,188 validate INFO jump test
+2026-11-14 19:07:22,438 validate INFO wrote reports/validation.md
+=== 07_validate done in 9765.1s
+EXIT 0

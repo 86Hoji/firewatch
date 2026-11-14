@@ -1,0 +1,81 @@
+region:
+  name: Kazakhstan
+  # FIRMS per-country yearly archive files (names as used by FIRMS)
+  firms_countries: [Kazakhstan]
+  # west, south, east, north — used for NRT API requests
+  bbox: [46.4, 40.5, 87.4, 55.5]
+  iso3: KAZ
+
+years:
+  start: 2000
+  end: null            # null = latest available
+
+download:
+  archive_base: https://firms.modaps.eosdis.nasa.gov/data/country
+  # folder name on FIRMS -> local product id
+  products:
+    modis: modis
+    viirs-snpp: viirs_snpp
+    viirs-jpss1: viirs_noaa20
+    viirs-jpss2: viirs_noaa21
+  product_start_year:
+    modis: 2000
+    viirs-snpp: 2012
+    viirs-jpss1: 2018
+    viirs-jpss2: 2023
+  nrt_sources: [MODIS_NRT, VIIRS_SNPP_NRT, VIIRS_NOAA20_NRT, VIIRS_NOAA21_NRT]
+  nrt_day_range: 5
+  nrt_pause_s: 1.5
+  retries: 4
+  boundaries_url: https://www.geoboundaries.org/api/current/gbOpen/{iso3}/ADM1/
+
+cleaning:
+  modis_min_confidence: 30
+  viirs_keep_confidence: [n, h, nominal, high]
+  keep_type: 0
+  static_mask:
+    min_detections: 10
+    min_type2_share: 0.5
+    min_months_per_year: 8   # cell active in >= N months of a year -> persistent
+    min_years_persistent: 2
+
+grid:
+  h3_res: 7
+  coarse_res: 5          # used by the API for very large polygons
+
+calibration:
+  period: [2012, 2019]
+  holdout_start: 2020
+  min_count: 50
+  bootstrap_iter: 1000
+  bootstrap_seed: 42
+  terra_only_until: "2002-06"     # inclusive, Aqua data starts July 2002
+  terra_aqua_period: [2003, 2011]
+  noaa20_period: [2018, 2019]
+  snpp_gap_min_noaa20: 20   # NOAA-20 detections on a day with zero S-NPP -> S-NPP outage day
+  interval_level: 0.90
+  loglog_min_points: 12     # min (year, month) points to fit log-log regression in a stratum
+  models: [ratio, loglog, poisson_log]
+  # chosen by reports/model_protocol.md (v2: backcast + LORO + LOYO, drift-free); null = v1 rule (holdout MAE)
+  selected_model: poisson_log
+  interval_method: hetero    # season | hetero, chosen by the same protocol
+
+validation:
+  pre_jump: [2009, 2011]
+  post_jump: [2012, 2014]
+  subregion_h3_res: 1
+  subregion_min_share: 0.03
+  known_events:
+    - name: Kostanay forest and steppe fires (Auliekol)
+      year: 2022
+      month: 9
+      bbox: [62.5, 51.5, 65.5, 53.5]
+    - name: Abai region forest fire (Semey Ormany)
+      year: 2023
+      month: 6
+      bbox: [79.0, 49.8, 82.0, 51.2]
+
+api:
+  max_cells: 200000
+  max_export_rows: 500000
+  base_period_start: 2001

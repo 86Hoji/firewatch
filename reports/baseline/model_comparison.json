@@ -1,0 +1,1037 @@
+{
+  "selected": "C2",
+  "results": {
+    "C0": {
+      "T1_backcast": {
+        "n_months": 48,
+        "mae": 269.34108133275697,
+        "mae_pct_of_mean": 8.685445112207734,
+        "bias_total_pct": -3.125282567408678,
+        "bias_median_rel_pct": -9.698858447882975,
+        "pearson_r": 0.994985189596838,
+        "spearman_rho": 0.9903655660824189
+      },
+      "T2_forecast": {
+        "n_months": 72,
+        "mae": 284.1368944261204,
+        "mae_pct_of_mean": 14.97485335505231,
+        "bias_total_pct": -10.118705932245827,
+        "bias_median_rel_pct": -14.773688167440868,
+        "pearson_r": 0.9793017467125583,
+        "spearman_rho": 0.98606789992655
+      },
+      "T3_loro": {
+        "mae_pct_of_mean": 16.466195167322983,
+        "bias_total_pct": 1.1174989474432522,
+        "abs_bias_median": 4.987392284248397,
+        "pearson_r": 0.9893683049385034,
+        "by_subregion": [
+          {
+            "sub": "8110bffffffffff",
+            "n_months": 88,
+            "mae": 35.39018179161988,
+            "mae_pct_of_mean": 22.585655215480088,
+            "bias_total_pct": 14.693612651402267,
+            "bias_median_rel_pct": -10.806347594025883,
+            "pearson_r": 0.9880690092731735,
+            "spearman_rho": 0.9865788603072068
+          },
+          {
+            "sub": "81203ffffffffff",
+            "n_months": 95,
+            "mae": 73.6653122651757,
+            "mae_pct_of_mean": 10.527890519747402,
+            "bias_total_pct": 1.948712439684701,
+            "bias_median_rel_pct": -0.2979056331247008,
+            "pearson_r": 0.991191303467994,
+            "spearman_rho": 0.987107115288937
+          },
+          {
+            "sub": "81207ffffffffff",
+            "n_months": 88,
+            "mae": 55.200329746352374,
+            "mae_pct_of_mean": 13.986435799945319,
+            "bias_total_pct": 0.28628545520180326,
+            "bias_median_rel_pct": -6.086409961132223,
+            "pearson_r": 0.9865276689483288,
+            "spearman_rho": 0.9803898097141713
+          },
+          {
+            "sub": "81213ffffffffff",
+            "n_months": 96,
+            "mae": 83.00212541688785,
+            "mae_pct_of_mean": 12.485629734125,
+            "bias_total_pct": -2.7209563431271904,
+            "bias_median_rel_pct": -19.77611940298507,
+            "pearson_r": 0.9902195171364393,
+            "spearman_rho": 0.9729806795328576
+          },
+          {
+            "sub": "81217ffffffffff",
+            "n_months": 93,
+            "mae": 175.98754563324567,
+            "mae_pct_of_mean": 18.945954534700647,
+            "bias_total_pct": 10.048925773219814,
+            "bias_median_rel_pct": -22.518208431534642,
+            "pearson_r": 0.9954465228888827,
+            "spearman_rho": 0.9837547690260211
+          },
+          {
+            "sub": "8121bffffffffff",
+            "n_months": 91,
+            "mae": 25.443868413994256,
+            "mae_pct_of_mean": 12.718440130038326,
+            "bias_total_pct": 2.5904587299135113,
+            "bias_median_rel_pct": -1.3716747344621223,
+            "pearson_r": 0.9903044688791649,
+            "spearman_rho": 0.9691338857206514
+          },
+          {
+            "sub": "812c7ffffffffff",
+            "n_months": 93,
+            "mae": 32.69897377460214,
+            "mae_pct_of_mean": 25.828134542534386,
+            "bias_total_pct": -7.253828225369603,
+            "bias_median_rel_pct": -29.201733790861468,
+            "pearson_r": 0.9885170927405675,
+            "spearman_rho": 0.9548117692382816
+          },
+          {
+            "sub": "merged_small",
+            "n_months": 96,
+            "mae": 37.89523137637908,
+            "mae_pct_of_mean": 24.994450100531715,
+            "bias_total_pct": -21.35553834065974,
+            "bias_median_rel_pct": -25.706996908023793,
+            "pearson_r": 0.9805457867712235,
+            "spearman_rho": 0.9737788210014384
+          }
+        ]
+      },
+      "T4_loyo": {
+        "n_months": 96,
+        "mae": 252.887489285466,
+        "mae_pct_of_mean": 7.838105391225584,
+        "bias_total_pct": 0.7499753170551734,
+        "bias_median_rel_pct": -3.183460596103556,
+        "pearson_r": 0.9943891513879588,
+        "spearman_rho": 0.9930683198025471
+      },
+      "score": 10.9965818902521,
+      "n_params": 1
+    },
+    "C1": {
+      "T1_backcast": {
+        "n_months": 48,
+        "mae": 239.9566858567825,
+        "mae_pct_of_mean": 7.7378861553671525,
+        "bias_total_pct": -1.0530652260839186,
+        "bias_median_rel_pct": -3.743174149569242,
+        "pearson_r": 0.9950014552343815,
+        "spearman_rho": 0.9881937851380146
+      },
+      "T2_forecast": {
+        "n_months": 72,
+        "mae": 202.40438840127996,
+        "mae_pct_of_mean": 10.66730894222649,
+        "bias_total_pct": -3.4672233045937944,
+        "bias_median_rel_pct": -1.9342944696075683,
+        "pearson_r": 0.9825868878456046,
+        "spearman_rho": 0.991630958507518
+      },
+      "T3_loro": {
+        "mae_pct_of_mean": 14.946740358522142,
+        "bias_total_pct": -1.926648674801115,
+        "abs_bias_median": 6.855057141244439,
+        "pearson_r": 0.9888738743402177,
+        "by_subregion": [
+          {
+            "sub": "8110bffffffffff",
+            "n_months": 88,
+            "mae": 30.282074373181306,
+            "mae_pct_of_mean": 19.325712849662448,
+            "bias_total_pct": 12.474424962170035,
+            "bias_median_rel_pct": -7.127732875835591,
+            "pearson_r": 0.9954796697452736,
+            "spearman_rho": 0.9851205691201504
+          },
+          {
+            "sub": "81203ffffffffff",
+            "n_months": 95,
+            "mae": 75.17558804558004,
+            "mae_pct_of_mean": 10.743731837483043,
+            "bias_total_pct": -0.21549423066934698,
+            "bias_median_rel_pct": 0.5190750869230235,
+            "pearson_r": 0.9909369908468468,
+            "spearman_rho": 0.9852351395029048
+          },
+          {
+            "sub": "81207ffffffffff",
+            "n_months": 88,
+            "mae": 53.038691730309004,
+            "mae_pct_of_mean": 13.438728721508715,
+            "bias_total_pct": 0.15493595834969798,
+            "bias_median_rel_pct": -0.7059753268145275,
+            "pearson_r": 0.9866272389948795,
+            "spearman_rho": 0.9780635387854741
+          },
+          {
+            "sub": "81213ffffffffff",
+            "n_months": 96,
+            "mae": 87.71101033326958,
+            "mae_pct_of_mean": 13.193965734332847,
+            "bias_total_pct": -7.746098632591352,
+            "bias_median_rel_pct": -18.40232287539439,
+            "pearson_r": 0.9878680071906307,
+            "spearman_rho": 0.9732369700368558
+          },
+          {
+            "sub": "81217ffffffffff",
+            "n_months": 93,
+            "mae": 70.92729639646015,
+            "mae_pct_of_mean": 7.635684263686428,
+            "bias_total_pct": -3.637803118932883,
+            "bias_median_rel_pct": -17.096927694522797,
+            "pearson_r": 0.9979872495372317,
+            "spearman_rho": 0.9826849216823766
+          },
+          {
+            "sub": "8121bffffffffff",
+            "n_months": 91,
+            "mae": 32.918545063596156,
+            "mae_pct_of_mean": 16.45475199553557,
+            "bias_total_pct": 5.964015649897527,
+            "bias_median_rel_pct": 2.265959852831351,
+            "pearson_r": 0.98807070056305,
+            "spearman_rho": 0.9541869845719216
+          },
+          {
+            "sub": "812c7ffffffffff",
+            "n_months": 93,
+            "mae": 28.12129148117717,
+            "mae_pct_of_mean": 22.21233317266415,
+            "bias_total_pct": -10.02626893690204,
+            "bias_median_rel_pct": -27.0992408096422,
+            "pearson_r": 0.9896770481173853,
+            "spearman_rho": 0.9507276168827268
+          },
+          {
+            "sub": "merged_small",
+            "n_months": 96,
+            "mae": 35.425987661542756,
+            "mae_pct_of_mean": 23.36581803853043,
+            "bias_total_pct": -17.895454315259702,
+            "bias_median_rel_pct": -21.769198196144462,
+            "pearson_r": 0.9778475487563281,
+            "spearman_rho": 0.9619218494091095
+          }
+        ]
+      },
+      "T4_loyo": {
+        "n_months": 96,
+        "mae": 200.94781947175787,
+        "mae_pct_of_mean": 6.228264559891505,
+        "bias_total_pct": -0.24999252322288903,
+        "bias_median_rel_pct": 0.0012671573019575435,
+        "pearson_r": 0.9966152773385979,
+        "spearman_rho": 0.9927630597268006
+      },
+      "score": 9.637630357926932,
+      "n_params": 2
+    },
+    "C2": {
+      "T1_backcast": {
+        "n_months": 48,
+        "mae": 216.28797878953935,
+        "mae_pct_of_mean": 6.974641071875828,
+        "bias_total_pct": -1.9997300275677674,
+        "bias_median_rel_pct": -3.6809689684888043,
+        "pearson_r": 0.9967066628311254,
+        "spearman_rho": 0.9871081561513209
+      },
+      "T2_forecast": {
+        "n_months": 72,
+        "mae": 196.30194544478994,
+        "mae_pct_of_mean": 10.345692178709808,
+        "bias_total_pct": -3.2327080829026182,
+        "bias_median_rel_pct": -3.7862178053786293,
+        "pearson_r": 0.983765641100986,
+        "spearman_rho": 0.991180750688242
+      },
+      "T3_loro": {
+        "mae_pct_of_mean": 15.339827034297246,
+        "bias_total_pct": -1.423793071212794,
+        "abs_bias_median": 7.238035149796968,
+        "pearson_r": 0.9898882946873819,
+        "by_subregion": [
+          {
+            "sub": "8110bffffffffff",
+            "n_months": 88,
+            "mae": 30.503369090706943,
+            "mae_pct_of_mean": 19.46694089478723,
+            "bias_total_pct": 12.550610936537202,
+            "bias_median_rel_pct": -6.788002118716387,
+            "pearson_r": 0.9953671799285859,
+            "spearman_rho": 0.9854211020935292
+          },
+          {
+            "sub": "81203ffffffffff",
+            "n_months": 95,
+            "mae": 77.21794816670386,
+            "mae_pct_of_mean": 11.035616078463235,
+            "bias_total_pct": 0.015589552358815525,
+            "bias_median_rel_pct": -0.04164052751533185,
+            "pearson_r": 0.9904081411891112,
+            "spearman_rho": 0.9850181635870985
+          },
+          {
+            "sub": "81207ffffffffff",
+            "n_months": 88,
+            "mae": 55.913723084819075,
+            "mae_pct_of_mean": 14.167192512349423,
+            "bias_total_pct": -0.14094396722895147,
+            "bias_median_rel_pct": -0.6764969026394128,
+            "pearson_r": 0.9842215976941178,
+            "spearman_rho": 0.9775956207154126
+          },
+          {
+            "sub": "81213ffffffffff",
+            "n_months": 96,
+            "mae": 81.47252198491763,
+            "mae_pct_of_mean": 12.25553849253685,
+            "bias_total_pct": -7.815270816077875,
+            "bias_median_rel_pct": -17.96118396225806,
+            "pearson_r": 0.9908737884901817,
+            "spearman_rho": 0.9734894849847808
+          },
+          {
+            "sub": "81217ffffffffff",
+            "n_months": 93,
+            "mae": 75.08507641030283,
+            "mae_pct_of_mean": 8.083290432771324,
+            "bias_total_pct": -2.7066421751966363,
+            "bias_median_rel_pct": -18.190415422325557,
+            "pearson_r": 0.9978199776131798,
+            "spearman_rho": 0.9828054678619422
+          },
+          {
+            "sub": "8121bffffffffff",
+            "n_months": 91,
+            "mae": 33.03399589356499,
+            "mae_pct_of_mean": 16.512461556245068,
+            "bias_total_pct": 6.66079948351606,
+            "bias_median_rel_pct": 2.406965149029212,
+            "pearson_r": 0.9849492044291462,
+            "spearman_rho": 0.958122236159223
+          },
+          {
+            "sub": "812c7ffffffffff",
+            "n_months": 93,
+            "mae": 28.097437045553306,
+            "mae_pct_of_mean": 22.193491126519937,
+            "bias_total_pct": -10.519889550325084,
+            "bias_median_rel_pct": -26.158115055360188,
+            "pearson_r": 0.9893684481856527,
+            "spearman_rho": 0.9520131768022546
+          },
+          {
+            "sub": "merged_small",
+            "n_months": 96,
+            "mae": 34.117000286852004,
+            "mae_pct_of_mean": 22.502452954570884,
+            "bias_total_pct": -16.706854644580968,
+            "bias_median_rel_pct": -22.500082374849047,
+            "pearson_r": 0.9731431988166723,
+            "spearman_rho": 0.962430598192355
+          }
+        ]
+      },
+      "T4_loyo": {
+        "n_months": 96,
+        "mae": 203.8846317930667,
+        "mae_pct_of_mean": 6.319289404788771,
+        "bias_total_pct": 0.11321573291530476,
+        "bias_median_rel_pct": 0.5417632407064619,
+        "pearson_r": 0.9966510588750188,
+        "spearman_rho": 0.993088620301415
+      },
+      "score": 9.544585836987281,
+      "n_params": 2
+    },
+    "C3": {
+      "T1_backcast": {
+        "n_months": 48,
+        "mae": 242.73421204869064,
+        "mae_pct_of_mean": 7.827453076121189,
+        "bias_total_pct": -1.3603718979003403,
+        "bias_median_rel_pct": -8.155715687489653,
+        "pearson_r": 0.995995153765624,
+        "spearman_rho": 0.9912340221307209
+      },
+      "T2_forecast": {
+        "n_months": 72,
+        "mae": 251.01455528397972,
+        "mae_pct_of_mean": 13.229208276360028,
+        "bias_total_pct": -5.02362141811867,
+        "bias_median_rel_pct": -14.783472154176922,
+        "pearson_r": 0.9856224478622574,
+        "spearman_rho": 0.9874748774017202
+      },
+      "T3_loro": {
+        "mae_pct_of_mean": 16.370951285760203,
+        "bias_total_pct": 2.2136467093996495,
+        "abs_bias_median": 5.548906410006029,
+        "pearson_r": 0.9848998176497463,
+        "by_subregion": [
+          {
+            "sub": "8110bffffffffff",
+            "n_months": 88,
+            "mae": 33.19433333089902,
+            "mae_pct_of_mean": 21.18428699049325,
+            "bias_total_pct": 14.536496471156232,
+            "bias_median_rel_pct": -7.322211343895253,
+            "pearson_r": 0.9863747400786737,
+            "spearman_rho": 0.9874451988791927
+          },
+          {
+            "sub": "81203ffffffffff",
+            "n_months": 95,
+            "mae": 119.97683038124518,
+            "mae_pct_of_mean": 17.146508937791722,
+            "bias_total_pct": 10.755120674169595,
+            "bias_median_rel_pct": 6.648281096915305,
+            "pearson_r": 0.9831822738453215,
+            "spearman_rho": 0.9823020929078952
+          },
+          {
+            "sub": "81207ffffffffff",
+            "n_months": 88,
+            "mae": 53.91619974735811,
+            "mae_pct_of_mean": 13.661068145943144,
+            "bias_total_pct": 5.737044606198195,
+            "bias_median_rel_pct": -2.6075849066834857,
+            "pearson_r": 0.9893424594769059,
+            "spearman_rho": 0.9837462846367948
+          },
+          {
+            "sub": "81213ffffffffff",
+            "n_months": 96,
+            "mae": 82.91069780574814,
+            "mae_pct_of_mean": 12.471876697146339,
+            "bias_total_pct": -5.219668766260869,
+            "bias_median_rel_pct": -23.523283006277236,
+            "pearson_r": 0.9903331720129226,
+            "spearman_rho": 0.9735474244595318
+          },
+          {
+            "sub": "81217ffffffffff",
+            "n_months": 93,
+            "mae": 118.88926334334697,
+            "mae_pct_of_mean": 12.799033987673225,
+            "bias_total_pct": 5.360768213813863,
+            "bias_median_rel_pct": -18.122355975747936,
+            "pearson_r": 0.9973587003653562,
+            "spearman_rho": 0.9848321505058885
+          },
+          {
+            "sub": "8121bffffffffff",
+            "n_months": 91,
+            "mae": 31.19935616505831,
+            "mae_pct_of_mean": 15.595393633728682,
+            "bias_total_pct": -0.933474795014564,
+            "bias_median_rel_pct": 0.9772678289102672,
+            "pearson_r": 0.98334542161305,
+            "spearman_rho": 0.9684847435640077
+          },
+          {
+            "sub": "812c7ffffffffff",
+            "n_months": 93,
+            "mae": 31.523189032047725,
+            "mae_pct_of_mean": 24.899410395621185,
+            "bias_total_pct": -1.9737958866145116,
+            "bias_median_rel_pct": -24.74026387974371,
+            "pearson_r": 0.9834248952208191,
+            "spearman_rho": 0.9506526960923506
+          },
+          {
+            "sub": "merged_small",
+            "n_months": 96,
+            "mae": 37.56738170632925,
+            "mae_pct_of_mean": 24.778211225060858,
+            "bias_total_pct": -19.31904336757755,
+            "bias_median_rel_pct": -22.508941323317952,
+            "pearson_r": 0.9751434522833126,
+            "spearman_rho": 0.9621998372219743
+          }
+        ]
+      },
+      "T4_loyo": {
+        "n_months": 96,
+        "mae": 235.98916981464617,
+        "mae_pct_of_mean": 7.314351490543801,
+        "bias_total_pct": 0.7454559655031885,
+        "bias_median_rel_pct": -2.8013572557422255,
+        "pearson_r": 0.9952700998993503,
+        "spearman_rho": 0.9922340764883437
+      },
+      "score": 10.504251950808397,
+      "n_params": 2
+    },
+    "C4": {
+      "T1_backcast": {
+        "n_months": 48,
+        "mae": 331.80505630217925,
+        "mae_pct_of_mean": 10.699721669659326,
+        "bias_total_pct": -4.167916455821738,
+        "bias_median_rel_pct": -9.714923707430437,
+        "pearson_r": 0.9921653091405576,
+        "spearman_rho": 0.9896865249947185
+      },
+      "T2_forecast": {
+        "n_months": 72,
+        "mae": 346.9341866620264,
+        "mae_pct_of_mean": 18.284456088010913,
+        "bias_total_pct": -13.496416176585445,
+        "bias_median_rel_pct": -18.286639000899548,
+        "pearson_r": 0.9249333481063788,
+        "spearman_rho": 0.9810911200866638
+      },
+      "T3_loro": {
+        "mae_pct_of_mean": 18.445762139661717,
+        "bias_total_pct": 1.3829434691335067,
+        "abs_bias_median": 7.62512705829917,
+        "pearson_r": 0.9833763777244905,
+        "by_subregion": [
+          {
+            "sub": "8110bffffffffff",
+            "n_months": 88,
+            "mae": 43.59632952981558,
+            "mae_pct_of_mean": 27.82273550383473,
+            "bias_total_pct": 18.460162470956316,
+            "bias_median_rel_pct": -9.489485655292926,
+            "pearson_r": 0.9697238155541621,
+            "spearman_rho": 0.9847551845839325
+          },
+          {
+            "sub": "81203ffffffffff",
+            "n_months": 95,
+            "mae": 100.68908130778183,
+            "mae_pct_of_mean": 14.38999702772445,
+            "bias_total_pct": 4.453536471563687,
+            "bias_median_rel_pct": 0.6738468421120635,
+            "pearson_r": 0.983366161207833,
+            "spearman_rho": 0.9839743816259651
+          },
+          {
+            "sub": "81207ffffffffff",
+            "n_months": 88,
+            "mae": 59.553923787510556,
+            "mae_pct_of_mean": 15.089531811064838,
+            "bias_total_pct": -1.687649533296674,
+            "bias_median_rel_pct": -8.008431609541995,
+            "pearson_r": 0.9833865942411479,
+            "spearman_rho": 0.9746953098918847
+          },
+          {
+            "sub": "81213ffffffffff",
+            "n_months": 96,
+            "mae": 105.31511824571218,
+            "mae_pct_of_mean": 15.842071094170027,
+            "bias_total_pct": -3.924396413811514,
+            "bias_median_rel_pct": -25.432582197390442,
+            "pearson_r": 0.9821536287376328,
+            "spearman_rho": 0.9750735686988978
+          },
+          {
+            "sub": "81217ffffffffff",
+            "n_months": 93,
+            "mae": 173.8905886188053,
+            "mae_pct_of_mean": 18.72020644489205,
+            "bias_total_pct": 6.913786495926116,
+            "bias_median_rel_pct": -26.347266884828514,
+            "pearson_r": 0.9942246536124567,
+            "spearman_rho": 0.9816790816459335
+          },
+          {
+            "sub": "8121bffffffffff",
+            "n_months": 91,
+            "mae": 36.352619909431134,
+            "mae_pct_of_mean": 18.17131783443138,
+            "bias_total_pct": 8.336467620672224,
+            "bias_median_rel_pct": -0.5595975632896535,
+            "pearson_r": 0.9852023714962808,
+            "spearman_rho": 0.9586605662264965
+          },
+          {
+            "sub": "812c7ffffffffff",
+            "n_months": 93,
+            "mae": 35.495659741522395,
+            "mae_pct_of_mean": 28.037169661640757,
+            "bias_total_pct": -9.019198684433034,
+            "bias_median_rel_pct": -33.47944281223391,
+            "pearson_r": 0.9885924297072209,
+            "spearman_rho": 0.958746927801035
+          },
+          {
+            "sub": "merged_small",
+            "n_months": 96,
+            "mae": 41.459768131662514,
+            "mae_pct_of_mean": 27.345501481549988,
+            "bias_total_pct": -21.962943553914897,
+            "bias_median_rel_pct": -24.58479999846205,
+            "pearson_r": 0.9658927624982504,
+            "spearman_rho": 0.9589716395123236
+          }
+        ]
+      },
+      "T4_loyo": {
+        "n_months": 96,
+        "mae": 313.46970966871567,
+        "mae_pct_of_mean": 9.71581721295332,
+        "bias_total_pct": 0.8246267693855408,
+        "bias_median_rel_pct": -3.676844651506926,
+        "pearson_r": 0.9908463697001334,
+        "spearman_rho": 0.9897381290117028
+      },
+      "score": 12.953767007424787,
+      "n_params": 1
+    },
+    "C5": {
+      "T1_backcast": {
+        "n_months": 48,
+        "mae": 309.45612561642275,
+        "mae_pct_of_mean": 9.979035431127969,
+        "bias_total_pct": -1.7137169420019356,
+        "bias_median_rel_pct": -11.688042430044415,
+        "pearson_r": 0.9933068860208935,
+        "spearman_rho": 0.9898767844542149
+      },
+      "T2_forecast": {
+        "n_months": 72,
+        "mae": 345.4733307910123,
+        "mae_pct_of_mean": 18.207464669893643,
+        "bias_total_pct": -8.69868502573327,
+        "bias_median_rel_pct": -18.501712245290364,
+        "pearson_r": 0.9288266886579485,
+        "spearman_rho": 0.9800942233292788
+      },
+      "T3_loro": {
+        "mae_pct_of_mean": 18.368245418636242,
+        "bias_total_pct": 2.6409468530967852,
+        "abs_bias_median": 5.403525828054692,
+        "pearson_r": 0.9770250086068223,
+        "by_subregion": [
+          {
+            "sub": "8110bffffffffff",
+            "n_months": 88,
+            "mae": 48.55266196392776,
+            "mae_pct_of_mean": 30.985816613428405,
+            "bias_total_pct": 21.91940480378718,
+            "bias_median_rel_pct": -7.571257162830635,
+            "pearson_r": 0.955390743189754,
+            "spearman_rho": 0.9819758503009576
+          },
+          {
+            "sub": "81203ffffffffff",
+            "n_months": 95,
+            "mae": 113.85417726115202,
+            "mae_pct_of_mean": 16.27148893507054,
+            "bias_total_pct": 7.816742829711765,
+            "bias_median_rel_pct": 2.353593178745311,
+            "pearson_r": 0.9792634447574363,
+            "spearman_rho": 0.9797747540612602
+          },
+          {
+            "sub": "81207ffffffffff",
+            "n_months": 88,
+            "mae": 72.97731543616612,
+            "mae_pct_of_mean": 18.49069637609806,
+            "bias_total_pct": 3.881353126205491,
+            "bias_median_rel_pct": -2.9118423333447843,
+            "pearson_r": 0.9741949721657253,
+            "spearman_rho": 0.9733931867276899
+          },
+          {
+            "sub": "81213ffffffffff",
+            "n_months": 96,
+            "mae": 101.52735968906524,
+            "mae_pct_of_mean": 15.272295915245088,
+            "bias_total_pct": -6.499779308221341,
+            "bias_median_rel_pct": -25.953561446961398,
+            "pearson_r": 0.9818345599741699,
+            "spearman_rho": 0.9748511296453536
+          },
+          {
+            "sub": "81217ffffffffff",
+            "n_months": 93,
+            "mae": 122.29336034230069,
+            "mae_pct_of_mean": 13.165502346225665,
+            "bias_total_pct": 0.2664759792667665,
+            "bias_median_rel_pct": -27.980434620768847,
+            "pearson_r": 0.9946772018308837,
+            "spearman_rho": 0.9828920821919553
+          },
+          {
+            "sub": "8121bffffffffff",
+            "n_months": 91,
+            "mae": 36.50161408414069,
+            "mae_pct_of_mean": 18.24579446117442,
+            "bias_total_pct": 1.400540579988079,
+            "bias_median_rel_pct": -6.905723449028425,
+            "pearson_r": 0.9803358791109421,
+            "spearman_rho": 0.9592390778178989
+          },
+          {
+            "sub": "812c7ffffffffff",
+            "n_months": 93,
+            "mae": 41.281140826847924,
+            "mae_pct_of_mean": 32.606982307600276,
+            "bias_total_pct": 4.307272347888042,
+            "bias_median_rel_pct": -28.429096174520364,
+            "pearson_r": 0.9747865724562083,
+            "spearman_rho": 0.9507285130975517
+          },
+          {
+            "sub": "merged_small",
+            "n_months": 96,
+            "mae": 43.42039505341017,
+            "mae_pct_of_mean": 28.638666610287707,
+            "bias_total_pct": -20.874438732432253,
+            "bias_median_rel_pct": -21.590420684791813,
+            "pearson_r": 0.9547117016052435,
+            "spearman_rho": 0.9410515699304393
+          }
+        ]
+      },
+      "T4_loyo": {
+        "n_months": 96,
+        "mae": 305.05131667927407,
+        "mae_pct_of_mean": 9.454893860586477,
+        "bias_total_pct": 0.5732805598951363,
+        "bias_median_rel_pct": -4.862074243241888,
+        "pearson_r": 0.9913364278236645,
+        "spearman_rho": 0.9905384599960604
+      },
+      "score": 12.600724903450228,
+      "n_params": 2
+    },
+    "C6": {
+      "T1_backcast": {
+        "n_months": 48,
+        "mae": 363.205991126752,
+        "mae_pct_of_mean": 11.712307995300062,
+        "bias_total_pct": -2.032260130242035,
+        "bias_median_rel_pct": -5.049014088578676,
+        "pearson_r": 0.9900385265427096,
+        "spearman_rho": 0.9784496811723241
+      },
+      "T2_forecast": {
+        "n_months": 72,
+        "mae": 302.4658009299911,
+        "mae_pct_of_mean": 15.94084085065118,
+        "bias_total_pct": -3.644908129210158,
+        "bias_median_rel_pct": 1.8312310510919514,
+        "pearson_r": 0.9245396565325371,
+        "spearman_rho": 0.9822809646035429
+      },
+      "T3_loro": {
+        "mae_pct_of_mean": 21.080676851828628,
+        "bias_total_pct": -6.014369779149083,
+        "abs_bias_median": 11.432365435594999,
+        "pearson_r": 0.9804917439908635,
+        "by_subregion": [
+          {
+            "sub": "8110bffffffffff",
+            "n_months": 88,
+            "mae": 37.51924961786543,
+            "mae_pct_of_mean": 23.94440471660133,
+            "bias_total_pct": 14.742890552105615,
+            "bias_median_rel_pct": -7.104182573585979,
+            "pearson_r": 0.9852593927244476,
+            "spearman_rho": 0.9831045304272285
+          },
+          {
+            "sub": "81203ffffffffff",
+            "n_months": 95,
+            "mae": 105.51378746374614,
+            "mae_pct_of_mean": 15.07952072127914,
+            "bias_total_pct": 3.8692891050294302,
+            "bias_median_rel_pct": 3.512200110054811,
+            "pearson_r": 0.9805914700338648,
+            "spearman_rho": 0.9775493634267834
+          },
+          {
+            "sub": "81207ffffffffff",
+            "n_months": 88,
+            "mae": 71.8969153715272,
+            "mae_pct_of_mean": 18.216948987055925,
+            "bias_total_pct": -1.719452692402008,
+            "bias_median_rel_pct": -9.96360998984365,
+            "pearson_r": 0.9763041897480772,
+            "spearman_rho": 0.9701132239883703
+          },
+          {
+            "sub": "81213ffffffffff",
+            "n_months": 96,
+            "mae": 112.44516880209551,
+            "mae_pct_of_mean": 16.91461195725594,
+            "bias_total_pct": -10.419126269199019,
+            "bias_median_rel_pct": -21.96999171736769,
+            "pearson_r": 0.9803920179478621,
+            "spearman_rho": 0.9739067393937372
+          },
+          {
+            "sub": "81217ffffffffff",
+            "n_months": 93,
+            "mae": 118.85917078295643,
+            "mae_pct_of_mean": 12.795794370466561,
+            "bias_total_pct": -10.309286865896159,
+            "bias_median_rel_pct": -26.495043265409745,
+            "pearson_r": 0.9936379849856803,
+            "spearman_rho": 0.9797993475090255
+          },
+          {
+            "sub": "8121bffffffffff",
+            "n_months": 91,
+            "mae": 56.84174488258835,
+            "mae_pct_of_mean": 28.413066653751937,
+            "bias_total_pct": 18.72901986010248,
+            "bias_median_rel_pct": 6.142845019931667,
+            "pearson_r": 0.9686115413761939,
+            "spearman_rho": 0.945336524466506
+          },
+          {
+            "sub": "812c7ffffffffff",
+            "n_months": 93,
+            "mae": 30.5626554886887,
+            "mae_pct_of_mean": 24.140708004484875,
+            "bias_total_pct": -12.680697864836633,
+            "bias_median_rel_pct": -35.12131007556647,
+            "pearson_r": 0.9885639565389522,
+            "spearman_rho": 0.9440003668850738
+          },
+          {
+            "sub": "merged_small",
+            "n_months": 96,
+            "mae": 38.23556254983074,
+            "mae_pct_of_mean": 25.218921365742016,
+            "bias_total_pct": -12.44560460199098,
+            "bias_median_rel_pct": -18.153396800455702,
+            "pearson_r": 0.9454774245401547,
+            "spearman_rho": 0.946673232129902
+          }
+        ]
+      },
+      "T4_loyo": {
+        "n_months": 96,
+        "mae": 354.88347843198153,
+        "mae_pct_of_mean": 10.999413665792868,
+        "bias_total_pct": 0.34800516030237383,
+        "bias_median_rel_pct": 0.21013410357309695,
+        "pearson_r": 0.9894464052829458,
+        "spearman_rho": 0.9864384133102028
+      },
+      "score": 14.597466170973854,
+      "n_params": 2
+    },
+    "C7": {
+      "T1_backcast": {
+        "n_months": 48,
+        "mae": 384.5016145720111,
+        "mae_pct_of_mean": 12.399028222488617,
+        "bias_total_pct": 0.6517302751144967,
+        "bias_median_rel_pct": -8.76594009090392,
+        "pearson_r": 0.9897821710743566,
+        "spearman_rho": 0.9775546210684155
+      },
+      "T2_forecast": {
+        "n_months": 72,
+        "mae": 307.78697201469186,
+        "mae_pct_of_mean": 16.221282279531714,
+        "bias_total_pct": 1.4138633862442322,
+        "bias_median_rel_pct": -1.5691653035835962,
+        "pearson_r": 0.9398669546557525,
+        "spearman_rho": 0.9862203146932103
+      },
+      "T3_loro": {
+        "mae_pct_of_mean": 21.8685486778936,
+        "bias_total_pct": 6.973921073927357,
+        "abs_bias_median": 12.595821155530423,
+        "pearson_r": 0.9733583968749299,
+        "by_subregion": [
+          {
+            "sub": "8110bffffffffff",
+            "n_months": 88,
+            "mae": 40.03450204450776,
+            "mae_pct_of_mean": 25.549613314356975,
+            "bias_total_pct": 18.09103203087174,
+            "bias_median_rel_pct": -4.647567579450875,
+            "pearson_r": 0.9820825540297417,
+            "spearman_rho": 0.9734205157300135
+          },
+          {
+            "sub": "81203ffffffffff",
+            "n_months": 95,
+            "mae": 157.05352562130386,
+            "mae_pct_of_mean": 22.445331087845993,
+            "bias_total_pct": 14.27722302125391,
+            "bias_median_rel_pct": 5.055115248109128,
+            "pearson_r": 0.9520635841495307,
+            "spearman_rho": 0.9694753198756896
+          },
+          {
+            "sub": "81207ffffffffff",
+            "n_months": 88,
+            "mae": 84.03231071043933,
+            "mae_pct_of_mean": 21.29176626794121,
+            "bias_total_pct": 8.127704000343167,
+            "bias_median_rel_pct": 7.140051677678838,
+            "pearson_r": 0.9699265019688494,
+            "spearman_rho": 0.9697469572383423
+          },
+          {
+            "sub": "81213ffffffffff",
+            "n_months": 96,
+            "mae": 106.01956399258286,
+            "mae_pct_of_mean": 15.948037642846103,
+            "bias_total_pct": -10.914419289806935,
+            "bias_median_rel_pct": -25.060518712482917,
+            "pearson_r": 0.984273020827761,
+            "spearman_rho": 0.9746801375324867
+          },
+          {
+            "sub": "81217ffffffffff",
+            "n_months": 93,
+            "mae": 187.3835241375909,
+            "mae_pct_of_mean": 20.172789591947808,
+            "bias_total_pct": -16.88485978226009,
+            "bias_median_rel_pct": -31.945389424725683,
+            "pearson_r": 0.9804976424416408,
+            "spearman_rho": 0.9789630583882892
+          },
+          {
+            "sub": "8121bffffffffff",
+            "n_months": 91,
+            "mae": 40.665717542828986,
+            "mae_pct_of_mean": 20.327274355382794,
+            "bias_total_pct": 5.9312714994095925,
+            "bias_median_rel_pct": -0.4372430895020186,
+            "pearson_r": 0.9767902917810103,
+            "spearman_rho": 0.9553152050778598
+          },
+          {
+            "sub": "812c7ffffffffff",
+            "n_months": 93,
+            "mae": 44.444198689139505,
+            "mae_pct_of_mean": 35.105405793188154,
+            "bias_total_pct": 8.016570648445123,
+            "bias_median_rel_pct": -27.787991961822513,
+            "pearson_r": 0.9477886035432485,
+            "spearman_rho": 0.9414794519266144
+          },
+          {
+            "sub": "merged_small",
+            "n_months": 96,
+            "mae": 40.331979541472265,
+            "mae_pct_of_mean": 26.60164916510709,
+            "bias_total_pct": -16.565415196922707,
+            "bias_median_rel_pct": -24.680722447948707,
+            "pearson_r": 0.9459556749852875,
+            "spearman_rho": 0.9442852129119625
+          }
+        ]
+      },
+      "T4_loyo": {
+        "n_months": 96,
+        "mae": 365.2619446171841,
+        "mae_pct_of_mean": 11.321088383623856,
+        "bias_total_pct": 1.3683129620863583,
+        "bias_median_rel_pct": -0.31178179286444274,
+        "pearson_r": 0.9869362381755915,
+        "spearman_rho": 0.9854956473433704
+      },
+      "score": 15.196221761335357,
+      "n_params": 4
+    }
+  },
+  "intervals": {
+    "season": {
+      "coverage": 0.8125,
+      "by_test": {
+        "T1": 0.7291666666666666,
+        "T4": 0.8541666666666666
+      },
+      "median_width_pct": 30.947721397934792
+    },
+    "hetero": {
+      "coverage": 0.8958333333333334,
+      "by_test": {
+        "T1": 0.9375,
+        "T4": 0.875
+      },
+      "median_width_pct": 34.999801784780914
+    },
+    "selected": "hetero"
+  },
+  "specs": {
+    "C0": {
+      "cols": [
+        "n_modis"
+      ],
+      "link": "identity",
+      "label": "Terra∪Aqua, ratio"
+    },
+    "C1": {
+      "cols": [
+        "n_modis"
+      ],
+      "link": "ols_log1p",
+      "label": "Terra∪Aqua, OLS log1p (v1)"
+    },
+    "C2": {
+      "cols": [
+        "n_modis"
+      ],
+      "link": "log",
+      "label": "Terra∪Aqua, Poisson log-link"
+    },
+    "C3": {
+      "cols": [
+        "n_modis_d",
+        "n_modis_n"
+      ],
+      "link": "identity",
+      "label": "Terra∪Aqua day+night, ratio"
+    },
+    "C4": {
+      "cols": [
+        "n_modis_aqua"
+      ],
+      "link": "identity",
+      "label": "Aqua, ratio"
+    },
+    "C5": {
+      "cols": [
+        "n_modis_aqua_d",
+        "n_modis_aqua_n"
+      ],
+      "link": "identity",
+      "label": "Aqua day+night, ratio"
+    },
+    "C6": {
+      "cols": [
+        "n_modis_aqua"
+      ],
+      "link": "log",
+      "label": "Aqua, Poisson log-link"
+    },
+    "C7": {
+      "cols": [
+        "n_modis_aqua_d",
+        "n_modis_aqua_n"
+      ],
+      "link": "log_sep",
+      "label": "Aqua day+night, Poisson log-link"
+    }
+  }
+}

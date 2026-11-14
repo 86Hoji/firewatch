@@ -1,0 +1,576 @@
+[
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2002",
+    "kind": "archive",
+    "rows": 43218
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2003",
+    "kind": "archive",
+    "rows": 56192
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2004",
+    "kind": "archive",
+    "rows": 51009
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2005",
+    "kind": "archive",
+    "rows": 36903
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2006",
+    "kind": "archive",
+    "rows": 41110
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2007",
+    "kind": "archive",
+    "rows": 29441
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2008",
+    "kind": "archive",
+    "rows": 39154
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2009",
+    "kind": "archive",
+    "rows": 21314
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2010",
+    "kind": "archive",
+    "rows": 31243
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2011",
+    "kind": "archive",
+    "rows": 14362
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2012",
+    "kind": "archive",
+    "rows": 28920
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2013",
+    "kind": "archive",
+    "rows": 10536
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2014",
+    "kind": "archive",
+    "rows": 19754
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2015",
+    "kind": "archive",
+    "rows": 20832
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2016",
+    "kind": "archive",
+    "rows": 11592
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2017",
+    "kind": "archive",
+    "rows": 35259
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2018",
+    "kind": "archive",
+    "rows": 15503
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2019",
+    "kind": "archive",
+    "rows": 24943
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2020",
+    "kind": "archive",
+    "rows": 18334
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2021",
+    "kind": "archive",
+    "rows": 15359
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2022",
+    "kind": "archive",
+    "rows": 7811
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2023",
+    "kind": "archive",
+    "rows": 7663
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2024",
+    "kind": "archive",
+    "rows": 3946
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2025",
+    "kind": "archive",
+    "rows": 9157
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2026",
+    "kind": "MODIS_NRT",
+    "rows": 5466
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Aqua",
+    "year": "2026",
+    "kind": "MODIS_SP",
+    "rows": 15987
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2000",
+    "kind": "archive",
+    "rows": 571
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2001",
+    "kind": "archive",
+    "rows": 34732
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2002",
+    "kind": "archive",
+    "rows": 64329
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2003",
+    "kind": "archive",
+    "rows": 50143
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2004",
+    "kind": "archive",
+    "rows": 50285
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2005",
+    "kind": "archive",
+    "rows": 37778
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2006",
+    "kind": "archive",
+    "rows": 42456
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2007",
+    "kind": "archive",
+    "rows": 28899
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2008",
+    "kind": "archive",
+    "rows": 38169
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2009",
+    "kind": "archive",
+    "rows": 20743
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2010",
+    "kind": "archive",
+    "rows": 31520
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2011",
+    "kind": "archive",
+    "rows": 13436
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2012",
+    "kind": "archive",
+    "rows": 29413
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2013",
+    "kind": "archive",
+    "rows": 9692
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2014",
+    "kind": "archive",
+    "rows": 20738
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2015",
+    "kind": "archive",
+    "rows": 21641
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2016",
+    "kind": "archive",
+    "rows": 11141
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2017",
+    "kind": "archive",
+    "rows": 37284
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2018",
+    "kind": "archive",
+    "rows": 15304
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2019",
+    "kind": "archive",
+    "rows": 26171
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2020",
+    "kind": "archive",
+    "rows": 18497
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2021",
+    "kind": "archive",
+    "rows": 16379
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2022",
+    "kind": "archive",
+    "rows": 10811
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2023",
+    "kind": "archive",
+    "rows": 7241
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2024",
+    "kind": "archive",
+    "rows": 3442
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2025",
+    "kind": "archive",
+    "rows": 6301
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2026",
+    "kind": "MODIS_NRT",
+    "rows": 3501
+  },
+  {
+    "instrument": "MODIS",
+    "satellite": "Terra",
+    "year": "2026",
+    "kind": "MODIS_SP",
+    "rows": 11008
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N",
+    "year": "2012",
+    "kind": "archive",
+    "rows": 198870
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N",
+    "year": "2013",
+    "kind": "archive",
+    "rows": 76084
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N",
+    "year": "2014",
+    "kind": "archive",
+    "rows": 151316
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N",
+    "year": "2015",
+    "kind": "archive",
+    "rows": 156586
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N",
+    "year": "2016",
+    "kind": "archive",
+    "rows": 85030
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N",
+    "year": "2017",
+    "kind": "archive",
+    "rows": 262035
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N",
+    "year": "2018",
+    "kind": "archive",
+    "rows": 111973
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N",
+    "year": "2019",
+    "kind": "archive",
+    "rows": 183650
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N",
+    "year": "2020",
+    "kind": "archive",
+    "rows": 129006
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N",
+    "year": "2021",
+    "kind": "archive",
+    "rows": 121740
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N",
+    "year": "2022",
+    "kind": "archive",
+    "rows": 84024
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N",
+    "year": "2023",
+    "kind": "archive",
+    "rows": 65706
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N",
+    "year": "2024",
+    "kind": "archive",
+    "rows": 33736
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N",
+    "year": "2025",
+    "kind": "archive",
+    "rows": 64117
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N",
+    "year": "2026",
+    "kind": "VIIRS_SNPP_NRT",
+    "rows": 62074
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N",
+    "year": "2026",
+    "kind": "VIIRS_SNPP_SP",
+    "rows": 90312
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N20",
+    "year": "2018",
+    "kind": "archive",
+    "rows": 104425
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N20",
+    "year": "2019",
+    "kind": "archive",
+    "rows": 183969
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N20",
+    "year": "2020",
+    "kind": "archive",
+    "rows": 126160
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N20",
+    "year": "2021",
+    "kind": "archive",
+    "rows": 118089
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N20",
+    "year": "2022",
+    "kind": "archive",
+    "rows": 86109
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N20",
+    "year": "2023",
+    "kind": "archive",
+    "rows": 62467
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N20",
+    "year": "2024",
+    "kind": "archive",
+    "rows": 36008
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N20",
+    "year": "2025",
+    "kind": "archive",
+    "rows": 63228
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N20",
+    "year": "2026",
+    "kind": "VIIRS_NOAA20_NRT",
+    "rows": 66259
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N20",
+    "year": "2026",
+    "kind": "VIIRS_NOAA20_SP",
+    "rows": 102278
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N21",
+    "year": "2026",
+    "kind": "VIIRS_NOAA21_NRT",
+    "rows": 60717
+  },
+  {
+    "instrument": "VIIRS",
+    "satellite": "N21",
+    "year": "2026",
+    "kind": "VIIRS_NOAA21_SP",
+    "rows": 97459
+  }
+]
