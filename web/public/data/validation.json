@@ -1,0 +1,1226 @@
+{
+  "model": {
+    "selected": "C2",
+    "label": "Terra∪Aqua, Poisson log-link",
+    "production_model": "poisson_log",
+    "train_country": "KAZ"
+  },
+  "pending_countries": [],
+  "uz_test": {
+    "steps": {
+      "naive": {
+        "step_ratio": 4.875887457270576,
+        "monthly_step": {
+          "step_factor": 5.700830061324495,
+          "ci_low": 3.7957816754036617,
+          "ci_high": 8.561994911007336,
+          "n_months": 203,
+          "ci_includes_1": false
+        },
+        "excess_vs_modis": 3.6245113369820174
+      },
+      "harmonized": {
+        "step_ratio": 1.7719395272070368,
+        "monthly_step": {
+          "step_factor": 1.752433428589128,
+          "ci_low": 1.2257281961607878,
+          "ci_high": 2.5054681219341046,
+          "n_months": 203,
+          "ci_includes_1": false
+        },
+        "excess_vs_modis": 1.317178659493425
+      },
+      "modis_only": {
+        "step_ratio": 1.345253747041809,
+        "monthly_step": {
+          "step_factor": 1.3204696137743948,
+          "ci_low": 0.8481711472851612,
+          "ci_high": 2.0557643424709364,
+          "n_months": 203,
+          "ci_includes_1": true
+        },
+        "excess_vs_modis": 1.0
+      },
+      "harmonized_local": {
+        "step_ratio": 1.1545011926972506,
+        "monthly_step": {
+          "step_factor": 1.159412363719557,
+          "ci_low": 0.8648940731741691,
+          "ci_high": 1.5542215756114597,
+          "n_months": 203,
+          "ci_includes_1": true
+        },
+        "excess_vs_modis": 0.8582032908185389
+      }
+    },
+    "overlap_as_is": {
+      "n_months": 96,
+      "mae_pct_of_mean": 35.49483215492909,
+      "bias_total_pct": -32.445832455493075,
+      "pearson_r": 0.9198852355835255,
+      "coverage": 0.5208333333333334
+    },
+    "holdout_as_is": {
+      "n_months": 72,
+      "mae_pct_of_mean": 35.49852560079317,
+      "bias_total_pct": -33.37059215987252,
+      "pearson_r": 0.9286162042712011,
+      "coverage": 0.5972222222222222
+    },
+    "holdout_as_is_to_2024": {
+      "n_months": 60,
+      "mae_pct_of_mean": 37.623201244971476,
+      "bias_total_pct": -35.28155282202362,
+      "pearson_r": 0.9203454670483543,
+      "coverage": 0.5833333333333334
+    },
+    "overlap_local_loyo": {
+      "n_months": 96,
+      "mae_pct_of_mean": 17.696532743299233,
+      "bias_total_pct": -0.40746112110360144,
+      "pearson_r": 0.9486894336016002
+    },
+    "holdout_local": {
+      "n_months": 72,
+      "mae_pct_of_mean": 22.72365280434786,
+      "bias_total_pct": 0.4661513935036226,
+      "pearson_r": 0.916869929912116
+    },
+    "ratio_observed": 3.9446948961519883,
+    "ratio_kz_model": 2.664805799266128,
+    "holdout_years": [
+      2020,
+      2025
+    ]
+  },
+  "tm_stress": {
+    "steps": {
+      "naive": {
+        "step_ratio": 4.753314917127072,
+        "monthly_step": {
+          "step_factor": 7.677258486303495,
+          "ci_low": 4.6385301788008775,
+          "ci_high": 12.706675518656619,
+          "n_months": 204,
+          "ci_includes_1": false
+        },
+        "excess_vs_modis": 3.9124602091859937
+      },
+      "harmonized": {
+        "step_ratio": 1.6619256856382087,
+        "monthly_step": {
+          "step_factor": 2.395163352778062,
+          "ci_low": 1.5499686196480846,
+          "ci_high": 3.7012410533792437,
+          "n_months": 204,
+          "ci_includes_1": false
+        },
+        "excess_vs_modis": 1.3679333747181255
+      },
+      "modis_only": {
+        "step_ratio": 1.214917127071823,
+        "monthly_step": {
+          "step_factor": 1.7926283876159015,
+          "ci_low": 1.111343030095252,
+          "ci_high": 2.8915613353070295,
+          "n_months": 204,
+          "ci_includes_1": false
+        },
+        "excess_vs_modis": 1.0
+      },
+      "harmonized_local": {
+        "step_ratio": 1.024472152239603,
+        "monthly_step": {
+          "step_factor": 1.1547353221258674,
+          "ci_low": 0.8104326879863435,
+          "ci_high": 1.6453108122751336,
+          "n_months": 204,
+          "ci_includes_1": true
+        },
+        "excess_vs_modis": 0.8432444727392822
+      }
+    },
+    "overlap_as_is": {
+      "n_months": 96,
+      "mae_pct_of_mean": 42.25838067870438,
+      "bias_total_pct": -34.945161533950696,
+      "pearson_r": 0.7267871216292912,
+      "coverage": 0.4166666666666667
+    },
+    "holdout_as_is": {
+      "n_months": 72,
+      "mae_pct_of_mean": 50.42162895902703,
+      "bias_total_pct": -45.32971586507261,
+      "pearson_r": 0.7369080624543343,
+      "coverage": 0.375
+    },
+    "holdout_as_is_to_2024": {
+      "n_months": 60,
+      "mae_pct_of_mean": 49.94945657502701,
+      "bias_total_pct": -44.762754751504744,
+      "pearson_r": 0.7300431026617763,
+      "coverage": 0.4
+    },
+    "overlap_local_loyo": {
+      "n_months": 96,
+      "mae_pct_of_mean": 22.931903060519296,
+      "bias_total_pct": -0.7011919422607205,
+      "pearson_r": 0.8270099571241405
+    },
+    "holdout_local": {
+      "n_months": 72,
+      "mae_pct_of_mean": 29.791882892481897,
+      "bias_total_pct": -12.4455587948527,
+      "pearson_r": 0.8522281780277698
+    },
+    "ratio_observed": 4.157662082514735,
+    "ratio_kz_model": 2.704760351744142,
+    "holdout_years": [
+      2020,
+      2025
+    ]
+  },
+  "flare_load": {
+    "KAZ": {
+      "static_share_removed_pct": 13.16436342380541,
+      "mask_test": {
+        "precision": 0.9393398342718491,
+        "recall": 0.8844727993792568,
+        "f1": 0.9110810150751537,
+        "tp": 41036,
+        "fp": 2650,
+        "fn": 5360,
+        "test_rows": 235202,
+        "test_type2_rows": 46396,
+        "type2_share": 0.19726022737901888
+      }
+    },
+    "UZB": {
+      "static_share_removed_pct": 39.51521876739805,
+      "mask_test": {
+        "precision": 0.9400184558597354,
+        "recall": 0.746944761284015,
+        "f1": 0.8324329232305806,
+        "tp": 18336,
+        "fp": 1170,
+        "fn": 6212,
+        "test_rows": 82161,
+        "test_type2_rows": 24548,
+        "type2_share": 0.2987792261535278
+      }
+    },
+    "TKM": {
+      "static_share_removed_pct": 56.532049153105284,
+      "mask_test": {
+        "precision": 0.8612747565055212,
+        "recall": 0.844572822016431,
+        "f1": 0.8528420250344444,
+        "tp": 58186,
+        "fp": 9372,
+        "fn": 10708,
+        "test_rows": 134450,
+        "test_type2_rows": 68894,
+        "type2_share": 0.5124135366307178
+      }
+    }
+  },
+  "annual": {
+    "KGZ": {
+      "years": [
+        2012,
+        2025
+      ],
+      "mae_pct_of_mean": 9.233193820316808,
+      "bias_total_pct": -5.659926277473157,
+      "pearson_r": 0.9549774391680733,
+      "naive_modis_bias_pct": -71.80285039470789,
+      "mean_annual_cell_days": 762.995055012506,
+      "annual": [
+        {
+          "year": 2012,
+          "actual": 807.0,
+          "harmonized": 724.2652783949549,
+          "modis": 229.0
+        },
+        {
+          "year": 2013,
+          "actual": 898.0,
+          "harmonized": 882.6634643620584,
+          "modis": 263.0
+        },
+        {
+          "year": 2014,
+          "actual": 817.0,
+          "harmonized": 747.9883705124777,
+          "modis": 249.0
+        },
+        {
+          "year": 2015,
+          "actual": 535.0,
+          "harmonized": 615.343376594818,
+          "modis": 168.0
+        },
+        {
+          "year": 2016,
+          "actual": 1141.0,
+          "harmonized": 1012.7434702102887,
+          "modis": 299.0
+        },
+        {
+          "year": 2017,
+          "actual": 965.0,
+          "harmonized": 796.3744975834381,
+          "modis": 246.0
+        },
+        {
+          "year": 2018,
+          "actual": 858.0,
+          "harmonized": 879.0297501381729,
+          "modis": 263.0
+        },
+        {
+          "year": 2019,
+          "actual": 975.0,
+          "harmonized": 933.3783384096789,
+          "modis": 302.0
+        },
+        {
+          "year": 2020,
+          "actual": 866.0,
+          "harmonized": 834.9167880119574,
+          "modis": 269.0
+        },
+        {
+          "year": 2021,
+          "actual": 435.0,
+          "harmonized": 524.4738558468582,
+          "modis": 131.0
+        },
+        {
+          "year": 2022,
+          "actual": 468.42363821483116,
+          "harmonized": 416.6941037664364,
+          "modis": 101.0
+        },
+        {
+          "year": 2023,
+          "actual": 574.9929577464789,
+          "harmonized": 532.4110468210241,
+          "modis": 157.0
+        },
+        {
+          "year": 2024,
+          "actual": 402.5141742137728,
+          "harmonized": 374.0236885871776,
+          "modis": 89.0
+        },
+        {
+          "year": 2025,
+          "actual": 939.0,
+          "harmonized": 803.0353343331142,
+          "modis": 246.0
+        }
+      ]
+    },
+    "TJK": {
+      "years": [
+        2012,
+        2025
+      ],
+      "mae_pct_of_mean": 20.33533166640443,
+      "bias_total_pct": 19.59702207776317,
+      "pearson_r": 0.9225580767956594,
+      "naive_modis_bias_pct": -75.7930183706879,
+      "mean_annual_cell_days": 306.8772283272283,
+      "annual": [
+        {
+          "year": 2012,
+          "actual": 194.0,
+          "harmonized": 257.7909563581339,
+          "modis": 43.0
+        },
+        {
+          "year": 2013,
+          "actual": 491.0,
+          "harmonized": 613.2316622738099,
+          "modis": 153.0
+        },
+        {
+          "year": 2014,
+          "actual": 396.0,
+          "harmonized": 428.5407932143218,
+          "modis": 89.0
+        },
+        {
+          "year": 2015,
+          "actual": 224.0,
+          "harmonized": 273.5263495686573,
+          "modis": 47.0
+        },
+        {
+          "year": 2016,
+          "actual": 378.0,
+          "harmonized": 474.4428459144546,
+          "modis": 101.0
+        },
+        {
+          "year": 2017,
+          "actual": 268.0,
+          "harmonized": 374.9486186095153,
+          "modis": 73.0
+        },
+        {
+          "year": 2018,
+          "actual": 216.0,
+          "harmonized": 274.35866721959934,
+          "modis": 46.0
+        },
+        {
+          "year": 2019,
+          "actual": 223.0,
+          "harmonized": 315.3886241871566,
+          "modis": 57.0
+        },
+        {
+          "year": 2020,
+          "actual": 332.0,
+          "harmonized": 434.65095373468523,
+          "modis": 91.0
+        },
+        {
+          "year": 2021,
+          "actual": 304.0,
+          "harmonized": 372.10829569862204,
+          "modis": 73.0
+        },
+        {
+          "year": 2022,
+          "actual": 263.5,
+          "harmonized": 247.64007198532465,
+          "modis": 47.0
+        },
+        {
+          "year": 2023,
+          "actual": 260.0,
+          "harmonized": 291.7887041467114,
+          "modis": 59.0
+        },
+        {
+          "year": 2024,
+          "actual": 321.7811965811966,
+          "harmonized": 323.5730439036233,
+          "modis": 60.0
+        },
+        {
+          "year": 2025,
+          "actual": 425.0,
+          "harmonized": 456.23478438338554,
+          "modis": 101.0
+        }
+      ]
+    }
+  },
+  "transfer": {
+    "KAZ": {
+      "role": "train",
+      "overlap_as_is": {
+        "n_months": 96,
+        "mae_pct_of_mean": 6.4534613269431285,
+        "bias_total_pct": 0.050589626793270885,
+        "pearson_r": 0.9965396319157276
+      },
+      "overlap_local": {
+        "n_months": 96,
+        "mae_pct_of_mean": 6.4534613269431285,
+        "bias_total_pct": 0.050589626793270885,
+        "pearson_r": 0.9965396319157276
+      },
+      "holdout_as_is": {
+        "n_months": 72,
+        "mae_pct_of_mean": 10.344329765467569,
+        "bias_total_pct": -2.1782177389847206,
+        "pearson_r": 0.9836859525084758,
+        "coverage": 0.8333333333333334
+      },
+      "holdout_local": {
+        "n_months": 72,
+        "mae_pct_of_mean": 10.344329765467569,
+        "bias_total_pct": -2.1782177389847206,
+        "pearson_r": 0.9836859525084758
+      },
+      "ratio_observed": 1.7988071178014728,
+      "ratio_kz_model": 1.7988059908462692,
+      "mean_monthly_modis": 1793.625,
+      "mae_ratio_as_is_vs_local": 1.0,
+      "transfers": true
+    },
+    "UZB": {
+      "role": "test",
+      "overlap_as_is": {
+        "n_months": 96,
+        "mae_pct_of_mean": 35.49483215492909,
+        "bias_total_pct": -32.445832455493075,
+        "pearson_r": 0.9198852355835255,
+        "coverage": 0.5208333333333334
+      },
+      "overlap_local": {
+        "n_months": 96,
+        "mae_pct_of_mean": 17.696532743299233,
+        "bias_total_pct": -0.40746112110360144,
+        "pearson_r": 0.9486894336016002
+      },
+      "holdout_as_is": {
+        "n_months": 72,
+        "mae_pct_of_mean": 35.49852560079317,
+        "bias_total_pct": -33.37059215987252,
+        "pearson_r": 0.9286162042712011,
+        "coverage": 0.5972222222222222
+      },
+      "holdout_local": {
+        "n_months": 72,
+        "mae_pct_of_mean": 22.72365280434786,
+        "bias_total_pct": 0.4661513935036226,
+        "pearson_r": 0.916869929912116
+      },
+      "ratio_observed": 3.9446948961519883,
+      "ratio_kz_model": 2.664805799266128,
+      "mean_monthly_modis": 129.39583333333334,
+      "mae_ratio_as_is_vs_local": 2.0057506557813793,
+      "transfers": false
+    },
+    "TKM": {
+      "role": "stress",
+      "overlap_as_is": {
+        "n_months": 96,
+        "mae_pct_of_mean": 42.25838067870438,
+        "bias_total_pct": -34.945161533950696,
+        "pearson_r": 0.7267871216292912,
+        "coverage": 0.4166666666666667
+      },
+      "overlap_local": {
+        "n_months": 96,
+        "mae_pct_of_mean": 22.931903060519296,
+        "bias_total_pct": -0.7011919422607205,
+        "pearson_r": 0.8270099571241405
+      },
+      "holdout_as_is": {
+        "n_months": 72,
+        "mae_pct_of_mean": 50.42162895902703,
+        "bias_total_pct": -45.32971586507261,
+        "pearson_r": 0.7369080624543343,
+        "coverage": 0.375
+      },
+      "holdout_local": {
+        "n_months": 72,
+        "mae_pct_of_mean": 29.791882892481897,
+        "bias_total_pct": -12.4455587948527,
+        "pearson_r": 0.8522281780277698
+      },
+      "ratio_observed": 4.157662082514735,
+      "ratio_kz_model": 2.704760351744142,
+      "mean_monthly_modis": 127.25,
+      "mae_ratio_as_is_vs_local": 1.8427768758301837,
+      "transfers": false
+    },
+    "KGZ": {
+      "role": "extra",
+      "overlap_as_is": {
+        "n_months": 92,
+        "mae_pct_of_mean": 24.24269702759082,
+        "bias_total_pct": -5.777779499629973,
+        "pearson_r": 0.9478076090992719,
+        "coverage": 0.8695652173913043
+      },
+      "overlap_local": {
+        "n_months": 92,
+        "mae_pct_of_mean": 20.823581256429474,
+        "bias_total_pct": -0.5491604777248142,
+        "pearson_r": 0.9603067479205435
+      },
+      "holdout_as_is": {
+        "n_months": 72,
+        "mae_pct_of_mean": 27.457146009275252,
+        "bias_total_pct": -5.436237555785598,
+        "pearson_r": 0.944723805876636,
+        "coverage": 0.8333333333333334
+      },
+      "holdout_local": {
+        "n_months": 72,
+        "mae_pct_of_mean": 24.18805289158482,
+        "bias_total_pct": -2.7186135449841373,
+        "pearson_r": 0.9639203081584697
+      },
+      "ratio_observed": 3.4650817236255573,
+      "ratio_kz_model": 3.264876942152495,
+      "mean_monthly_modis": 21.945652173913043,
+      "mae_ratio_as_is_vs_local": 1.164194416371375,
+      "transfers": true
+    },
+    "TJK": {
+      "role": "extra",
+      "overlap_as_is": {
+        "n_months": 95,
+        "mae_pct_of_mean": 49.25364868245473,
+        "bias_total_pct": 26.034665997725877,
+        "pearson_r": 0.8189969145586684,
+        "coverage": 0.9263157894736842
+      },
+      "overlap_local": {
+        "n_months": 95,
+        "mae_pct_of_mean": 37.35387576527936,
+        "bias_total_pct": 1.7646625201474064,
+        "pearson_r": 0.7785566792666524
+      },
+      "holdout_as_is": {
+        "n_months": 72,
+        "mae_pct_of_mean": 51.78785881640448,
+        "bias_total_pct": 11.525826182684943,
+        "pearson_r": 0.701313531890729,
+        "coverage": 0.8333333333333334
+      },
+      "holdout_local": {
+        "n_months": 72,
+        "mae_pct_of_mean": 30.859598314208146,
+        "bias_total_pct": -14.47449509159322,
+        "pearson_r": 0.8122090697197852
+      },
+      "ratio_observed": 3.9244663382594416,
+      "ratio_kz_model": 4.946188041618471,
+      "mean_monthly_modis": 6.410526315789474,
+      "mae_ratio_as_is_vs_local": 1.3185686270402033,
+      "transfers": false
+    },
+    "PRT": {
+      "role": "transfer",
+      "overlap_as_is": {
+        "n_months": 96,
+        "mae_pct_of_mean": 61.736464495553484,
+        "bias_total_pct": 58.93681814606107,
+        "pearson_r": 0.9642346876326833,
+        "coverage": 0.6770833333333334
+      },
+      "overlap_local": {
+        "n_months": 96,
+        "mae_pct_of_mean": 15.640653238654783,
+        "bias_total_pct": 1.4090784038617163,
+        "pearson_r": 0.9769014086881499
+      },
+      "holdout_as_is": {
+        "n_months": 72,
+        "mae_pct_of_mean": 94.33155512827877,
+        "bias_total_pct": 89.49021359320906,
+        "pearson_r": 0.9773809071768123,
+        "coverage": 0.5972222222222222
+      },
+      "holdout_local": {
+        "n_months": 72,
+        "mae_pct_of_mean": 22.188826216910993,
+        "bias_total_pct": 17.098744490529594,
+        "pearson_r": 0.9931512691172604
+      },
+      "ratio_observed": 1.5818955512572535,
+      "ratio_kz_model": 2.5142144555623713,
+      "mean_monthly_modis": 134.63541666666666,
+      "mae_ratio_as_is_vs_local": 3.9471794146663974,
+      "transfers": false
+    },
+    "AUS": {
+      "role": "transfer",
+      "overlap_as_is": {
+        "n_months": 96,
+        "mae_pct_of_mean": 33.316737181644896,
+        "bias_total_pct": -32.64403631714717,
+        "pearson_r": 0.9769458592668914,
+        "coverage": 0.010416666666666666
+      },
+      "overlap_local": {
+        "n_months": 96,
+        "mae_pct_of_mean": 5.220215657345395,
+        "bias_total_pct": -0.08498107536114495,
+        "pearson_r": 0.9896182803076825
+      },
+      "holdout_as_is": {
+        "n_months": 72,
+        "mae_pct_of_mean": 34.91346714348764,
+        "bias_total_pct": -34.91346714348765,
+        "pearson_r": 0.9831797641575954,
+        "coverage": 0.0
+      },
+      "holdout_local": {
+        "n_months": 72,
+        "mae_pct_of_mean": 7.005728175862507,
+        "bias_total_pct": -4.511660327686319,
+        "pearson_r": 0.9881310195958561
+      },
+      "ratio_observed": 1.9735695274192369,
+      "ratio_kz_model": 1.3293167741443512,
+      "mean_monthly_modis": 13521.71875,
+      "mae_ratio_as_is_vs_local": 6.382253027183796,
+      "transfers": false
+    },
+    "BRA": {
+      "role": "transfer",
+      "overlap_as_is": {
+        "n_months": 96,
+        "mae_pct_of_mean": 52.533505321590624,
+        "bias_total_pct": -52.38114273539802,
+        "pearson_r": 0.9872426602780655,
+        "coverage": 0.0625
+      },
+      "overlap_local": {
+        "n_months": 96,
+        "mae_pct_of_mean": 5.48632137591729,
+        "bias_total_pct": 0.14483404229681968,
+        "pearson_r": 0.9960575016889491
+      },
+      "holdout_as_is": {
+        "n_months": 72,
+        "mae_pct_of_mean": 48.78639639031722,
+        "bias_total_pct": -48.67317495525335,
+        "pearson_r": 0.985324054340011,
+        "coverage": 0.05555555555555555
+      },
+      "holdout_local": {
+        "n_months": 72,
+        "mae_pct_of_mean": 10.30550312428674,
+        "bias_total_pct": 6.408915706044294,
+        "pearson_r": 0.9909032815102665
+      },
+      "ratio_observed": 2.472257535511388,
+      "ratio_kz_model": 1.1772607870485345,
+      "mean_monthly_modis": 18141.1875,
+      "mae_ratio_as_is_vs_local": 9.57536055984457,
+      "transfers": false
+    },
+    "USA": {
+      "role": "transfer",
+      "overlap_as_is": {
+        "n_months": 96,
+        "mae_pct_of_mean": 27.385843820288333,
+        "bias_total_pct": -26.732142710454685,
+        "pearson_r": 0.9225672462722886,
+        "coverage": 0.041666666666666664
+      },
+      "overlap_local": {
+        "n_months": 96,
+        "mae_pct_of_mean": 8.297583008614707,
+        "bias_total_pct": -0.31486144561579965,
+        "pearson_r": 0.9513679112295382
+      },
+      "holdout_as_is": {
+        "n_months": 72,
+        "mae_pct_of_mean": 30.335752253308858,
+        "bias_total_pct": -30.335752253308858,
+        "pearson_r": 0.9319204417265308,
+        "coverage": 0.05555555555555555
+      },
+      "holdout_local": {
+        "n_months": 72,
+        "mae_pct_of_mean": 8.82864471086694,
+        "bias_total_pct": -5.238117221219891,
+        "pearson_r": 0.9589033155606892
+      },
+      "ratio_observed": 2.1480071963675478,
+      "ratio_kz_model": 1.5737988472037383,
+      "mean_monthly_modis": 5471.510416666667,
+      "mae_ratio_as_is_vs_local": 3.300460361994069,
+      "transfers": false
+    },
+    "IND": {
+      "role": "transfer",
+      "overlap_as_is": {
+        "n_months": 96,
+        "mae_pct_of_mean": 64.6255380038002,
+        "bias_total_pct": -64.6106968197262,
+        "pearson_r": 0.9834832262870088,
+        "coverage": 0.07291666666666667
+      },
+      "overlap_local": {
+        "n_months": 96,
+        "mae_pct_of_mean": 9.191885671226673,
+        "bias_total_pct": -0.011351050225631194,
+        "pearson_r": 0.987053512242782
+      },
+      "holdout_as_is": {
+        "n_months": 72,
+        "mae_pct_of_mean": 64.72346611383493,
+        "bias_total_pct": -64.70919973227515,
+        "pearson_r": 0.9846205736076393,
+        "coverage": 0.09722222222222222
+      },
+      "holdout_local": {
+        "n_months": 72,
+        "mae_pct_of_mean": 10.086511085541707,
+        "bias_total_pct": 0.7412906684213889,
+        "pearson_r": 0.9882365232587463
+      },
+      "ratio_observed": 4.455421859626107,
+      "ratio_kz_model": 1.576742749863276,
+      "mean_monthly_modis": 5081.666666666667,
+      "mae_ratio_as_is_vs_local": 7.030716037526151,
+      "transfers": false
+    }
+  },
+  "burned_area": {
+    "KAZ": {
+      "months": 271,
+      "naive": {
+        "r_log_all": 0.855636019380289,
+        "r_log_pre2012": 0.8740966111815572,
+        "r_log_post2012": 0.886202583557296,
+        "step_given_burned_area": {
+          "step_factor": 2.719216527307808,
+          "ci_low": 1.9544532679002802,
+          "ci_high": 3.7832260529450514,
+          "n_months": 271,
+          "ci_includes_1": false
+        }
+      },
+      "harmonized": {
+        "r_log_all": 0.8823081639354464,
+        "r_log_pre2012": 0.8703041505296433,
+        "r_log_post2012": 0.8878059185823448,
+        "step_given_burned_area": {
+          "step_factor": 1.1594684327712133,
+          "ci_low": 0.877500348026436,
+          "ci_high": 1.5320416107144754,
+          "n_months": 271,
+          "ci_includes_1": true
+        }
+      },
+      "harmonized_local": {
+        "r_log_all": 0.8823081639354464,
+        "r_log_pre2012": 0.8703041505296433,
+        "r_log_post2012": 0.8878059185823448,
+        "step_given_burned_area": {
+          "step_factor": 1.1594684327712133,
+          "ci_low": 0.877500348026436,
+          "ci_high": 1.5320416107144754,
+          "n_months": 271,
+          "ci_includes_1": true
+        }
+      }
+    },
+    "KGZ": {
+      "months": 258,
+      "naive": {
+        "r_log_all": 0.5395284285787478,
+        "r_log_pre2012": 0.7470436141881241,
+        "r_log_post2012": 0.5093628574266144,
+        "step_given_burned_area": {
+          "step_factor": 2.234452712260106,
+          "ci_low": 1.5382766350003643,
+          "ci_high": 3.2456963914851134,
+          "n_months": 258,
+          "ci_includes_1": false
+        }
+      },
+      "harmonized": {
+        "r_log_all": 0.6522035498995278,
+        "r_log_pre2012": 0.788584497451901,
+        "r_log_post2012": 0.511382238801629,
+        "step_given_burned_area": {
+          "step_factor": 0.583938617875806,
+          "ci_low": 0.40271245112368714,
+          "ci_high": 0.8467190634291523,
+          "n_months": 258,
+          "ci_includes_1": false
+        }
+      },
+      "harmonized_local": {
+        "r_log_all": 0.6453577159275933,
+        "r_log_pre2012": 0.7431694319791358,
+        "r_log_post2012": 0.511382238801629,
+        "step_given_burned_area": {
+          "step_factor": 0.6262975731823047,
+          "ci_low": 0.4434155410741446,
+          "ci_high": 0.8846073577481026,
+          "n_months": 258,
+          "ci_includes_1": false
+        }
+      }
+    },
+    "TJK": {
+      "months": 260,
+      "naive": {
+        "r_log_all": 0.3014094341043363,
+        "r_log_pre2012": 0.5681637882495684,
+        "r_log_post2012": 0.3753898339696157,
+        "step_given_burned_area": {
+          "step_factor": 2.954562563798249,
+          "ci_low": 2.090948162089106,
+          "ci_high": 4.174871525593602,
+          "n_months": 260,
+          "ci_includes_1": false
+        }
+      },
+      "harmonized": {
+        "r_log_all": 0.5015153321022533,
+        "r_log_pre2012": 0.5752521141935802,
+        "r_log_post2012": 0.3675426436066568,
+        "step_given_burned_area": {
+          "step_factor": 0.6591331253624342,
+          "ci_low": 0.4672376196174708,
+          "ci_high": 0.929840532330726,
+          "n_months": 260,
+          "ci_includes_1": false
+        }
+      },
+      "harmonized_local": {
+        "r_log_all": 0.46967333090229,
+        "r_log_pre2012": 0.5628587357461787,
+        "r_log_post2012": 0.3675426436066568,
+        "step_given_burned_area": {
+          "step_factor": 0.7797930087651921,
+          "ci_low": 0.5579345827095823,
+          "ci_high": 1.0898717436835943,
+          "n_months": 260,
+          "ci_includes_1": true
+        }
+      }
+    },
+    "TKM": {
+      "months": 276,
+      "naive": {
+        "r_log_all": 0.29572350418294013,
+        "r_log_pre2012": 0.6190336865645445,
+        "r_log_post2012": 0.5179532019064574,
+        "step_given_burned_area": {
+          "step_factor": 5.767579374983243,
+          "ci_low": 4.341462583739309,
+          "ci_high": 7.662157903035737,
+          "n_months": 276,
+          "ci_includes_1": false
+        }
+      },
+      "harmonized": {
+        "r_log_all": 0.4825202960390027,
+        "r_log_pre2012": 0.6556295937863406,
+        "r_log_post2012": 0.5141426152315869,
+        "step_given_burned_area": {
+          "step_factor": 1.8726092982109137,
+          "ci_low": 1.437676868902636,
+          "ci_high": 2.43911942912636,
+          "n_months": 276,
+          "ci_includes_1": false
+        }
+      },
+      "harmonized_local": {
+        "r_log_all": 0.5023521419307679,
+        "r_log_pre2012": 0.5152122451112087,
+        "r_log_post2012": 0.5141426152315869,
+        "step_given_burned_area": {
+          "step_factor": 1.0107978465962286,
+          "ci_low": 0.7617933720271103,
+          "ci_high": 1.3411934577020876,
+          "n_months": 276,
+          "ci_includes_1": true
+        }
+      }
+    },
+    "UZB": {
+      "months": 275,
+      "naive": {
+        "r_log_all": 0.47444208098338325,
+        "r_log_pre2012": 0.680146637162039,
+        "r_log_post2012": 0.6453224999377063,
+        "step_given_burned_area": {
+          "step_factor": 4.668117867275507,
+          "ci_low": 3.551590046721273,
+          "ci_high": 6.135653083861398,
+          "n_months": 275,
+          "ci_includes_1": false
+        }
+      },
+      "harmonized": {
+        "r_log_all": 0.6149505840634895,
+        "r_log_pre2012": 0.6593207037187246,
+        "r_log_post2012": 0.6438130182317494,
+        "step_given_burned_area": {
+          "step_factor": 1.4733440833163416,
+          "ci_low": 1.1567197882713762,
+          "ci_high": 1.8766366840557553,
+          "n_months": 275,
+          "ci_includes_1": false
+        }
+      },
+      "harmonized_local": {
+        "r_log_all": 0.6479030781822284,
+        "r_log_pre2012": 0.6780320596845754,
+        "r_log_post2012": 0.6438130182317494,
+        "step_given_burned_area": {
+          "step_factor": 1.000205907339209,
+          "ci_low": 0.8089146578781362,
+          "ci_high": 1.2367335012823613,
+          "n_months": 275,
+          "ci_includes_1": true
+        }
+      }
+    }
+  },
+  "events": {
+    "KAZ": {
+      "unit": "H3 res-4 hexagon-month",
+      "top": [
+        {
+          "rank": 1,
+          "adm1_id": "KZ-KZY",
+          "adm1_name": "Kyzylorda Region",
+          "hex": "842036dffffffff",
+          "year": 2003,
+          "month": 4,
+          "n_harm": 583.0275272525779,
+          "expected": 167.83147196824748,
+          "excess": 415.19605528433044,
+          "lat": 44.875134094651685,
+          "lon": 65.06582798623539
+        },
+        {
+          "rank": 2,
+          "adm1_id": "KZ-KAR",
+          "adm1_name": "Karaganda Region",
+          "hex": "84211b3ffffffff",
+          "year": 2005,
+          "month": 7,
+          "n_harm": 380.05001773697904,
+          "expected": 0.0,
+          "excess": 380.05001773697904,
+          "lat": 47.31012987258678,
+          "lon": 66.23218855908101
+        },
+        {
+          "rank": 3,
+          "adm1_id": "KZ-ZAP",
+          "adm1_name": "West Kazakhstan Region",
+          "hex": "84109adffffffff",
+          "year": 2001,
+          "month": 7,
+          "n_harm": 374.36950193601854,
+          "expected": 0.0,
+          "excess": 374.36950193601854,
+          "lat": 49.75249588686437,
+          "lon": 52.351487759675784
+        }
+      ],
+      "candidates": 1255,
+      "known_events": [
+        {
+          "name": "Kostanay forest and steppe fires (Auliekol)",
+          "adm1_id": "KZ-KUS",
+          "year": 2022,
+          "month": 9,
+          "hex": "84212b1ffffffff",
+          "n_harm": 91.0,
+          "expected": 1.0,
+          "excess": 90.0,
+          "rank": 412,
+          "of": 1255
+        },
+        {
+          "name": "Abai region forest fire (Semey Ormany)",
+          "adm1_id": "KZ-VOS",
+          "year": 2023,
+          "month": 6,
+          "hex": "8420449ffffffff",
+          "n_harm": 123.0,
+          "expected": 0.0,
+          "excess": 123.0,
+          "rank": 242,
+          "of": 1255
+        }
+      ]
+    },
+    "UZB": {
+      "unit": "H3 res-4 hexagon-month",
+      "top": [
+        {
+          "rank": 1,
+          "adm1_id": "UZ-QR",
+          "adm1_name": "Republic of Karakalpakstan",
+          "hex": "8421a3dffffffff",
+          "year": 2001,
+          "month": 8,
+          "n_harm": 253.47557187799055,
+          "expected": 0.0,
+          "excess": 253.47557187799055,
+          "lat": 43.498573822597294,
+          "lon": 59.74877621796367
+        },
+        {
+          "rank": 3,
+          "adm1_id": "UZ-QR",
+          "adm1_name": "Republic of Karakalpakstan",
+          "hex": "8421a21ffffffff",
+          "year": 2021,
+          "month": 4,
+          "n_harm": 240.0,
+          "expected": 51.40332295096028,
+          "excess": 188.59667704903973,
+          "lat": 42.83832332997847,
+          "lon": 58.94473888163989
+        },
+        {
+          "rank": 4,
+          "adm1_id": "UZ-QR",
+          "adm1_name": "Republic of Karakalpakstan",
+          "hex": "8421a07ffffffff",
+          "year": 2006,
+          "month": 8,
+          "n_harm": 173.0270965196148,
+          "expected": 5.0,
+          "excess": 168.0270965196148,
+          "lat": 43.65580214253429,
+          "lon": 59.12170473573617
+        }
+      ],
+      "candidates": 338,
+      "known_events": []
+    },
+    "TKM": {
+      "unit": "H3 res-4 hexagon-month",
+      "top": [
+        {
+          "rank": 1,
+          "adm1_id": "TM-B",
+          "adm1_name": "Balkan",
+          "hex": "842ccc7ffffffff",
+          "year": 2003,
+          "month": 8,
+          "n_harm": 213.75634583460626,
+          "expected": 0.0,
+          "excess": 213.75634583460626,
+          "lat": 38.259656153807946,
+          "lon": 56.06080680653619
+        },
+        {
+          "rank": 2,
+          "adm1_id": "TM-B",
+          "adm1_name": "Balkan",
+          "hex": "842ccc7ffffffff",
+          "year": 2010,
+          "month": 7,
+          "n_harm": 171.85159588677493,
+          "expected": 0.0,
+          "excess": 171.85159588677493,
+          "lat": 38.23903573191202,
+          "lon": 56.087254522149934
+        },
+        {
+          "rank": 3,
+          "adm1_id": "TM-A",
+          "adm1_name": "Ahai",
+          "hex": "8421925ffffffff",
+          "year": 2005,
+          "month": 2,
+          "n_harm": 219.09031994214058,
+          "expected": 52.0,
+          "excess": 167.09031994214058,
+          "lat": 37.34064139798946,
+          "lon": 60.712364692092194
+        }
+      ],
+      "candidates": 297,
+      "known_events": []
+    },
+    "KGZ": {
+      "unit": "H3 res-4 hexagon-month",
+      "top": [
+        {
+          "rank": 1,
+          "adm1_id": "KG-J",
+          "adm1_name": "Jalal-Abad Region",
+          "hex": "8420a9dffffffff",
+          "year": 2007,
+          "month": 11,
+          "n_harm": 151.12573752894997,
+          "expected": 0.0,
+          "excess": 151.12573752894997,
+          "lat": 41.031473030391574,
+          "lon": 73.37603831092932
+        },
+        {
+          "rank": 2,
+          "adm1_id": "KG-C",
+          "adm1_name": "Chuy Region",
+          "hex": "8420185ffffffff",
+          "year": 2002,
+          "month": 8,
+          "n_harm": 146.09548338695484,
+          "expected": 10.0,
+          "excess": 136.09548338695484,
+          "lat": 43.05501553459265,
+          "lon": 74.0067731043417
+        },
+        {
+          "rank": 3,
+          "adm1_id": "KG-C",
+          "adm1_name": "Chuy Region",
+          "hex": "84201a9ffffffff",
+          "year": 2006,
+          "month": 8,
+          "n_harm": 134.5701388512707,
+          "expected": 26.0,
+          "excess": 108.57013885127071,
+          "lat": 42.75662962273178,
+          "lon": 73.60926416820838
+        }
+      ],
+      "candidates": 78,
+      "known_events": []
+    },
+    "TJK": {
+      "unit": "H3 res-4 hexagon-month",
+      "top": [
+        {
+          "rank": 1,
+          "adm1_id": "TJ-KT",
+          "adm1_name": "Khatlon Region",
+          "hex": "8420845ffffffff",
+          "year": 2003,
+          "month": 10,
+          "n_harm": 78.60246997801092,
+          "expected": 2.0,
+          "excess": 76.60246997801092,
+          "lat": 37.999771786789246,
+          "lon": 69.54767348216934
+        },
+        {
+          "rank": 2,
+          "adm1_id": "TJ-KT",
+          "adm1_name": "Khatlon Region",
+          "hex": "8420845ffffffff",
+          "year": 2004,
+          "month": 10,
+          "n_harm": 58.663638403805706,
+          "expected": 2.0,
+          "excess": 56.663638403805706,
+          "lat": 38.07537628219024,
+          "lon": 69.65123152665797
+        },
+        {
+          "rank": 3,
+          "adm1_id": "TJ-KT",
+          "adm1_name": "Khatlon Region",
+          "hex": "8420845ffffffff",
+          "year": 2002,
+          "month": 8,
+          "n_harm": 55.22517791548269,
+          "expected": 2.0,
+          "excess": 53.22517791548269,
+          "lat": 38.06931858286776,
+          "lon": 69.65310383962768
+        }
+      ],
+      "candidates": 18,
+      "known_events": []
+    }
+  },
+  "takeaways": {
+    "uz": "Applied to Uzbekistan without any Uzbek data, the naive splice jumps ×4.88 at 2012, the KZ-harmonized series ×1.77, a locally refitted one ×1.15 (MODIS alone ×1.35). In 2012–2019 the KZ model is off by 35.5% a month and -32.4% in total; the same model refitted on Uzbekistan: 17.7% and -0.4%. Uzbekistan's VIIRS/MODIS ratio is ×3.94, the KZ model implies ×2.66: VIIRS sees relatively more fires there (C1: small agricultural burns). 2025 contains the new industrial source near 38.1°N 67.3°E (C2), so the holdout is also shown to 2024 — it changes little.",
+    "tm": "The naive splice jumps ×4.75 at 2012, the KZ-harmonized series ×1.66, a locally refitted one ×1.02 (MODIS alone ×1.21). Overlap error as-is 42.3% (bias -34.9%), local refit 22.9%. 57% of Turkmenistan's confident detections are static sources (Kazakhstan 13%); FIRMS `type` removes them in archive data and the mask in recent data (precision/recall above). The remaining error is the same kind as Uzbekistan's: VIIRS/MODIS ×4.16 vs ×2.70 from the KZ model. TM's monthly R is the lowest of the cell-level countries.",
+    "annual": "Kyrgyzstan and Tajikistan have only a few hundred fire cell-days a year, so only annual totals are meaningful. KGZ: annual error 9.2%, bias -5.7% (raw MODIS: -72%); TJK: annual error 20.3%, bias +19.6% (raw MODIS: -76%). The harmonized totals are usable for a yearly trend, not for single months.",
+    "transfer": "Transfers as-is: KAZ, KGZ; does not: AUS, BRA, IND, PRT, TJK, TKM, USA, UZB. The observed VIIRS/MODIS ratio ranges from ×1.58 to ×4.46; the KZ model cannot know a country's ratio and errs in the direction of the difference (too high for Portugal, too low for India). Refitted locally, the same model gets 5.2–37.4% monthly error. Honest conclusion: the METHOD transfers across biomes, the COEFFICIENTS do not — every country needs its own 2012–2019 overlap fit (which FIRMS provides everywhere).",
+    "ba": "Holding burned area fixed, naive: continuous (95% CI includes 1) in none; KZ-harmonized: continuous (95% CI includes 1) in KAZ; locally harmonized: continuous (95% CI includes 1) in KAZ, TJK, TKM, UZB. The naive series jumps ×2.2–×5.8 everywhere. Correlation with burned area is high in Kazakhstan and weak in Kyrgyzstan/Tajikistan (few fires; much burned area there is not seen as active fire).",
+    "events": "Kostanay forest and steppe fires (Auliekol) (2022-09): 91 cell-days in one hexagon vs a normal of 1, rank 412 of 1255. Abai region forest fire (Semey Ormany) (2023-06): 123 cell-days in one hexagon vs a normal of 0, rank 242 of 1255. The top events are the largest local excesses; check them against news before the demo."
+  }
+}

@@ -1,47 +1,38 @@
-"""Cross-check of the per-country S-NPP outage thresholds.
+"""Why the outage list is satellite-wide: per-country rules compared with the global list (reports/outage_check.json).
 
-S-NPP outages are satellite-wide, so a real outage day should be an outage in every country with fires that day.
-Reference ("global") outage days: S-NPP has zero detections summed over all countries while NOAA-20 has detections
-in at least half of them. For each country: how many of its outage days are global (precision) and how many global
-days it catches (recall), with the per-country threshold and with the old fixed one.
--> reports/outage_check.json        python -m pipeline.outage_check
+Reference = the production list (pipeline/outage.py, all countries combined). For each country: the old fixed
+threshold (20 NOAA-20 detections) and the superseded per-country threshold; days found, share of the global list
+caught ("found"), share of the country's days that are real ("true").     python -m pipeline.outage_check
 """
-import duckdb
+import pandas as pd
 
-from pipeline.common import AGG, REPORTS, get_logger, load_config, write_json
+from pipeline import ingest, outage
+from pipeline.common import REPORTS, get_logger, load_config, write_json
 
 log = get_logger("outage_check")
 
 
 def main():
     cfg = load_config()
-    oc = cfg["outage"]
-    files = sorted((AGG / "country_day").glob("*.parquet"))
-    con = duckdb.connect()
-    con.execute(f"CREATE TABLE d AS SELECT * FROM read_parquet({[f.as_posix() for f in files]}, filename = true)")
-    # country_day is already one row per country-date with a count per platform
-    con.execute(f"""CREATE TABLE w AS SELECT regexp_extract(filename, '([A-Z]{{3}})\\.parquet$', 1) AS country,
-                    CAST(date AS DATE) AS date, n_snpp AS snpp, n_noaa20 AS n20
-                    FROM d WHERE date >= DATE '{oc["typical_from"]}'""")
-    nc = con.execute("SELECT count(DISTINCT country) FROM w").fetchall()[0][0]
-    con.execute(f"""CREATE TABLE g AS SELECT date FROM w GROUP BY date
-                    HAVING sum(snpp) = 0 AND count(*) FILTER (WHERE n20 > 0) >= {nc / 2}""")
-    n_global = con.execute("SELECT count(*) FROM g").fetchall()[0][0]
-    summ = __import__("json").loads((REPORTS / "cleaning_summary.json").read_text(encoding="utf-8"))["countries"]
-    out = {"n_countries": nc, "global_outage_days": n_global, "countries": {}}
-    for c in sorted(summ):
-        thr = (summ[c].get("outage") or {}).get("threshold")
-        if thr is None:
-            continue
-        row = {"threshold": thr}
-        for name, t in (("per_country", thr), ("fixed", oc["reference_threshold"])):
-            tp, n = con.execute(f"""SELECT count(*) FILTER (WHERE date IN (SELECT date FROM g)), count(*) FROM w
-                                    WHERE country = '{c}' AND snpp = 0 AND n20 >= {t}""").fetchall()[0]
-            row[name] = {"outage_days": n, "global": tp, "precision": tp / n if n else None,
-                         "recall": tp / n_global if n_global else None}
+    oc = cfg["outage"]["per_country_superseded"]
+    daily = outage.combined_daily(cfg)
+    days, _ = outage.global_days(cfg, daily)
+    ref = set(days["date"])
+    since = pd.Timestamp(oc["typical_from"])
+    out = {"global_outage_days": len(ref), "countries_combined": sorted(daily["country"].unique()), "countries": {}}
+    for c, d in daily.groupby("country"):
+        thr, info = ingest.outage_threshold(cfg, c, d.drop(columns="country"))
+        d = d[d["date"] >= since]
+        row = {"per_country_threshold": thr, "typical_daily_noaa20": info["typical_daily_noaa20"]}
+        for name, t in (("fixed_20", oc["reference_threshold"]), ("per_country", thr)):
+            sel = set(d.loc[(d["n_snpp"] == 0) & (d["n_noaa20"] >= t), "date"])
+            tp = len(sel & ref)
+            row[name] = {"outage_days": len(sel), "global": tp, "true_share": tp / len(sel) if sel else None,
+                         "found_share": tp / len(ref) if ref else None}
         out["countries"][c] = row
-        log.info("%s thr %s: %s", c, thr, row)
+        log.info("%s: %s", c, row)
     write_json(REPORTS / "outage_check.json", out)
+    return out
 
 
 if __name__ == "__main__":

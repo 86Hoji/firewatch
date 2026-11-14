@@ -364,7 +364,7 @@ def write_report(M, cfg):
         L.append(f"| {e['name']} | {e['year']}-{e['month']:02d} | {fmt(e['value'], 0)} | {fmt(e['median_same_month'], 0)} | "
                  f"{e['rank_among_same_month']} / {e['of_years']} | {e['rank_among_all_months']} / {e['of_months']} |")
     L += ["", "## Coefficients", "", "![coefficients](coefficients.png)", "", "![raw series](raw_series.png)", ""]
-    (REPORTS / "validation.md").write_text("\n".join(L), encoding="utf-8")
+    (REPORTS / "validation_kz.md").write_text("\n".join(L), encoding="utf-8")
 
 
 def main():
@@ -397,7 +397,7 @@ def main():
     coef_plot(coef_t, best)
     write_json(REPORTS / "metrics.json", M)
     write_report(M, cfg)
-    log.info("wrote reports/validation.md")
+    log.info("wrote reports/validation_kz.md")
 
 
 if __name__ == "__main__":

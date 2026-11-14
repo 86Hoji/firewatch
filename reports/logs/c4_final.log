@@ -1,0 +1,212 @@
+2026-11-15 04:00:45,389 clean INFO KAZ (cell, train): [847148, 847158, 847199, 847159, 847181, 847180]
+2026-11-15 04:00:48,589 ingest INFO   847148 fire_archive_M-C61_847148.csv          777034 rows
+2026-11-15 04:00:49,899 ingest INFO   847158 fire_archive_M-C61_847158.csv          258020 rows
+2026-11-15 04:00:50,853 ingest INFO   847199 fire_archive_M-C61_847199.csv          221560 rows
+2026-11-15 04:00:50,883 ingest INFO   847199 fire_nrt_M-C61_847199.csv                4449 rows
+2026-11-15 04:00:53,337 ingest INFO   847159 fire_archive_SV-C2_847159.csv          933875 rows
+2026-11-15 04:00:55,417 ingest INFO   847181 fire_archive_SV-C2_847181.csv          833595 rows
+2026-11-15 04:00:55,550 ingest INFO   847181 fire_nrt_SV-C2_847181.csv               29625 rows
+2026-11-15 04:00:57,650 ingest INFO   847180 fire_archive_J1V-C2_847180.csv         830218 rows
+2026-11-15 04:00:57,785 ingest INFO   847180 fire_nrt_J1V-C2_847180.csv              31181 rows
+ 85% ▕████████████████████████████████▎     ▏ (<1 second remaining)      99% ▕█████████████████████████████████████▌▏ (<1 second remaining)     100% ▕██████████████████████████████████████▏ (00:00:03.08 elapsed)     
+ 93% ▕███████████████████████████████████▎  ▏ (<1 second remaining)      97% ▕████████████████████████████████████▊ ▏ (<1 second remaining)      99% ▕█████████████████████████████████████▌▏ (<1 second remaining)     100% ▕██████████████████████████████████████▏ (00:00:04.84 elapsed)     
+2026-11-15 04:01:07,385 ingest INFO   unknown_platform          3919557 ->    3919557
+2026-11-15 04:01:07,385 ingest INFO   confidence                3919557 ->    3667872
+2026-11-15 04:01:07,385 ingest INFO   type_not_vegetation       3667872 ->    3185020
+2026-11-15 04:01:07,385 ingest INFO   nrt_static_mask           3185020 ->    3172931
+2026-11-15 04:01:07,385 ingest INFO   exact_duplicates          3172931 ->    3172931
+2026-11-15 04:01:07,385 ingest INFO   nrt_overlaps_sp           3172931 ->    3172931
+2026-11-15 04:01:10,039 clean INFO UZB (cell, test): [847909, 847912, 847910, 847911]
+2026-11-15 04:01:10,482 ingest INFO   847909 fire_archive_M-C61_847909.csv           97386 rows
+2026-11-15 04:01:10,514 ingest INFO   847909 fire_nrt_M-C61_847909.csv                 335 rows
+2026-11-15 04:01:11,265 ingest INFO   847912 fire_archive_SV-C2_847912.csv          268472 rows
+2026-11-15 04:01:11,298 ingest INFO   847912 fire_nrt_SV-C2_847912.csv                3532 rows
+2026-11-15 04:01:11,753 ingest INFO   847910 fire_archive_J1V-C2_847910.csv         139330 rows
+2026-11-15 04:01:11,782 ingest INFO   847910 fire_nrt_J1V-C2_847910.csv               3773 rows
+2026-11-15 04:01:12,259 ingest INFO   847911 fire_archive_J2V-C2_847911.csv          52198 rows
+2026-11-15 04:01:12,296 ingest INFO   847911 fire_nrt_J2V-C2_847911.csv               3379 rows
+2026-11-15 04:01:13,634 ingest INFO   unknown_platform           568405 ->     568405
+2026-11-15 04:01:13,634 ingest INFO   confidence                 568405 ->     524484
+2026-11-15 04:01:13,634 ingest INFO   type_not_vegetation        524484 ->     317233
+2026-11-15 04:01:13,634 ingest INFO   nrt_static_mask            317233 ->     312778
+2026-11-15 04:01:13,634 ingest INFO   exact_duplicates           312778 ->     312778
+2026-11-15 04:01:13,634 ingest INFO   nrt_overlaps_sp            312778 ->     312778
+2026-11-15 04:01:13,999 clean INFO TKM (cell, stress): [848066, 848011, 848009, 848010]
+2026-11-15 04:01:14,349 ingest INFO   848066 fire_archive_M-C61_848066.csv           69898 rows
+2026-11-15 04:01:14,380 ingest INFO   848066 fire_nrt_M-C61_848066.csv                 220 rows
+2026-11-15 04:01:15,419 ingest INFO   848011 fire_archive_SV-C2_848011.csv          372292 rows
+2026-11-15 04:01:15,501 ingest INFO   848011 fire_nrt_SV-C2_848011.csv               10081 rows
+2026-11-15 04:01:16,220 ingest INFO   848009 fire_archive_J1V-C2_848009.csv         224479 rows
+2026-11-15 04:01:16,284 ingest INFO   848009 fire_nrt_J1V-C2_848009.csv              11132 rows
+2026-11-15 04:01:16,768 ingest INFO   848010 fire_archive_J2V-C2_848010.csv          87967 rows
+2026-11-15 04:01:16,833 ingest INFO   848010 fire_nrt_J2V-C2_848010.csv              10385 rows
+2026-11-15 04:01:18,301 ingest INFO   unknown_platform           786454 ->     786454
+2026-11-15 04:01:18,301 ingest INFO   confidence                 786454 ->     752750
+2026-11-15 04:01:18,301 ingest INFO   type_not_vegetation        752750 ->     327205
+2026-11-15 04:01:18,301 ingest INFO   nrt_static_mask            327205 ->     308900
+2026-11-15 04:01:18,301 ingest INFO   exact_duplicates           308900 ->     308900
+2026-11-15 04:01:18,301 ingest INFO   nrt_overlaps_sp            308900 ->     308900
+2026-11-15 04:01:18,853 clean INFO KGZ (cell, extra): [847969, 847972, 847970, 847971]
+2026-11-15 04:01:19,148 ingest INFO   847969 fire_archive_M-C61_847969.csv           14829 rows
+2026-11-15 04:01:19,168 ingest INFO   847969 fire_nrt_M-C61_847969.csv                  76 rows
+2026-11-15 04:01:19,399 ingest INFO   847972 fire_archive_SV-C2_847972.csv           31749 rows
+2026-11-15 04:01:19,455 ingest INFO   847972 fire_nrt_SV-C2_847972.csv                 624 rows
+2026-11-15 04:01:19,590 ingest INFO   847970 fire_archive_J1V-C2_847970.csv          17094 rows
+2026-11-15 04:01:19,624 ingest INFO   847970 fire_nrt_J1V-C2_847970.csv                753 rows
+2026-11-15 04:01:19,670 ingest INFO   847971 fire_archive_J2V-C2_847971.csv           5959 rows
+2026-11-15 04:01:19,699 ingest INFO   847971 fire_nrt_J2V-C2_847971.csv                706 rows
+2026-11-15 04:01:20,182 ingest INFO   unknown_platform            71790 ->      71790
+2026-11-15 04:01:20,182 ingest INFO   confidence                  71790 ->      67198
+2026-11-15 04:01:20,182 ingest INFO   type_not_vegetation         67198 ->      42759
+2026-11-15 04:01:20,182 ingest INFO   nrt_static_mask             42759 ->      42117
+2026-11-15 04:01:20,182 ingest INFO   exact_duplicates            42117 ->      42117
+2026-11-15 04:01:20,182 ingest INFO   nrt_overlaps_sp             42117 ->      42117
+2026-11-15 04:01:20,450 clean INFO TJK (cell, extra): [847982, 847996, 847994, 847995]
+2026-11-15 04:01:20,518 ingest INFO   847982 fire_archive_M-C61_847982.csv            3906 rows
+2026-11-15 04:01:20,534 ingest INFO   847982 fire_nrt_M-C61_847982.csv                  21 rows
+2026-11-15 04:01:20,599 ingest INFO   847996 fire_archive_SV-C2_847996.csv           11742 rows
+2026-11-15 04:01:20,616 ingest INFO   847996 fire_nrt_SV-C2_847996.csv                 297 rows
+2026-11-15 04:01:20,668 ingest INFO   847994 fire_archive_J1V-C2_847994.csv           7669 rows
+2026-11-15 04:01:20,684 ingest INFO   847994 fire_nrt_J1V-C2_847994.csv                315 rows
+2026-11-15 04:01:20,717 ingest INFO   847995 fire_archive_J2V-C2_847995.csv           3140 rows
+2026-11-15 04:01:20,733 ingest INFO   847995 fire_nrt_J2V-C2_847995.csv                358 rows
+2026-11-15 04:01:20,906 ingest INFO   unknown_platform            27448 ->      27448
+2026-11-15 04:01:20,906 ingest INFO   confidence                  27448 ->      25617
+2026-11-15 04:01:20,906 ingest INFO   type_not_vegetation         25617 ->      16733
+2026-11-15 04:01:20,906 ingest INFO   nrt_static_mask             16733 ->      16308
+2026-11-15 04:01:20,906 ingest INFO   exact_duplicates            16308 ->      16308
+2026-11-15 04:01:20,906 ingest INFO   nrt_overlaps_sp             16308 ->      16308
+2026-11-15 04:01:21,132 clean INFO PRT (totals, transfer): [848384, 848385, 848386, 848387]
+2026-11-15 04:01:21,482 ingest INFO   848384 fire_archive_M-C61_848384.csv           78694 rows
+2026-11-15 04:01:21,499 ingest INFO   848384 fire_nrt_M-C61_848384.csv                 358 rows
+2026-11-15 04:01:21,701 ingest INFO   848385 fire_archive_J1V-C2_848385.csv          52454 rows
+2026-11-15 04:01:21,717 ingest INFO   848385 fire_nrt_J1V-C2_848385.csv               1853 rows
+2026-11-15 04:01:21,900 ingest INFO   848386 fire_archive_J2V-C2_848386.csv          27658 rows
+2026-11-15 04:01:21,933 ingest INFO   848386 fire_nrt_J2V-C2_848386.csv               1841 rows
+2026-11-15 04:01:22,349 ingest INFO   848387 fire_archive_SV-C2_848387.csv          114364 rows
+2026-11-15 04:01:22,385 ingest INFO   848387 fire_nrt_SV-C2_848387.csv                1642 rows
+2026-11-15 04:01:23,632 ingest INFO   unknown_platform           278864 ->     278864
+2026-11-15 04:01:23,632 ingest INFO   confidence                 278864 ->     266168
+2026-11-15 04:01:23,632 ingest INFO   type_not_vegetation        266168 ->     256881
+2026-11-15 04:01:23,632 ingest INFO   nrt_static_mask            256881 ->     256580
+2026-11-15 04:01:23,632 ingest INFO   exact_duplicates           256580 ->     256580
+2026-11-15 04:01:23,632 ingest INFO   nrt_overlaps_sp            256580 ->     256580
+=== 02b_outage
+2026-11-15 04:01:27,588 outage INFO satellite-wide S-NPP outage days: 61 (from 10 countries); partial days not counted: 9
+=== 02b_outage done in 3.4s
+=== 03_grid
+2026-11-15 04:01:45,534 grid INFO KAZ: hotspots 3172931, S-NPP outage days 61, cell-months 855862, cells 242039
+2026-11-15 04:01:47,759 grid INFO UZB: hotspots 312778, S-NPP outage days 61, cell-months 111789, cells 15854
+2026-11-15 04:01:49,851 grid INFO TKM: hotspots 308900, S-NPP outage days 61, cell-months 113178, cells 14486
+2026-11-15 04:01:51,020 grid INFO KGZ: hotspots 42117, S-NPP outage days 61, cell-months 21319, cells 5194
+2026-11-15 04:01:51,933 grid INFO TJK: hotspots 16308, S-NPP outage days 55, cell-months 8031, cells 2764
+2026-11-15 04:01:55,039 grid INFO ADM1 assignment: {'KAZ': {'cells': {'inside': 240798, 'nearest': 1217, 'outside': 24}, 'modis_cell_days': {'inside': 649003, 'nearest': 3029, 'outside': 41}}, 'UZB': {'cells': {'inside': 15409, 'nearest': 443, 'outside': 2}, 'modis_cell_days': {'inside': 40305, 'nearest': 903, 'outside': 2}}, 'TKM': {'cells': {'inside': 14233, 'nearest': 253}, 'modis_cell_days': {'inside': 35338, 'nearest': 651}}, 'KGZ': {'cells': {'inside': 5059, 'nearest': 135}, 'modis_cell_days': {'inside': 9496, 'nearest': 285}}, 'TJK': {'cells': {'inside': 2595, 'nearest': 169}, 'modis_cell_days': {'inside': 2297, 'nearest': 224}}}
+2026-11-15 04:01:55,050 grid INFO wrote cell_month_all.parquet (1110179 rows, 5 countries)
+=== 03_grid done in 27.5s
+=== 04_landcover
+2026-11-15 04:01:55,061 landcover INFO no MCD12C1*.hdf in C:\Users\hp\OneDrive\Документы\firewatch\data\reference: skipping land cover (optional)
+=== 04_landcover done in 0.0s
+=== 04b_burned_area
+2026-11-15 04:01:55,062 burned_area INFO no MCD64A1 tiles in C:\Users\hp\OneDrive\Документы\firewatch\data\reference\mcd64a1: skipping burned area (optional)
+=== 04b_burned_area done in 0.0s
+=== experiments
+2026-11-15 04:01:58,361 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 04:02:03,444 experiments INFO C0 Terra∪Aqua, ratio                      score 11.79 | T1 8.9 T3 18.5 T4 8.0 | T2 14.8 bias -9.3
+2026-11-15 04:02:08,140 experiments INFO C1 Terra∪Aqua, OLS log1p (v1)             score 10.97 | T1 7.8 T3 18.8 T4 6.4 | T2 10.7 bias -2.3
+2026-11-15 04:02:13,332 experiments INFO C2 Terra∪Aqua, Poisson log-link           score 10.63 | T1 6.9 T3 18.5 T4 6.5 | T2 10.3 bias -2.2
+2026-11-15 04:02:18,315 experiments INFO C3 Terra∪Aqua day+night, ratio            score 12.24 | T1 7.9 T3 21.3 T4 7.5 | T2 13.2 bias -4.1
+2026-11-15 04:02:22,195 experiments INFO C4 Aqua, ratio                            score 14.62 | T1 10.8 T3 23.1 T4 10.0 | T2 18.3 bias -12.8
+2026-11-15 04:02:27,853 experiments INFO C5 Aqua day+night, ratio                  score 14.59 | T1 10.0 T3 24.1 T4 9.6 | T2 18.3 bias -7.6
+2026-11-15 04:02:33,703 experiments INFO C6 Aqua, Poisson log-link                 score 14.71 | T1 11.7 T3 21.3 T4 11.1 | T2 16.2 bias -2.8
+2026-11-15 04:02:42,651 experiments INFO C7 Aqua day+night, Poisson log-link       score 15.77 | T1 12.5 T3 23.5 T4 11.3 | T2 16.4 bias 2.1
+2026-11-15 04:02:44,153 experiments INFO coverage before {'T3_loro_region': 0.438, 'T1_backcast_country': 0.938, 'T2_holdout_country': 0.833, 'T4_loyo_country': 0.896}
+2026-11-15 04:02:44,153 experiments INFO coverage after  {'T3_loro_region': 0.912, 'T1_backcast_country': 0.938, 'T2_holdout_country': 0.833, 'T4_loyo_country': 0.896}
+2026-11-15 04:02:44,157 experiments INFO selected C2 -> production model poisson_log; LORO MAE 18.5%
+=== experiments done in 49.1s
+=== 05_calibrate
+2026-11-15 04:02:44,393 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 04:04:01,536 calibrate INFO holdout ratio: MAE%=14.8 bias=-9.3% R=0.979 PI cov=72% CI cov=24%
+2026-11-15 04:04:01,536 calibrate INFO holdout loglog: MAE%=10.7 bias=-2.3% R=0.983 PI cov=85% CI cov=24%
+2026-11-15 04:04:01,536 calibrate INFO holdout poisson_log: MAE%=10.3 bias=-2.2% R=0.984 PI cov=83% CI cov=19%
+2026-11-15 04:04:01,536 calibrate INFO selected model: poisson_log
+=== 05_calibrate done in 77.4s
+=== 06_harmonize
+2026-11-15 04:04:01,806 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 04:04:05,473 harmonize INFO cell-months in: 855862, out: 855862; pre-2012 MODIS 399562 -> harmonized 687877
+=== 06_harmonize done in 3.9s
+=== 07_validate
+2026-11-15 04:04:05,823 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 04:04:06,299 validate INFO temporal holdout
+2026-11-15 04:04:09,290 validate INFO jump test
+2026-11-15 04:04:13,574 validate INFO wrote reports/validation_kz.md
+=== 07_validate done in 8.1s
+=== 07b_validation_package
+2026-11-15 04:04:20,738 package INFO transfer KAZ: as-is 6.5% (bias +0.1%) vs local 6.5% -> True
+2026-11-15 04:04:22,561 package INFO transfer UZB: as-is 35.5% (bias -32.4%) vs local 17.7% -> False
+2026-11-15 04:04:24,258 package INFO transfer TKM: as-is 42.3% (bias -34.9%) vs local 22.9% -> False
+2026-11-15 04:04:25,829 package INFO transfer KGZ: as-is 24.2% (bias -5.8%) vs local 20.8% -> True
+2026-11-15 04:04:27,784 package INFO transfer TJK: as-is 49.3% (bias +26.0%) vs local 37.4% -> False
+2026-11-15 04:04:29,348 package INFO transfer PRT: as-is 61.7% (bias +58.9%) vs local 15.6% -> False
+2026-11-15 04:04:30,837 package INFO transfer AUS: as-is 33.3% (bias -32.6%) vs local 5.2% -> False
+2026-11-15 04:04:32,419 package INFO transfer BRA: as-is 52.5% (bias -52.4%) vs local 5.5% -> False
+2026-11-15 04:04:34,074 package INFO transfer USA: as-is 27.4% (bias -26.7%) vs local 8.3% -> False
+2026-11-15 04:04:35,876 package INFO transfer IND: as-is 64.6% (bias -64.6%) vs local 9.2% -> False
+2026-11-15 04:04:40,167 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 04:04:41,039 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 04:04:41,704 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 04:04:41,997 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 04:04:42,155 package INFO wrote reports/validation.json and reports/VALIDATION.md
+=== 07b_validation_package done in 28.6s
+=== 08_export_web
+2026-11-15 04:04:42,261 export_web INFO export 2001-01 .. 2026-10 for ['KAZ', 'UZB', 'TKM', 'KGZ', 'TJK', 'PRT', 'AUS', 'BRA', 'USA', 'IND']
+2026-11-15 04:04:56,523 export_web INFO KAZ: 52 hex files
+2026-11-15 04:04:56,658 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 04:04:58,273 export_web INFO UZB: 52 hex files
+2026-11-15 04:04:58,408 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 04:04:58,980 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 04:04:59,246 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 04:04:59,589 export_web INFO boundaries: 5 files; files > 5 MB: 0
+size per folder:
+  data                                 0.04 MB
+  data/boundaries                      0.15 MB
+  data/hex                            37.58 MB
+  data/regions                         0.28 MB
+  data/series                          0.13 MB
+=== 08_export_web done in 17.5s
+2026-11-15 04:05:03,132 outage_check INFO AUS: {'per_country_threshold': 512, 'typical_daily_noaa20': 2228.5, 'fixed_20': {'outage_days': 65, 'global': 61, 'true_share': 0.9384615384615385, 'found_share': 1.0}, 'per_country': {'outage_days': 62, 'global': 58, 'true_share': 0.9354838709677419, 'found_share': 0.9508196721311475}}
+2026-11-15 04:05:03,142 outage_check INFO BRA: {'per_country_threshold': 319, 'typical_daily_noaa20': 1387.0, 'fixed_20': {'outage_days': 63, 'global': 61, 'true_share': 0.9682539682539683, 'found_share': 1.0}, 'per_country': {'outage_days': 60, 'global': 58, 'true_share': 0.9666666666666667, 'found_share': 0.9508196721311475}}
+2026-11-15 04:05:03,153 outage_check INFO IND: {'per_country_threshold': 150, 'typical_daily_noaa20': 653.0, 'fixed_20': {'outage_days': 49, 'global': 47, 'true_share': 0.9591836734693877, 'found_share': 0.7704918032786885}, 'per_country': {'outage_days': 27, 'global': 27, 'true_share': 1.0, 'found_share': 0.4426229508196721}}
+2026-11-15 04:05:03,158 outage_check INFO KAZ: {'per_country_threshold': 20, 'typical_daily_noaa20': 87.0, 'fixed_20': {'outage_days': 56, 'global': 54, 'true_share': 0.9642857142857143, 'found_share': 0.8852459016393442}, 'per_country': {'outage_days': 56, 'global': 54, 'true_share': 0.9642857142857143, 'found_share': 0.8852459016393442}}
+2026-11-15 04:05:03,166 outage_check INFO KGZ: {'per_country_threshold': 5, 'typical_daily_noaa20': 2.0, 'fixed_20': {'outage_days': 1, 'global': 1, 'true_share': 1.0, 'found_share': 0.01639344262295082}, 'per_country': {'outage_days': 20, 'global': 8, 'true_share': 0.4, 'found_share': 0.13114754098360656}}
+2026-11-15 04:05:03,178 outage_check INFO PRT: {'per_country_threshold': 5, 'typical_daily_noaa20': 4.0, 'fixed_20': {'outage_days': 14, 'global': 13, 'true_share': 0.9285714285714286, 'found_share': 0.21311475409836064}, 'per_country': {'outage_days': 60, 'global': 26, 'true_share': 0.43333333333333335, 'found_share': 0.4262295081967213}}
+2026-11-15 04:05:03,187 outage_check INFO TJK: {'per_country_threshold': 5, 'typical_daily_noaa20': 2.0, 'fixed_20': {'outage_days': 0, 'global': 0, 'true_share': None, 'found_share': 0.0}, 'per_country': {'outage_days': 29, 'global': 4, 'true_share': 0.13793103448275862, 'found_share': 0.06557377049180328}}
+2026-11-15 04:05:03,200 outage_check INFO TKM: {'per_country_threshold': 5, 'typical_daily_noaa20': 19.0, 'fixed_20': {'outage_days': 39, 'global': 34, 'true_share': 0.8717948717948718, 'found_share': 0.5573770491803278}, 'per_country': {'outage_days': 67, 'global': 56, 'true_share': 0.835820895522388, 'found_share': 0.9180327868852459}}
+2026-11-15 04:05:03,211 outage_check INFO USA: {'per_country_threshold': 175, 'typical_daily_noaa20': 760.0, 'fixed_20': {'outage_days': 61, 'global': 59, 'true_share': 0.9672131147540983, 'found_share': 0.9672131147540983}, 'per_country': {'outage_days': 61, 'global': 59, 'true_share': 0.9672131147540983, 'found_share': 0.9672131147540983}}
+2026-11-15 04:05:03,219 outage_check INFO UZB: {'per_country_threshold': 5, 'typical_daily_noaa20': 19.0, 'fixed_20': {'outage_days': 27, 'global': 23, 'true_share': 0.8518518518518519, 'found_share': 0.3770491803278688}, 'per_country': {'outage_days': 64, 'global': 55, 'true_share': 0.859375, 'found_share': 0.9016393442622951}}
+# Kazakhstan: what moved
+
+| metric | Phase B | after C3 | now |
+|---|---|---|---|
+| hotspots after cleaning | 3,171,270 | 3,171,270 | 3,172,931 |
+| removed as static (type != 0) | 482,852 | 482,852 | 482,852 |
+| NRT removed by static mask | 13,750 | 13,750 | 12,089 |
+| static mask cells | 189 | 189 | 91 |
+| selected model | C2 (poisson_log) | C2 (poisson_log) | C2 (poisson_log) |
+| step ratio 2012: naive points | 2.824 | 2.824 | 2.824 |
+| step ratio 2012: naive cell-days | 1.647 | 1.647 | 1.647 |
+| step ratio 2012: harmonized | 0.924 | 0.924 | 0.924 |
+| step ratio 2012: MODIS alone | 0.886 | 0.886 | 0.886 |
+| harmonized jump vs MODIS alone | 1.042 | 1.042 | 1.042 |
+| monthly step factor, harmonized | 0.861 | 0.861 | 0.861 |
+| backcast T1 MAE % | 6.927 | 6.927 | 6.927 |
+| backcast T1 bias % | -2.146 | -2.146 | -2.146 |
+| leave-one-year-out T4 MAE % | 6.453 | 6.453 | 6.453 |
+| holdout 2020+ MAE % | 10.3 | 10.3 | 10.3 |
+| holdout 2020+ bias % | -2.207 | -2.207 | -2.178 |
+| holdout 2020+ coverage | 0.833 | 0.833 | 0.833 |
+| LORO MAE % (median region) | 17.3 | 18.5 | 18.5 |
+| LORO coverage (region-months) | 0.405 | 0.912 | 0.912 |
+| model score (mean T1, T3, T4) | 9.675 | 10.6 | 10.6 |
+
+Phase B LORO used H3 res-1 hexagons without zero months; since C3 it uses ADM1 oblasts with zero months and the region-level interval (not comparable one-to-one).
+EXIT 0

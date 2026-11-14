@@ -58,7 +58,8 @@ def bounds(pred, params):
     p = np.asarray(pred, float)
     if params["method"] == "hetero_log_ratio":
         s = np.sqrt(params["median_pred"] / np.maximum(p, 1e-9))
-        lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+        with np.errstate(over="ignore", invalid="ignore"):       # p ~ 0 -> huge s; those rows are set to 0 below
+            lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
         lo, hi = np.where(p > 0, lo, 0.0), np.where(p > 0, hi, 0.0)
     elif params["method"] == "binned_log1p":
         b = _bin(p, params["inner_edges"])

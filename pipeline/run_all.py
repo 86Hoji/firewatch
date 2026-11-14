@@ -2,8 +2,8 @@ import importlib
 import sys
 import time
 
-STEPS = ["01_download", "02_clean", "03_grid", "04_landcover", "04b_burned_area", "experiments", "05_calibrate", "06_harmonize",
-         "07_validate"]
+STEPS = ["01_download", "02_clean", "02b_outage", "03_grid", "04_landcover", "04b_burned_area", "experiments", "05_calibrate", "06_harmonize",
+         "07_validate", "07b_validation_package", "08_export_web"]
 
 
 def main(argv):

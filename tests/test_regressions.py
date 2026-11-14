@@ -42,17 +42,29 @@ def test_terra_only_months_are_scaled_to_terra_plus_aqua(cfg):
     assert m[1] == 10.0          # 2005: Terra+Aqua as observed
 
 
-def test_snpp_outage_threshold_is_inclusive(tmp_path):
-    rows = [("c1", "2026-11-05", "NOAA20")] * 20 + [("c2", "2026-11-06", "NOAA20")] * 19 + \
-           [("c1", "2026-11-07", "SNPP"), ("c1", "2026-11-07", "NOAA20")]
+def test_outage_fill_uses_global_days_and_skips_cells_snpp_saw(tmp_path):
+    rows = [("c1", "2026-11-05", "NOAA20"), ("c2", "2026-11-05", "NOAA20"), ("c2", "2026-11-05", "SNPP"),
+            ("c3", "2026-11-06", "NOAA20")]                       # 11-06 is not an outage day
     df = pd.DataFrame(rows, columns=["h3_cell", "date", "platform"])
     df["date"] = pd.to_datetime(df["date"]).dt.date
     df["year"], df["month"] = 2026, 11
     p = tmp_path / "h.parquet"
     df.to_parquet(p)
-    gap, n_days = grid.outage_fill(duckdb.connect(), f"read_parquet('{p.as_posix()}')", 20)
-    assert n_days == 1                                   # 20 NOAA-20 detections is enough, 19 is not
-    assert gap.set_index("h3_cell")["n_viirs_noaa20_gap"].to_dict() == {"c1": 1}
+    gap, n_days = grid.outage_fill(duckdb.connect(), f"read_parquet('{p.as_posix()}')",
+                                   [pd.Timestamp("2026-11-05").date()])
+    assert n_days == 1
+    assert gap.set_index("h3_cell")["n_viirs_noaa20_gap"].to_dict() == {"c1": 1}   # c2 already has S-NPP
+
+
+def test_global_outage_rule():
+    from pipeline import outage
+    cfg = {"outage": {"max_snpp_share": 0.01, "min_noaa20_total": 500}}
+    d = pd.DataFrame({"date": pd.to_datetime(["2026-01-01"] * 2 + ["2026-01-02"] * 2 + ["2026-01-03"] * 2),
+                      "country": ["A", "B"] * 3,
+                      "n_snpp": [0, 0, 3, 0, 0, 0], "n_noaa20": [900, 5, 900, 5, 100, 50]})
+    days, _ = outage.global_days(cfg, d)
+    # day 1: S-NPP 0 vs 905 -> outage; day 2: 3/905 = 0.3% -> outage; day 3: too few NOAA-20 to tell
+    assert days["date"].dt.strftime("%m-%d").tolist() == ["01-01", "01-02"]
 
 
 def test_standard_processing_replaces_nrt_on_same_day():

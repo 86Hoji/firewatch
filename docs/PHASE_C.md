@@ -227,3 +227,58 @@ The geoBoundaries file has the 16 pre-2022 units (no Abai/Jetisu/Ulytau) — fin
 ### Regression
 KZ ingestion, cleaning, hotspots, cell-months, and T1/T2/T4 of all 8 candidate models: identical to Phase B.
 Changed by design (excluded in `regression_check.py`): LORO and intervals. 36 tests pass.
+
+## After the C3 review: both recommendations applied
+
+### Satellite-wide S-NPP outage days (`pipeline/outage.py`, step `02b_outage`)
+An outage is a property of the satellite, so there is now **one list for all countries**, built from all 10
+combined: a UTC day is an outage when S-NPP has ≤ 1% of NOAA-20's detections summed over all countries (and NOAA-20
+has ≥ 500). Result: **61 days** (59 with exactly zero S-NPP, 2 with < 0.4%); 9 partial-data days (S-NPP at 7–28%)
+are deliberately not counted. NOAA-20 fills only cells S-NPP did not see that day. Totals-only countries get the fill
+from a new `country_day.c_noaa20_only` column, so no second pass over 20–50 M points is needed (a test checks that
+both routes give identical numbers). How the old per-country rules compare with the global list
+(`reports/outage_check.json`): KZ/USA/AUS/BRA catch 89–100% of real outage days with either threshold; the per-country
+threshold helped UZ/TM (found 38→90%, 56→92%) but produced mostly false days in KGZ/TJK/PRT (true 13–43%) and missed
+India's off-season outages (found 77→44%).
+
+### Static-source mask: type-2 rule only, rebuilt from the last 5 years (`config: cleaning.static_mask`)
+Honest test unchanged (built only from rows before 2025-01-01, tested 2025-01…2026-07):
+
+| country | precision / recall, new | precision / recall, C2 mask | total change if mask replaced `type` (S-NPP), new vs C2 |
+|---|---|---|---|
+| KAZ | 93.9% / 88.4% | 88.6% / 96.1% | +2.1% vs −3.1% |
+| UZB | 94.0% / 74.7% | 84.2% / 76.4% | +5.2% vs +0.3% |
+| TKM | 86.1% / 84.5% | 82.3% / 95.0% | −3.9% vs −18.5% |
+
+Trade-off: fewer real fires removed (precision up 4–10 points, Turkmenistan's distortion −18% → −4%), some flares
+missed (recall down). **The new Uzbek source (38.1°N 67.3°E) is not caught by any mask rule, not even the production
+mask built from data through 2026**: FIRMS labels 92% of its VIIRS detections type 0 (vegetation fire), so no rule
+built on FIRMS `type` can flag it. It stays a documented caveat for Uzbekistan 2025+.
+
+### Kazakhstan: what moved (`reports/kz_before_after.md`)
+Hotspots after cleaning 3,171,270 → 3,172,931 (+0.05%: the smaller mask, 189 → 91 cells, removes 1,661 fewer NRT
+rows in 2025–26); every model metric identical to Phase B except holdout bias −2.21% → −2.18%; LORO and coverage
+changed in C3 (ADM1 regions, region intervals). The regression reference is now the snapshot `reports/phase_c4`.
+
+## C4 — validation package (`pipeline/07b_validation_package.py` → `reports/VALIDATION.md`, `reports/validation.json`)
+
+Headline results (details and plain-language takeaways per test in `reports/VALIDATION.md`):
+
+* **Uzbekistan, independent test.** 2012 jump: naive ×4.88 → KZ-harmonized ×1.77 → locally refitted ×1.15 (MODIS
+  alone ×1.35). KZ model as-is: 35.5% monthly error, −32% bias; local refit: 17.7%, −0.4%.
+* **Turkmenistan, stress test.** 57% of confident detections are static sources (KZ 13%). Jump ×4.75 → ×1.66 (KZ)
+  → ×1.02 (local). As-is 42% error / −35% bias; local 23%.
+* **Kyrgyzstan / Tajikistan, annual totals.** Annual error 9% / 20%, bias −6% / +20% (raw MODIS −72% / −76%).
+* **Transfer table (10 countries).** KZ coefficients transfer only to KZ-like regimes (KGZ). Observed VIIRS/MODIS
+  ratio ranges ×1.58 (Portugal) to ×4.46 (India); KZ as-is errs in the direction of the difference (PRT +59%,
+  IND −65%, BRA −52%, AUS −33%, USA −27%). Refitted locally the same model gets 5–37% (big countries 5–9%).
+  **The method transfers across biomes; the coefficients do not.**
+* **Burned area.** With burned area held fixed, the naive series jumps ×2.2–×5.8 at 2012 in all five countries.
+  KZ-harmonized is continuous only in KZ (×1.16, CI 0.88–1.53); **locally harmonized is continuous in UZ (×1.00),
+  TM (×1.01), TJ and KZ** — independent evidence that the harmonization works when coefficients are local.
+* **Events.** Region-month z-scores failed (see `docs/DECISIONS.md` #16). Excess cell-days per H3 res-4 hexagon:
+  Abai June 2023 = 123 cell-days vs a normal of 0, **rank 242 of 1,255** — not #1. Kostanay Sept 2022: rank 412.
+  Honest reading: in detection counts a forest fire is not exceptional next to Kazakhstan's steppe/farm burning
+  (top events: Kyzylorda 2003-04, Karaganda 2005-07, West KZ 2001-07). Abai stands out by intensity (FRP), land
+  cover (pine forest) and impact, which a count-based product does not measure. It is in `anomalies.json` for the
+  demo as a known event.

@@ -6,7 +6,7 @@
       "outside": 24
     },
     "modis_cell_days": {
-      "inside": 648966,
+      "inside": 649003,
       "nearest": 3029,
       "outside": 41
     }
@@ -18,7 +18,7 @@
       "outside": 2
     },
     "modis_cell_days": {
-      "inside": 40263,
+      "inside": 40305,
       "nearest": 903,
       "outside": 2
     }
@@ -29,7 +29,7 @@
       "nearest": 253
     },
     "modis_cell_days": {
-      "inside": 35325,
+      "inside": 35338,
       "nearest": 651
     }
   },

@@ -21,15 +21,17 @@ def series_metrics(actual, pred, low=None, high=None):
     return out
 
 
-def step_test(years, months, values, cut, lags=12):
-    """log1p(y) = month dummies + linear trend + step*(year >= cut); step with Newey-West 95% CI.
+def step_test(years, months, values, cut, lags=12, covariate=None):
+    """log1p(y) = month dummies + linear trend [+ c * log1p(covariate)] + step*(year >= cut); step with Newey-West
+    95% CI. covariate: an independent driver (e.g. burned area) -> the step is the jump NOT explained by it.
 
     Returns the step as a multiplicative factor exp(beta) with its CI.
     """
     y = np.log1p(np.asarray(values, float))
     t = (np.asarray(years) - np.min(years)) * 12 + np.asarray(months) - 1
     D = (np.asarray(months)[:, None] == np.arange(1, 13)[None, :]).astype(float)
-    X = np.column_stack([D, t / 120.0, (np.asarray(years) >= cut).astype(float)])
+    extra = [] if covariate is None else [np.log1p(np.asarray(covariate, float))]
+    X = np.column_stack([D, t / 120.0, *extra, (np.asarray(years) >= cut).astype(float)])
     beta, *_ = np.linalg.lstsq(X, y, rcond=None)
     e = y - X @ beta
     n = len(y)

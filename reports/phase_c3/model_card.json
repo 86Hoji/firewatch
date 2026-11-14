@@ -1,0 +1,97 @@
+{
+  "selected": "C2",
+  "label": "Terra∪Aqua, Poisson log-link",
+  "link": "log",
+  "cols": [
+    "n_modis"
+  ],
+  "production_model": "poisson_log",
+  "train_country": "KAZ",
+  "calibration_period": [
+    2012,
+    2019
+  ],
+  "holdout": [
+    2020,
+    2025
+  ],
+  "scores": {
+    "score": 10.62729733454155,
+    "T1_backcast_mae_pct": 6.9274225221387535,
+    "T3_loro_mae_pct": 18.501008154542767,
+    "T4_loyo_mae_pct": 6.4534613269431285,
+    "T2_forecast_mae_pct": 10.31390912648695,
+    "T2_forecast_bias_pct": -2.2065217459649413
+  },
+  "loro": {
+    "unit": "ADM1 region-month",
+    "years": [
+      2012,
+      2019
+    ],
+    "mae_pct_median": 18.501008154542767,
+    "regions_included": 13,
+    "regions_total": 16,
+    "min_share": 0.01
+  },
+  "intervals": {
+    "level": 0.9,
+    "country": {
+      "method": "hetero_log_ratio",
+      "level": 0.9,
+      "q_lo": -0.159155635512417,
+      "q_hi": 0.15953123888798226,
+      "median_pred": 2490.082845944574,
+      "n": 96
+    },
+    "region": {
+      "method": "binned_log1p",
+      "level": 0.9,
+      "inner_edges": [
+        5.0,
+        20.0,
+        100.0,
+        500.0
+      ],
+      "q_lo": [
+        0.0,
+        -0.41650610245677905,
+        -1.0722828370125022,
+        -0.6891160768757402,
+        -0.3124561501274376,
+        -0.2984451925691501
+      ],
+      "q_hi": [
+        2.70805020110221,
+        2.383761174188189,
+        1.756727111567246,
+        0.9507189862225438,
+        0.4366643696811555,
+        0.1736108082307836
+      ],
+      "n": [
+        504,
+        87,
+        147,
+        284,
+        352,
+        162
+      ]
+    },
+    "coverage_before": {
+      "T3_loro_region": 0.4375,
+      "T1_backcast_country": 0.9375,
+      "T2_holdout_country": 0.8333333333333334,
+      "T4_loyo_country": 0.8958333333333334
+    },
+    "coverage_after": {
+      "T3_loro_region": 0.912109375,
+      "T1_backcast_country": 0.9375,
+      "T2_holdout_country": 0.8333333333333334,
+      "T4_loyo_country": 0.8958333333333334
+    },
+    "median_region_coverage_before": 0.46354166666666663,
+    "median_region_coverage_after": 0.9479166666666666,
+    "min_region_coverage_after": 0.7291666666666666
+  }
+}

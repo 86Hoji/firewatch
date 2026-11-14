@@ -1,0 +1,134 @@
+=== 02_clean
+2026-11-15 02:03:08,126 clean INFO KAZ (cell, train): [847148, 847158, 847199, 847159, 847181, 847180]
+2026-11-15 02:03:10,688 ingest INFO   847148 fire_archive_M-C61_847148.csv          777034 rows
+2026-11-15 02:03:11,701 ingest INFO   847158 fire_archive_M-C61_847158.csv          258020 rows
+2026-11-15 02:03:12,622 ingest INFO   847199 fire_archive_M-C61_847199.csv          221560 rows
+2026-11-15 02:03:12,667 ingest INFO   847199 fire_nrt_M-C61_847199.csv                4449 rows
+2026-11-15 02:03:15,508 ingest INFO   847159 fire_archive_SV-C2_847159.csv          933875 rows
+2026-11-15 02:03:17,706 ingest INFO   847181 fire_archive_SV-C2_847181.csv          833595 rows
+2026-11-15 02:03:17,884 ingest INFO   847181 fire_nrt_SV-C2_847181.csv               29625 rows
+2026-11-15 02:03:20,119 ingest INFO   847180 fire_archive_J1V-C2_847180.csv         830218 rows
+2026-11-15 02:03:20,281 ingest INFO   847180 fire_nrt_J1V-C2_847180.csv              31181 rows
+2026-11-15 02:03:30,194 ingest INFO   unknown_platform          3919557 ->    3919557
+2026-11-15 02:03:30,194 ingest INFO   confidence                3919557 ->    3667872
+2026-11-15 02:03:30,194 ingest INFO   type_not_vegetation       3667872 ->    3185020
+2026-11-15 02:03:30,194 ingest INFO   nrt_static_mask           3185020 ->    3172931
+2026-11-15 02:03:30,194 ingest INFO   exact_duplicates          3172931 ->    3172931
+2026-11-15 02:03:30,194 ingest INFO   nrt_overlaps_sp           3172931 ->    3172931
+2026-11-15 02:03:33,221 clean INFO UZB (cell, test): [847909, 847912, 847910, 847911]
+2026-11-15 02:03:33,879 ingest INFO   847909 fire_archive_M-C61_847909.csv           97386 rows
+2026-11-15 02:03:33,898 ingest INFO   847909 fire_nrt_M-C61_847909.csv                 335 rows
+2026-11-15 02:03:34,733 ingest INFO   847912 fire_archive_SV-C2_847912.csv          268472 rows
+2026-11-15 02:03:34,766 ingest INFO   847912 fire_nrt_SV-C2_847912.csv                3532 rows
+2026-11-15 02:03:35,259 ingest INFO   847910 fire_archive_J1V-C2_847910.csv         139330 rows
+2026-11-15 02:03:35,289 ingest INFO   847910 fire_nrt_J1V-C2_847910.csv               3773 rows
+2026-11-15 02:03:35,861 ingest INFO   847911 fire_archive_J2V-C2_847911.csv          52198 rows
+2026-11-15 02:03:35,893 ingest INFO   847911 fire_nrt_J2V-C2_847911.csv               3379 rows
+2026-11-15 02:03:37,551 ingest INFO   unknown_platform           568405 ->     568405
+2026-11-15 02:03:37,551 ingest INFO   confidence                 568405 ->     524484
+2026-11-15 02:03:37,551 ingest INFO   type_not_vegetation        524484 ->     317233
+2026-11-15 02:03:37,551 ingest INFO   nrt_static_mask            317233 ->     312778
+2026-11-15 02:03:37,551 ingest INFO   exact_duplicates           312778 ->     312778
+2026-11-15 02:03:37,551 ingest INFO   nrt_overlaps_sp            312778 ->     312778
+2026-11-15 02:03:37,929 clean INFO TKM (cell, stress): [848066, 848011, 848009, 848010]
+2026-11-15 02:03:38,272 ingest INFO   848066 fire_archive_M-C61_848066.csv           69898 rows
+2026-11-15 02:03:38,281 ingest INFO   848066 fire_nrt_M-C61_848066.csv                 220 rows
+2026-11-15 02:03:39,365 ingest INFO   848011 fire_archive_SV-C2_848011.csv          372292 rows
+2026-11-15 02:03:39,413 ingest INFO   848011 fire_nrt_SV-C2_848011.csv               10081 rows
+2026-11-15 02:03:40,163 ingest INFO   848009 fire_archive_J1V-C2_848009.csv         224479 rows
+2026-11-15 02:03:40,224 ingest INFO   848009 fire_nrt_J1V-C2_848009.csv              11132 rows
+2026-11-15 02:03:40,813 ingest INFO   848010 fire_archive_J2V-C2_848010.csv          87967 rows
+2026-11-15 02:03:40,869 ingest INFO   848010 fire_nrt_J2V-C2_848010.csv              10385 rows
+2026-11-15 02:03:42,408 ingest INFO   unknown_platform           786454 ->     786454
+2026-11-15 02:03:42,408 ingest INFO   confidence                 786454 ->     752750
+2026-11-15 02:03:42,408 ingest INFO   type_not_vegetation        752750 ->     327205
+2026-11-15 02:03:42,408 ingest INFO   nrt_static_mask            327205 ->     308900
+2026-11-15 02:03:42,408 ingest INFO   exact_duplicates           308900 ->     308900
+2026-11-15 02:03:42,408 ingest INFO   nrt_overlaps_sp            308900 ->     308900
+2026-11-15 02:03:42,829 clean INFO KGZ (cell, extra): [847969, 847972, 847970, 847971]
+2026-11-15 02:03:42,979 ingest INFO   847969 fire_archive_M-C61_847969.csv           14829 rows
+2026-11-15 02:03:42,991 ingest INFO   847969 fire_nrt_M-C61_847969.csv                  76 rows
+2026-11-15 02:03:43,168 ingest INFO   847972 fire_archive_SV-C2_847972.csv           31749 rows
+2026-11-15 02:03:43,184 ingest INFO   847972 fire_nrt_SV-C2_847972.csv                 624 rows
+2026-11-15 02:03:43,262 ingest INFO   847970 fire_archive_J1V-C2_847970.csv          17094 rows
+2026-11-15 02:03:43,289 ingest INFO   847970 fire_nrt_J1V-C2_847970.csv                753 rows
+2026-11-15 02:03:43,325 ingest INFO   847971 fire_archive_J2V-C2_847971.csv           5959 rows
+2026-11-15 02:03:43,341 ingest INFO   847971 fire_nrt_J2V-C2_847971.csv                706 rows
+2026-11-15 02:03:43,833 ingest INFO   unknown_platform            71790 ->      71790
+2026-11-15 02:03:43,833 ingest INFO   confidence                  71790 ->      67198
+2026-11-15 02:03:43,833 ingest INFO   type_not_vegetation         67198 ->      42759
+2026-11-15 02:03:43,833 ingest INFO   nrt_static_mask             42759 ->      42117
+2026-11-15 02:03:43,833 ingest INFO   exact_duplicates            42117 ->      42117
+2026-11-15 02:03:43,833 ingest INFO   nrt_overlaps_sp             42117 ->      42117
+2026-11-15 02:03:44,087 clean INFO TJK (cell, extra): [847982, 847996, 847994, 847995]
+2026-11-15 02:03:44,151 ingest INFO   847982 fire_archive_M-C61_847982.csv            3906 rows
+2026-11-15 02:03:44,166 ingest INFO   847982 fire_nrt_M-C61_847982.csv                  21 rows
+2026-11-15 02:03:44,230 ingest INFO   847996 fire_archive_SV-C2_847996.csv           11742 rows
+2026-11-15 02:03:44,246 ingest INFO   847996 fire_nrt_SV-C2_847996.csv                 297 rows
+2026-11-15 02:03:44,294 ingest INFO   847994 fire_archive_J1V-C2_847994.csv           7669 rows
+2026-11-15 02:03:44,310 ingest INFO   847994 fire_nrt_J1V-C2_847994.csv                315 rows
+2026-11-15 02:03:44,342 ingest INFO   847995 fire_archive_J2V-C2_847995.csv           3140 rows
+2026-11-15 02:03:44,358 ingest INFO   847995 fire_nrt_J2V-C2_847995.csv                358 rows
+2026-11-15 02:03:44,548 ingest INFO   unknown_platform            27448 ->      27448
+2026-11-15 02:03:44,548 ingest INFO   confidence                  27448 ->      25617
+2026-11-15 02:03:44,548 ingest INFO   type_not_vegetation         25617 ->      16733
+2026-11-15 02:03:44,548 ingest INFO   nrt_static_mask             16733 ->      16308
+2026-11-15 02:03:44,548 ingest INFO   exact_duplicates            16308 ->      16308
+2026-11-15 02:03:44,548 ingest INFO   nrt_overlaps_sp             16308 ->      16308
+2026-11-15 02:03:44,755 clean INFO PRT (totals, transfer): [848384, 848385, 848386, 848387]
+2026-11-15 02:03:45,137 ingest INFO   848384 fire_archive_M-C61_848384.csv           78694 rows
+2026-11-15 02:03:45,155 ingest INFO   848384 fire_nrt_M-C61_848384.csv                 358 rows
+2026-11-15 02:03:45,407 ingest INFO   848385 fire_archive_J1V-C2_848385.csv          52454 rows
+2026-11-15 02:03:45,423 ingest INFO   848385 fire_nrt_J1V-C2_848385.csv               1853 rows
+2026-11-15 02:03:45,614 ingest INFO   848386 fire_archive_J2V-C2_848386.csv          27658 rows
+2026-11-15 02:03:45,652 ingest INFO   848386 fire_nrt_J2V-C2_848386.csv               1841 rows
+2026-11-15 02:03:46,122 ingest INFO   848387 fire_archive_SV-C2_848387.csv          114364 rows
+2026-11-15 02:03:46,138 ingest INFO   848387 fire_nrt_SV-C2_848387.csv                1642 rows
+2026-11-15 02:03:47,588 ingest INFO   unknown_platform           278864 ->     278864
+2026-11-15 02:03:47,588 ingest INFO   confidence                 278864 ->     266168
+2026-11-15 02:03:47,588 ingest INFO   type_not_vegetation        266168 ->     256881
+2026-11-15 02:03:47,588 ingest INFO   nrt_static_mask            256881 ->     256580
+2026-11-15 02:03:47,588 ingest INFO   exact_duplicates           256580 ->     256580
+2026-11-15 02:03:47,588 ingest INFO   nrt_overlaps_sp            256580 ->     256580
+2026-11-15 02:03:47,973 clean INFO AUS (totals, transfer): [848403, 848404, 848405, 848406]
+2026-11-15 02:04:09,091 ingest INFO   848403 fire_archive_M-C61_848403.csv         6554801 rows
+2026-11-15 02:04:09,427 ingest INFO   848403 fire_nrt_M-C61_848403.csv               61394 rows
+2026-11-15 02:04:36,360 ingest INFO   848404 fire_archive_J1V-C2_848404.csv        9932750 rows
+2026-11-15 02:04:37,458 ingest INFO   848404 fire_nrt_J1V-C2_848404.csv             378673 rows
+2026-11-15 02:04:49,463 ingest INFO   848405 fire_archive_J2V-C2_848405.csv        4444845 rows
+2026-11-15 02:04:50,609 ingest INFO   848405 fire_nrt_J2V-C2_848405.csv             378995 rows
+2026-11-15 02:05:37,678 ingest INFO   848406 fire_archive_SV-C2_848406.csv        17518493 rows
+2026-11-15 02:05:38,563 ingest INFO   848406 fire_nrt_SV-C2_848406.csv              278603 rows
+2026-11-15 02:32:09,056 ingest INFO   unknown_platform         39548554 ->   39548554
+2026-11-15 02:32:09,056 ingest INFO   confidence               39548554 ->   36012064
+2026-11-15 02:32:09,056 ingest INFO   type_not_vegetation      36012064 ->   35601646
+2026-11-15 02:32:09,056 ingest INFO   nrt_static_mask          35601646 ->   35592553
+2026-11-15 02:32:09,056 ingest INFO   exact_duplicates         35592553 ->   35592532
+2026-11-15 02:32:09,066 ingest INFO   nrt_overlaps_sp          35592532 ->   35592532
+2026-11-15 02:33:05,404 clean INFO BRA (totals, transfer): [848492, 848493, 848494, 848495]
+2026-11-15 02:33:40,939 ingest INFO   848492 fire_archive_M-C61_848492.csv        10062320 rows
+2026-11-15 02:33:41,578 ingest INFO   848492 fire_nrt_M-C61_848492.csv              121700 rows
+2026-11-15 02:34:13,450 ingest INFO   848493 fire_archive_J1V-C2_848493.csv       10981074 rows
+2026-11-15 02:34:15,090 ingest INFO   848493 fire_nrt_J1V-C2_848493.csv             580239 rows
+2026-11-15 02:34:27,083 ingest INFO   848494 fire_archive_J2V-C2_848494.csv        4212752 rows
+2026-11-15 02:34:28,668 ingest INFO   848494 fire_nrt_J2V-C2_848494.csv             563694 rows
+2026-11-15 02:35:32,703 ingest INFO   848495 fire_archive_SV-C2_848495.csv        19373658 rows
+2026-11-15 02:35:34,618 ingest INFO   848495 fire_nrt_SV-C2_848495.csv              531290 rows
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\hp\OneDrive\Документы\firewatch\pipeline\run_all.py", line 19, in <module>
+    main(sys.argv[1:])
+  File "C:\Users\hp\OneDrive\Документы\firewatch\pipeline\run_all.py", line 14, in main
+    importlib.import_module(f"pipeline.{s}").main()
+  File "C:\Users\hp\OneDrive\Документы\firewatch\pipeline\02_clean.py", line 155, in main
+    summary[c] = run_country(cfg, man, c)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\OneDrive\Документы\firewatch\pipeline\02_clean.py", line 113, in run_country
+    steps = ingest.clean(con, cfg)
+            ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\OneDrive\Документы\firewatch\pipeline\ingest.py", line 212, in clean
+    con.execute("""CREATE OR REPLACE TABLE t4 AS SELECT * FROM t3
+_duckdb.IOException: IO Error: Cannot open file "C:\Users\hp\AppData\Local\Temp\firewatch_work\spill\duckdb_temp_5128_1_storage_S192K-0.tmp": Системе не удается найти указанный путь.
+
+EXIT 1

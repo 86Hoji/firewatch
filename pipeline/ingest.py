@@ -49,7 +49,7 @@ def connect(cfg, path=":memory:"):
     inp = cfg.get("inputs", {})
     if inp.get("duckdb_memory_limit"):
         con.execute(f"SET memory_limit = '{inp['duckdb_memory_limit']}'")
-    con.execute(f"SET temp_directory = '{work_dir(cfg).as_posix()}/spill'")
+    con.execute(f"SET temp_directory = '{spill_dir(work_dir(cfg)).as_posix()}'")
     con.execute("SET preserve_insertion_order = false")
     try:
         con.execute("LOAD h3")
@@ -57,6 +57,11 @@ def connect(cfg, path=":memory:"):
         con.execute("INSTALL h3 FROM community")
         con.execute("LOAD h3")
     return con
+
+
+def spill_dir(wd):
+    """Per-process spill folder: two pipeline processes must never delete each other's DuckDB temp files."""
+    return Path(wd) / f"spill_{os.getpid()}"
 
 
 def work_dir(cfg):
@@ -156,11 +161,27 @@ def type_ok_sql(cfg):
     return f"(type IS NULL OR type = {float(cfg['cleaning']['keep_type'])})"
 
 
-def static_mask_sql(cfg, src, before=None):
-    """Cells with mostly type-2 detections, or active >= N months in >= Y years. SP rows (with `type`) of src;
-    before: optional 'YYYY-MM-DD' -> only rows with date < before (honest train/test split, C2)."""
+def static_mask_sql(cfg, src, before=None, rules=None, recent_years="config"):
+    """Static-source cells from SP rows (they carry FIRMS `type`) of src.
+
+    Rules (config cleaning.static_mask.rules): 'type2' = cell with >= min_detections and >= min_type2_share of
+    type-2 detections; 'persistent' = active >= min_months_per_year months in >= min_years_persistent years.
+    Window: only the last `recent_years` years of SP data before `before` (or before the newest SP row + 1 day), so
+    the mask is rebuilt from recent data on every refresh and new industrial sites are picked up. None = all history.
+    before: 'YYYY-MM-DD' for the honest train/test split (C2)."""
     m = cfg["cleaning"]["static_mask"]
-    when = f"AND date < DATE '{before}'" if before else ""
+    rules = m.get("rules", ["type2", "persistent"]) if rules is None else rules
+    ry = m.get("recent_years") if recent_years == "config" else recent_years
+    end = f"DATE '{before}'" if before else f"((SELECT max(date) FROM {src} WHERE type IS NOT NULL) + INTERVAL 1 DAY)"
+    when = f"AND date < {end}" + (f" AND date >= {end} - INTERVAL {int(ry)} YEAR" if ry else "")
+    parts = []
+    if "type2" in rules:
+        parts.append("SELECT h3_cell, 'type2' AS reason FROM by_type")
+    if "persistent" in rules:
+        parts.append("SELECT h3_cell, 'persistent' AS reason FROM by_persist "
+                     + ("WHERE h3_cell NOT IN (SELECT h3_cell FROM by_type)" if "type2" in rules else ""))
+    if not parts:
+        return "SELECT NULL::VARCHAR AS h3_cell, NULL::VARCHAR AS reason WHERE false"
     return f"""
         WITH sp AS (SELECT h3_cell, year, date, type FROM {src} WHERE type IS NOT NULL {when}),
         per_cell AS (SELECT h3_cell, count(*) AS n, avg(CASE WHEN type = 2 THEN 1.0 ELSE 0.0 END) AS t2
@@ -169,8 +190,7 @@ def static_mask_sql(cfg, src, before=None):
         months AS (SELECT h3_cell, year, count(DISTINCT date_trunc('month', date)) AS nm FROM sp GROUP BY 1, 2),
         by_persist AS (SELECT h3_cell FROM months WHERE nm >= {int(m['min_months_per_year'])}
                        GROUP BY 1 HAVING count(*) >= {int(m['min_years_persistent'])})
-        SELECT h3_cell, CASE WHEN h3_cell IN (SELECT h3_cell FROM by_type) THEN 'type2' ELSE 'persistent' END AS reason
-        FROM (SELECT h3_cell FROM by_type UNION SELECT h3_cell FROM by_persist) ORDER BY h3_cell"""
+        SELECT * FROM ({' UNION ALL '.join(parts)}) ORDER BY h3_cell"""
 
 
 def confident(con, cfg, src="raw", table="t1"):
@@ -228,29 +248,50 @@ def cell_month_query(src):
         FROM {src} GROUP BY 1, 2, 3 ORDER BY 1, 2, 3"""
 
 
-def outage_fill(con, src, min_n20):
-    """NOAA-20 cell-days per cell-month on S-NPP outage days, and the number of outage days."""
-    days = outage_days_sql(src, min_n20)
+def dates_sql(days):
+    """A one-column (date) relation from a list of dates."""
+    if not len(days):
+        return "SELECT NULL::DATE AS date WHERE false"
+    return "SELECT * FROM (VALUES " + ", ".join(f"(DATE '{d}')" for d in days) + ") t(date)"
+
+
+def outage_fill(con, src, days):
+    """NOAA-20 cell-days per cell-month on S-NPP outage days (satellite-wide list), only in cells where S-NPP saw
+    nothing that day; and the number of outage days within the data's span."""
+    dd = dates_sql(days)
     gap = con.execute(f"""
-        SELECT h3_cell, CAST(year AS INTEGER) AS year, CAST(month AS INTEGER) AS month,
-               count(DISTINCT date) AS n_viirs_noaa20_gap
-        FROM {src} WHERE platform = 'NOAA20' AND date IN ({days}) GROUP BY 1, 2, 3""").df()
-    return gap, con.execute(f"SELECT count(*) FROM ({days})").fetchall()[0][0]
+        WITH cd AS (SELECT h3_cell, date, CAST(year AS INTEGER) AS year, CAST(month AS INTEGER) AS month,
+                           bool_or(platform = 'NOAA20') AS n20, bool_or(platform = 'SNPP') AS snpp
+                    FROM {src} WHERE CAST(date AS DATE) IN ({dd}) GROUP BY ALL)
+        SELECT h3_cell, year, month, count(*) AS n_viirs_noaa20_gap FROM cd WHERE n20 AND NOT snpp
+        GROUP BY 1, 2, 3""").df()
+    n = con.execute(f"""SELECT count(*) FROM ({dd}) WHERE date BETWEEN (SELECT min(date) FROM {src})
+                        AND (SELECT max(date) FROM {src})""").fetchall()[0][0]
+    return gap, n
 
 
-def country_month_query(src, min_n20):
+def country_month_query(src, days=None):
     """Country-month totals straight from points: cell-days = distinct (cell, day) per group, summed over cells.
-    Equal to summing cell_month over cells, but never materialises cells (used for 20-50M-row countries)."""
+    Equal to summing cell_month over cells, but never materialises cells (used for 20-50M-row countries).
+    days: satellite-wide outage dates -> n_viirs_noaa20_gap, n_outage_days; None -> those columns are left out
+    (totals-only countries get them from 02b_outage, which needs every country cleaned first)."""
     any_, sums = [], []
     for g, cond in GROUPS.items():
         any_ += [f"bool_or({cond}) AS {g}", f"bool_or({cond} AND daynight = 'D') AS {g}_d",
                  f"bool_or({cond} AND daynight = 'N') AS {g}_n", f"count(*) FILTER (WHERE {cond}) AS pc_{g}"]
         sums += [f"sum({g}::INTEGER) AS n_{g}", f"sum({g}_d::INTEGER) AS n_{g}_d", f"sum({g}_n::INTEGER) AS n_{g}_n",
                  f"sum(pc_{g}) AS p_{g}"]
+    if days is None:
+        return f"""
+        WITH cd AS (SELECT h3_cell, date, CAST(year AS INTEGER) AS year, CAST(month AS INTEGER) AS month,
+                           {', '.join(any_)} FROM {src} GROUP BY 1, 2, 3, 4)
+        SELECT year, month, {', '.join(sums)}, count(DISTINCT h3_cell) AS n_active_cells
+        FROM cd GROUP BY year, month ORDER BY year, month"""
     return f"""
-        WITH gap AS ({outage_days_sql(src, min_n20)}),
+        WITH gap AS ({dates_sql(days)}),
         cd AS (SELECT h3_cell, date, CAST(year AS INTEGER) AS year, CAST(month AS INTEGER) AS month,
-                      {', '.join(any_)}, bool_or(platform = 'NOAA20' AND date IN (SELECT date FROM gap)) AS gapday
+                      {', '.join(any_)}, bool_or(platform = 'NOAA20') AND NOT bool_or(platform = 'SNPP')
+                      AND CAST(date AS DATE) IN (SELECT date FROM gap) AS gapday
                FROM {src} GROUP BY 1, 2, 3, 4)
         SELECT year, month, {', '.join(sums)}, sum(gapday::INTEGER) AS n_viirs_noaa20_gap,
                count(DISTINCT h3_cell) AS n_active_cells, (SELECT count(*) FROM gap
@@ -259,16 +300,24 @@ def country_month_query(src, min_n20):
 
 
 def daily_counts_sql(src):
-    """Detections per day and satellite (points): the input of the outage threshold and outage checks."""
+    """Per day: detections per satellite (points) -> satellite-wide outage days (02b_outage); and c_noaa20_only =
+    cells seen by NOAA-20 but not by S-NPP that day -> the NOAA-20 fill for totals-only countries."""
     plats = ["SNPP", "NOAA20", "NOAA21", "Terra", "Aqua"]
     cols = ", ".join(f"count(*) FILTER (WHERE platform = '{p}') AS n_{p.lower()}" for p in plats)
-    return f"SELECT date, {cols} FROM {src} GROUP BY date ORDER BY date"
+    return f"""
+        WITH pts AS (SELECT date, {cols} FROM {src} GROUP BY date),
+        cd AS (SELECT date, h3_cell, bool_or(platform = 'NOAA20') AS n20, bool_or(platform = 'SNPP') AS snpp
+               FROM {src} GROUP BY 1, 2),
+        n20o AS (SELECT date, count(*) FILTER (WHERE n20 AND NOT snpp) AS c_noaa20_only FROM cd GROUP BY 1)
+        SELECT pts.*, coalesce(n20o.c_noaa20_only, 0) AS c_noaa20_only FROM pts LEFT JOIN n20o USING (date)
+        ORDER BY date"""
 
 
 def outage_threshold(cfg, country, daily=None):
-    """Per-country S-NPP outage threshold (see config `outage`). Returns (threshold, info dict)."""
+    """SUPERSEDED (kept for pipeline/outage_check.py, which documents why): per-country S-NPP outage threshold.
+    Production uses the satellite-wide list (pipeline/outage.py). Returns (threshold, info dict)."""
     from pipeline.common import AGG
-    o = cfg["outage"]
+    o = cfg["outage"]["per_country_superseded"]
 
     def typical(df):
         d = df[(pd.to_datetime(df["date"]) >= pd.Timestamp(o["typical_from"])) & (df["n_noaa20"] > 0)]
@@ -302,4 +351,4 @@ def remove_work(path):
     for p in (Path(path), Path(str(path) + ".wal")):
         if p.exists():
             os.remove(p)
-    shutil.rmtree(Path(path).parent / "spill", ignore_errors=True)
+    shutil.rmtree(spill_dir(Path(path).parent), ignore_errors=True)

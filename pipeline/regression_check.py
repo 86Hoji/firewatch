@@ -1,6 +1,9 @@
-"""Regression check: the train country (KZ) must give exactly the Phase B results after any refactor.
+"""Regression check: the train country (KZ) must give exactly the snapshot results after any refactor.
 
-Compares against the snapshot in reports/phase_b/ (taken before Phase C):
+Snapshot: config `regression.snapshot` (reports/phase_c4 since the C3-review changes — type-2 mask from the last 5
+years and satellite-wide outage days changed KZ on purpose; reports/phase_b is kept for history, and
+reports/kz_before_after.md shows exactly what moved). New snapshot: python -m pipeline.regression_check --snapshot
+Compares:
   cleaning steps, hotspots per platform-year, yearly cell-month sums, country_month == sum of cell_month,
   and (if the full pipeline ran) every headline metric in metrics.json / model_comparison.json.
 Changed on purpose in C3, so not compared: leave-one-region-out (H3 res-1 hexagons -> ADM1 regions, zero months
@@ -17,7 +20,7 @@ import pandas as pd
 
 from pipeline.common import AGG, PROCESSED, REPORTS, load_config
 
-SNAP = REPORTS / "phase_b"
+SNAP = REPORTS / load_config().get("regression", {}).get("snapshot", "phase_b")
 CHANGED_BY_DESIGN = re.compile(r"^(intervals|regions|spatial_cv|spatial_cv_median)\.|T3_loro|\.score$|"
                                r"^(criterion|interval_method)$")
 
@@ -40,7 +43,7 @@ def compare_json(name, rtol=1e-9):
         _flat(json.loads((REPORTS / name).read_text(encoding="utf-8")))
     bad = []
     for k in sorted(set(a) | set(b)):
-        if CHANGED_BY_DESIGN.search(k) or k not in a:
+        if (SNAP.name == "phase_b" and CHANGED_BY_DESIGN.search(k)) or k not in a:
             continue
         x, y = a.get(k), b.get(k)
         if isinstance(x, (int, float)) and isinstance(y, (int, float)) and not isinstance(x, bool):
@@ -95,8 +98,28 @@ def main():
             print("DIFF", *f)
         print(f"FAILED: {len(fails)} differences")
         sys.exit(1)
-    print("OK: identical to Phase B (except the C3 changes by design: LORO regions, intervals)")
+    print(f"OK: identical to the {SNAP.name} snapshot")
+
+
+def snapshot():
+    """Write the current KZ state as the new reference (reports/<regression.snapshot>/)."""
+    import shutil
+    cfg = load_config()
+    c = cfg["train_country"]
+    SNAP.mkdir(parents=True, exist_ok=True)
+    cs = json.loads((REPORTS / "cleaning_summary.json").read_text(encoding="utf-8"))["countries"][c]
+    (SNAP / "cleaning_summary.json").write_text(json.dumps(cs, indent=2), encoding="utf-8")
+    duckdb.sql(f"""SELECT platform, CAST(year AS BIGINT) AS year, count(*) AS n FROM read_parquet(
+        '{(PROCESSED / 'hotspots' / f'country={c}').as_posix()}/**/*.parquet', hive_partitioning = true)
+        GROUP BY ALL ORDER BY ALL""").df().to_csv(SNAP / "kz_hotspots_platform_year.csv", index=False)
+    cm = pd.read_parquet(AGG / "cell_month_all.parquet", filters=[("country", "==", c)])
+    num = [k for k in cm.columns if k.startswith(("n_", "p_")) and k not in ("n_active_cells",)]
+    cm.groupby("year")[num].sum().to_csv(SNAP / "kz_cell_month_yearly.csv")
+    for name in ("metrics.json", "model_comparison.json", "model_selection.json"):
+        if (REPORTS / name).exists():
+            shutil.copyfile(REPORTS / name, SNAP / name)
+    print(f"snapshot written to {SNAP}")
 
 
 if __name__ == "__main__":
-    main()
+    snapshot() if "--snapshot" in sys.argv else main()

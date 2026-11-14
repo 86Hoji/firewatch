@@ -20,8 +20,8 @@
     "T1_backcast_mae_pct": 6.9274225221387535,
     "T3_loro_mae_pct": 18.501008154542767,
     "T4_loyo_mae_pct": 6.4534613269431285,
-    "T2_forecast_mae_pct": 10.31390912648695,
-    "T2_forecast_bias_pct": -2.2065217459649413
+    "T2_forecast_mae_pct": 10.344329765467569,
+    "T2_forecast_bias_pct": -2.1782177389847206
   },
   "loro": {
     "unit": "ADM1 region-month",

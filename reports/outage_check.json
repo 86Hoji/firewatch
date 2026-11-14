@@ -1,140 +1,176 @@
 {
-  "n_countries": 9,
-  "global_outage_days": 59,
+  "global_outage_days": 61,
+  "countries_combined": [
+    "AUS",
+    "BRA",
+    "IND",
+    "KAZ",
+    "KGZ",
+    "PRT",
+    "TJK",
+    "TKM",
+    "USA",
+    "UZB"
+  ],
   "countries": {
     "AUS": {
-      "threshold": 512,
+      "per_country_threshold": 512,
+      "typical_daily_noaa20": 2228.5,
+      "fixed_20": {
+        "outage_days": 65,
+        "global": 61,
+        "true_share": 0.9384615384615385,
+        "found_share": 1.0
+      },
       "per_country": {
         "outage_days": 62,
-        "global": 56,
-        "precision": 0.9032258064516129,
-        "recall": 0.9491525423728814
+        "global": 58,
+        "true_share": 0.9354838709677419,
+        "found_share": 0.9508196721311475
+      }
+    },
+    "BRA": {
+      "per_country_threshold": 319,
+      "typical_daily_noaa20": 1387.0,
+      "fixed_20": {
+        "outage_days": 63,
+        "global": 61,
+        "true_share": 0.9682539682539683,
+        "found_share": 1.0
       },
-      "fixed": {
-        "outage_days": 65,
-        "global": 59,
-        "precision": 0.9076923076923077,
-        "recall": 1.0
+      "per_country": {
+        "outage_days": 60,
+        "global": 58,
+        "true_share": 0.9666666666666667,
+        "found_share": 0.9508196721311475
       }
     },
     "IND": {
-      "threshold": 150,
+      "per_country_threshold": 150,
+      "typical_daily_noaa20": 653.0,
+      "fixed_20": {
+        "outage_days": 49,
+        "global": 47,
+        "true_share": 0.9591836734693877,
+        "found_share": 0.7704918032786885
+      },
       "per_country": {
         "outage_days": 27,
         "global": 27,
-        "precision": 1.0,
-        "recall": 0.4576271186440678
-      },
-      "fixed": {
-        "outage_days": 49,
-        "global": 46,
-        "precision": 0.9387755102040817,
-        "recall": 0.7796610169491526
+        "true_share": 1.0,
+        "found_share": 0.4426229508196721
       }
     },
     "KAZ": {
-      "threshold": 20,
+      "per_country_threshold": 20,
+      "typical_daily_noaa20": 87.0,
+      "fixed_20": {
+        "outage_days": 56,
+        "global": 54,
+        "true_share": 0.9642857142857143,
+        "found_share": 0.8852459016393442
+      },
       "per_country": {
         "outage_days": 56,
-        "global": 52,
-        "precision": 0.9285714285714286,
-        "recall": 0.8813559322033898
-      },
-      "fixed": {
-        "outage_days": 56,
-        "global": 52,
-        "precision": 0.9285714285714286,
-        "recall": 0.8813559322033898
+        "global": 54,
+        "true_share": 0.9642857142857143,
+        "found_share": 0.8852459016393442
       }
     },
     "KGZ": {
-      "threshold": 5,
+      "per_country_threshold": 5,
+      "typical_daily_noaa20": 2.0,
+      "fixed_20": {
+        "outage_days": 1,
+        "global": 1,
+        "true_share": 1.0,
+        "found_share": 0.01639344262295082
+      },
       "per_country": {
         "outage_days": 20,
         "global": 8,
-        "precision": 0.4,
-        "recall": 0.13559322033898305
-      },
-      "fixed": {
-        "outage_days": 1,
-        "global": 1,
-        "precision": 1.0,
-        "recall": 0.01694915254237288
+        "true_share": 0.4,
+        "found_share": 0.13114754098360656
       }
     },
     "PRT": {
-      "threshold": 5,
-      "per_country": {
-        "outage_days": 60,
-        "global": 25,
-        "precision": 0.4166666666666667,
-        "recall": 0.423728813559322
-      },
-      "fixed": {
+      "per_country_threshold": 5,
+      "typical_daily_noaa20": 4.0,
+      "fixed_20": {
         "outage_days": 14,
         "global": 13,
-        "precision": 0.9285714285714286,
-        "recall": 0.22033898305084745
+        "true_share": 0.9285714285714286,
+        "found_share": 0.21311475409836064
+      },
+      "per_country": {
+        "outage_days": 60,
+        "global": 26,
+        "true_share": 0.43333333333333335,
+        "found_share": 0.4262295081967213
       }
     },
     "TJK": {
-      "threshold": 5,
+      "per_country_threshold": 5,
+      "typical_daily_noaa20": 2.0,
+      "fixed_20": {
+        "outage_days": 0,
+        "global": 0,
+        "true_share": null,
+        "found_share": 0.0
+      },
       "per_country": {
         "outage_days": 29,
         "global": 4,
-        "precision": 0.13793103448275862,
-        "recall": 0.06779661016949153
-      },
-      "fixed": {
-        "outage_days": 0,
-        "global": 0,
-        "precision": null,
-        "recall": 0.0
+        "true_share": 0.13793103448275862,
+        "found_share": 0.06557377049180328
       }
     },
     "TKM": {
-      "threshold": 5,
-      "per_country": {
-        "outage_days": 64,
-        "global": 51,
-        "precision": 0.796875,
-        "recall": 0.864406779661017
+      "per_country_threshold": 5,
+      "typical_daily_noaa20": 19.0,
+      "fixed_20": {
+        "outage_days": 39,
+        "global": 34,
+        "true_share": 0.8717948717948718,
+        "found_share": 0.5573770491803278
       },
-      "fixed": {
-        "outage_days": 37,
-        "global": 30,
-        "precision": 0.8108108108108109,
-        "recall": 0.5084745762711864
+      "per_country": {
+        "outage_days": 67,
+        "global": 56,
+        "true_share": 0.835820895522388,
+        "found_share": 0.9180327868852459
       }
     },
     "USA": {
-      "threshold": 174,
+      "per_country_threshold": 175,
+      "typical_daily_noaa20": 760.0,
+      "fixed_20": {
+        "outage_days": 61,
+        "global": 59,
+        "true_share": 0.9672131147540983,
+        "found_share": 0.9672131147540983
+      },
       "per_country": {
         "outage_days": 61,
         "global": 59,
-        "precision": 0.9672131147540983,
-        "recall": 1.0
-      },
-      "fixed": {
-        "outage_days": 61,
-        "global": 59,
-        "precision": 0.9672131147540983,
-        "recall": 1.0
+        "true_share": 0.9672131147540983,
+        "found_share": 0.9672131147540983
       }
     },
     "UZB": {
-      "threshold": 5,
-      "per_country": {
-        "outage_days": 64,
-        "global": 53,
-        "precision": 0.828125,
-        "recall": 0.8983050847457628
-      },
-      "fixed": {
+      "per_country_threshold": 5,
+      "typical_daily_noaa20": 19.0,
+      "fixed_20": {
         "outage_days": 27,
         "global": 23,
-        "precision": 0.8518518518518519,
-        "recall": 0.3898305084745763
+        "true_share": 0.8518518518518519,
+        "found_share": 0.3770491803278688
+      },
+      "per_country": {
+        "outage_days": 64,
+        "global": 55,
+        "true_share": 0.859375,
+        "found_share": 0.9016393442622951
       }
     }
   }

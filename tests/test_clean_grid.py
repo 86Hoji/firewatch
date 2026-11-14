@@ -75,8 +75,14 @@ def test_country_month_equals_sum_of_cell_months(tmp_path):
     src = f"read_parquet('{p.as_posix()}')"
     con = duckdb.connect()
     cm = con.execute(ingest.cell_month_query(src)).df()
-    gap, _ = ingest.outage_fill(con, src, 1)
+    days = sorted(set(df["date"]))[::7]                    # pretend every 7th day was a satellite-wide outage
+    gap, _ = ingest.outage_fill(con, src, days)
     cm = cm.merge(gap, on=["h3_cell", "year", "month"], how="left").fillna({"n_viirs_noaa20_gap": 0})
-    tot = con.execute(ingest.country_month_query(src, 1)).df().set_index(["year", "month"])
+    tot = con.execute(ingest.country_month_query(src, days)).df().set_index(["year", "month"])
     s = cm.groupby(["year", "month"])[[c for c in cm.columns if c.startswith(("n_", "p_"))]].sum()
     assert (s - tot[s.columns]).abs().to_numpy().max() == 0
+    # totals-only countries: the same fill from country_day (02b_outage) without touching points again
+    from pipeline import outage
+    daily = con.execute(ingest.daily_counts_sql(src)).df()
+    g, _ = outage.gap_from_country_day(daily, days)
+    assert (g.reindex(tot.index, fill_value=0) - tot["n_viirs_noaa20_gap"]).abs().max() == 0

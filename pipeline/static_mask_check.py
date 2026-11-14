@@ -3,7 +3,8 @@
 Train: mask built ONLY from archive rows (they carry `type`) dated before mask_check.split (2025-01-01).
 Test:  archive rows from split to mask_check.test_end (2026-07-31), never seen when building the mask.
  * detection level: does "in a masked cell" catch type = 2 (static land source)? precision, recall, F1
-   - for the mask as configured and for each of its two rules separately (type2-share rule, persistent rule)
+   - production mask (type-2 rule, built from the last cleaning.static_mask.recent_years years before the split),
+     and for comparison the C2 mask (both rules, all history), the type-2 rule on all history, the persistent rule
  * monthly totals: cell-days per month if the mask REPLACED `type` (drop masked cells, ignore type) vs the
    production rule (keep type = 0); % change per country and sensor.
 Outputs reports/static_mask_check.json and .md.   python -m pipeline.static_mask_check
@@ -57,6 +58,12 @@ def monthly_change(con, test, mask_tbl):
     return out
 
 
+MASKS = {"mask": "mask", "c2_both_rules_all_history": "mask_c2", "type2_all_history": "mask_type2_all",
+         "persistent_rule_only": "mask_persistent"}
+LABELS = {"mask": "production: type-2 rule, last 5 y", "c2_both_rules_all_history": "C2 mask (both rules, all history)",
+          "type2_all_history": "type-2 rule, all history", "persistent_rule_only": "persistent rule only"}
+
+
 def check_country(cfg, man, country):
     mc = cfg["mask_check"]
     path = ingest.work_dir(cfg) / f"maskcheck_{country}.duckdb"
@@ -65,20 +72,18 @@ def check_country(cfg, man, country):
     try:
         ingest.stage(con, cfg, man[man["country"] == country], clean_mod.unify, cfg["inputs"]["sensors"])
         ingest.confident(con, cfg)
-        con.execute(f"CREATE TABLE mask AS {ingest.static_mask_sql(cfg, 't1', before=mc['split'])}")
+        sp = mc["split"]
+        q = lambda **k: ingest.static_mask_sql(cfg, "t1", before=sp, **k)  # noqa: E731
+        con.execute(f"CREATE TABLE mask AS {q()}")                                    # production (as configured)
+        con.execute(f"CREATE TABLE mask_c2 AS {q(rules=['type2', 'persistent'], recent_years=None)}")
+        con.execute(f"CREATE TABLE mask_type2_all AS {q(rules=['type2'], recent_years=None)}")
+        con.execute(f"CREATE TABLE mask_persistent AS {q(rules=['persistent'], recent_years=None)}")
         con.execute(f"""CREATE TABLE test AS SELECT * FROM t1 WHERE type IS NOT NULL
-                        AND date >= DATE '{mc['split']}' AND date <= DATE '{mc['test_end']}'""")
-        con.execute("CREATE VIEW mask_type2 AS SELECT * FROM mask WHERE reason = 'type2'")
-        # cells flagged by the persistent rule (also those that pass the type2 rule): rebuild with type2 rule off
-        c2 = {**cfg, "cleaning": {**cfg["cleaning"], "static_mask": {**cfg["cleaning"]["static_mask"],
-                                                                     "min_type2_share": 2.0}}}
-        con.execute(f"CREATE TABLE mask_persistent AS {ingest.static_mask_sql(c2, 't1', before=mc['split'])}")
-        res = {"mask_cells": {r: n for r, n in con.execute("SELECT reason, count(*) FROM mask GROUP BY 1").fetchall()},
-               "mask_cells_persistent_rule": con.execute("SELECT count(*) FROM mask_persistent").fetchall()[0][0],
-               "detection": {"mask": pr(con, "test", "mask"), "type2_rule_only": pr(con, "test", "mask_type2"),
-                             "persistent_rule_only": pr(con, "test", "mask_persistent")},
-               "monthly": {"mask": monthly_change(con, "test", "mask"),
-                           "type2_rule_only": monthly_change(con, "test", "mask_type2")}}
+                        AND date >= DATE '{sp}' AND date <= DATE '{mc['test_end']}'""")
+        res = {"mask_cells": {k: con.execute(f"SELECT count(*) FROM {t}").fetchall()[0][0]
+                              for k, t in MASKS.items()},
+               "detection": {k: pr(con, "test", t) for k, t in MASKS.items()},
+               "monthly": {k: monthly_change(con, "test", t) for k, t in MASKS.items() if k != "persistent_rule_only"}}
     finally:
         con.close()
         ingest.remove_work(path)
@@ -97,13 +102,12 @@ def fmt(x, d=1, pct=False):
 def write_md(cfg, R):
     mc = cfg["mask_check"]
     L = ["# Static-source mask: honest test", "",
-         f"Mask built from archive rows before {mc['split']}; tested on archive rows {mc['split']} … {mc['test_end']} "
+         f"Every mask is built ONLY from archive rows before {mc['split']}; tested on archive rows {mc['split']} … {mc['test_end']} "
          "(which carry the true FIRMS `type`). A detection counts as \"caught\" if it falls in a masked H3 cell.", "",
          "## Does the mask catch static sources (type = 2)?", "",
          "| country | rule | precision | recall | F1 | test rows | of which type 2 |", "|---|---|---|---|---|---|---|"]
     for c, r in R.items():
-        for k, lab in (("mask", "mask as configured"), ("type2_rule_only", "type-2 share rule only"),
-                       ("persistent_rule_only", "persistent rule only")):
+        for k, lab in LABELS.items():
             d = r["detection"][k]
             L.append(f"| {c} | {lab} | {fmt(d['precision'], pct=True)} | {fmt(d['recall'], pct=True)} | "
                      f"{fmt(d['f1'], 3)} | {d['test_rows']:,} | {d['test_type2_rows']:,} ({fmt(d['type2_share'], pct=True)}) |")
@@ -112,7 +116,7 @@ def write_md(cfg, R):
           "Positive = the mask lets through more than `type` does (missed flares, or real fires `type` drops).", "",
           "| country | rule | sensor | total change | median monthly abs. change | worst month |", "|---|---|---|---|---|---|"]
     for c, r in R.items():
-        for k, lab in (("mask", "as configured"), ("type2_rule_only", "type-2 rule only")):
+        for k, lab in ((k, v) for k, v in LABELS.items() if k in r["monthly"]):
             for g, m in r["monthly"][k].items():
                 L.append(f"| {c} | {lab} | {g} | {m['total_pct']:+.1f}% | {m['median_abs_monthly_pct']:.1f}% | "
                          f"{m['max_abs_monthly_pct']:.1f}% |")

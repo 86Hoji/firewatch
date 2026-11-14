@@ -19,7 +19,7 @@ from pydantic import BaseModel, Field, field_validator, model_validator
 from shapely.geometry import box, shape
 
 from pipeline import intervals
-from pipeline.common import AGG, PROCESSED, REF, REPORTS, ROOT, load_config, outage_days_sql
+from pipeline.common import AGG, PROCESSED, REF, REPORTS, ROOT, load_config
 
 CFG = load_config()
 MODES = {"harmonized": "n_harm", "raw_modis": "p_modis", "raw_viirs": "p_viirs_snpp", "naive": None, "modis_cells": "n_modis"}
@@ -54,16 +54,11 @@ def load_state(agg=AGG, ref=REF, processed=PROCESSED):
     S.cut = CFG["calibration"]["period"][0]
     by_country = processed / "hotspots" / f"country={CFG['train_country']}"
     S.hotspots = (by_country if by_country.is_dir() else processed / "hotspots").as_posix()
-    # S-NPP outage days (same rule as 03_grid): NOAA-20 points stand in for S-NPP on the map
+    # S-NPP outage days (satellite-wide list from 02b_outage, same as 03_grid): NOAA-20 points stand in on the map
     try:
-        src = f"read_parquet('{S.hotspots}/**/*.parquet', hive_partitioning = true)"
-        try:
-            from pipeline.ingest import outage_threshold
-            thr = outage_threshold(CFG, CFG["train_country"])[0]
-        except SystemExit:
-            thr = CFG["outage"]["reference_threshold"]
-        S.gap_dates = [str(d) for (d,) in S.con.execute(outage_days_sql(src, thr)).fetchall()]
-    except duckdb.Error:
+        from pipeline.outage import load_days
+        S.gap_dates = [str(d) for d in load_days(CFG)]
+    except SystemExit:
         S.gap_dates = []
     S.regions = {}
     gj = ref / "regions.geojson"
@@ -261,7 +256,7 @@ def base_stats(f, q, last):
 @app.get("/api/meta")
 def meta():
     return {**S.meta, "cells": int(len(S.cells)), "calibration_start": S.cut,
-            "modes": UNITS, "validation": "/reports/validation.md"}
+            "modes": UNITS, "validation": "/reports/validation_kz.md"}
 
 
 @app.get("/api/regions")

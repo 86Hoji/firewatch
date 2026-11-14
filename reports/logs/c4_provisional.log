@@ -1,0 +1,160 @@
+2026-11-15 02:41:48,936 ingest INFO   847148 fire_archive_M-C61_847148.csv          777034 rows
+2026-11-15 02:41:49,901 ingest INFO   847158 fire_archive_M-C61_847158.csv          258020 rows
+2026-11-15 02:41:50,975 ingest INFO   847199 fire_archive_M-C61_847199.csv          221560 rows
+2026-11-15 02:41:51,027 ingest INFO   847199 fire_nrt_M-C61_847199.csv                4449 rows
+2026-11-15 02:41:53,803 ingest INFO   847159 fire_archive_SV-C2_847159.csv          933875 rows
+2026-11-15 02:41:55,983 ingest INFO   847181 fire_archive_SV-C2_847181.csv          833595 rows
+2026-11-15 02:41:56,163 ingest INFO   847181 fire_nrt_SV-C2_847181.csv               29625 rows
+2026-11-15 02:41:58,382 ingest INFO   847180 fire_archive_J1V-C2_847180.csv         830218 rows
+2026-11-15 02:41:58,549 ingest INFO   847180 fire_nrt_J1V-C2_847180.csv              31181 rows
+2026-11-15 02:42:03,597 mask_check INFO KAZ: precision 0.939 recall 0.884 (type2 share of test rows 19.7%)
+2026-11-15 02:42:04,053 ingest INFO   847909 fire_archive_M-C61_847909.csv           97386 rows
+2026-11-15 02:42:04,101 ingest INFO   847909 fire_nrt_M-C61_847909.csv                 335 rows
+2026-11-15 02:42:04,917 ingest INFO   847912 fire_archive_SV-C2_847912.csv          268472 rows
+2026-11-15 02:42:04,949 ingest INFO   847912 fire_nrt_SV-C2_847912.csv                3532 rows
+2026-11-15 02:42:05,497 ingest INFO   847910 fire_archive_J1V-C2_847910.csv         139330 rows
+2026-11-15 02:42:05,567 ingest INFO   847910 fire_nrt_J1V-C2_847910.csv               3773 rows
+2026-11-15 02:42:06,303 ingest INFO   847911 fire_archive_J2V-C2_847911.csv          52198 rows
+2026-11-15 02:42:06,335 ingest INFO   847911 fire_nrt_J2V-C2_847911.csv               3379 rows
+2026-11-15 02:42:07,436 mask_check INFO UZB: precision 0.940 recall 0.747 (type2 share of test rows 29.9%)
+2026-11-15 02:42:07,777 ingest INFO   848066 fire_archive_M-C61_848066.csv           69898 rows
+2026-11-15 02:42:07,820 ingest INFO   848066 fire_nrt_M-C61_848066.csv                 220 rows
+2026-11-15 02:42:08,901 ingest INFO   848011 fire_archive_SV-C2_848011.csv          372292 rows
+2026-11-15 02:42:08,954 ingest INFO   848011 fire_nrt_SV-C2_848011.csv               10081 rows
+2026-11-15 02:42:09,685 ingest INFO   848009 fire_archive_J1V-C2_848009.csv         224479 rows
+2026-11-15 02:42:09,754 ingest INFO   848009 fire_nrt_J1V-C2_848009.csv              11132 rows
+2026-11-15 02:42:10,285 ingest INFO   848010 fire_archive_J2V-C2_848010.csv          87967 rows
+2026-11-15 02:42:10,335 ingest INFO   848010 fire_nrt_J2V-C2_848010.csv              10385 rows
+2026-11-15 02:42:11,530 mask_check INFO TKM: precision 0.861 recall 0.845 (type2 share of test rows 51.2%)
+2026-11-15 02:42:11,534 mask_check INFO wrote reports/static_mask_check.{json,md}
+=== 03_grid
+2026-11-15 02:42:32,936 grid INFO KAZ: hotspots 3172931, S-NPP outage days 61, cell-months 855862, cells 242039
+2026-11-15 02:42:36,201 grid INFO UZB: hotspots 312778, S-NPP outage days 61, cell-months 111789, cells 15854
+2026-11-15 02:42:38,905 grid INFO TKM: hotspots 308900, S-NPP outage days 61, cell-months 113178, cells 14486
+2026-11-15 02:42:40,202 grid INFO KGZ: hotspots 42117, S-NPP outage days 61, cell-months 21319, cells 5194
+2026-11-15 02:42:41,791 grid INFO TJK: hotspots 16308, S-NPP outage days 55, cell-months 8031, cells 2764
+2026-11-15 02:42:45,470 grid INFO ADM1 assignment: {'KAZ': {'cells': {'inside': 240798, 'nearest': 1217, 'outside': 24}, 'modis_cell_days': {'inside': 649003, 'nearest': 3029, 'outside': 41}}, 'UZB': {'cells': {'inside': 15409, 'nearest': 443, 'outside': 2}, 'modis_cell_days': {'inside': 40305, 'nearest': 903, 'outside': 2}}, 'TKM': {'cells': {'inside': 14233, 'nearest': 253}, 'modis_cell_days': {'inside': 35338, 'nearest': 651}}, 'KGZ': {'cells': {'inside': 5059, 'nearest': 135}, 'modis_cell_days': {'inside': 9496, 'nearest': 285}}, 'TJK': {'cells': {'inside': 2595, 'nearest': 169}, 'modis_cell_days': {'inside': 2297, 'nearest': 224}}}
+2026-11-15 02:42:45,487 grid INFO wrote cell_month_all.parquet (1110179 rows, 5 countries)
+=== 03_grid done in 33.7s
+=== 04_landcover
+2026-11-15 02:42:45,487 landcover INFO no MCD12C1*.hdf in C:\Users\hp\OneDrive\Документы\firewatch\data\reference: skipping land cover (optional)
+=== 04_landcover done in 0.0s
+=== 04b_burned_area
+2026-11-15 02:42:45,487 burned_area INFO no MCD64A1 tiles in C:\Users\hp\OneDrive\Документы\firewatch\data\reference\mcd64a1: skipping burned area (optional)
+=== 04b_burned_area done in 0.0s
+=== experiments
+2026-11-15 02:42:50,113 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 02:42:56,583 experiments INFO C0 Terra∪Aqua, ratio                      score 11.79 | T1 8.9 T3 18.5 T4 8.0 | T2 14.8 bias -9.3
+2026-11-15 02:43:01,704 experiments INFO C1 Terra∪Aqua, OLS log1p (v1)             score 10.97 | T1 7.8 T3 18.8 T4 6.4 | T2 10.7 bias -2.3
+2026-11-15 02:43:09,421 experiments INFO C2 Terra∪Aqua, Poisson log-link           score 10.63 | T1 6.9 T3 18.5 T4 6.5 | T2 10.3 bias -2.2
+2026-11-15 02:43:16,388 experiments INFO C3 Terra∪Aqua day+night, ratio            score 12.24 | T1 7.9 T3 21.3 T4 7.5 | T2 13.2 bias -4.1
+2026-11-15 02:43:21,238 experiments INFO C4 Aqua, ratio                            score 14.62 | T1 10.8 T3 23.1 T4 10.0 | T2 18.3 bias -12.8
+2026-11-15 02:43:27,371 experiments INFO C5 Aqua day+night, ratio                  score 14.59 | T1 10.0 T3 24.1 T4 9.6 | T2 18.3 bias -7.6
+2026-11-15 02:43:34,104 experiments INFO C6 Aqua, Poisson log-link                 score 14.71 | T1 11.7 T3 21.3 T4 11.1 | T2 16.2 bias -2.8
+2026-11-15 02:43:45,192 experiments INFO C7 Aqua day+night, Poisson log-link       score 15.77 | T1 12.5 T3 23.5 T4 11.3 | T2 16.4 bias 2.1
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: overflow encountered in exp
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: invalid value encountered in multiply
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+2026-11-15 02:43:46,813 experiments INFO coverage before {'T3_loro_region': 0.438, 'T1_backcast_country': 0.938, 'T2_holdout_country': 0.833, 'T4_loyo_country': 0.896}
+2026-11-15 02:43:46,813 experiments INFO coverage after  {'T3_loro_region': 0.912, 'T1_backcast_country': 0.938, 'T2_holdout_country': 0.833, 'T4_loyo_country': 0.896}
+2026-11-15 02:43:46,822 experiments INFO selected C2 -> production model poisson_log; LORO MAE 18.5%
+=== experiments done in 61.4s
+=== 05_calibrate
+2026-11-15 02:43:47,148 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 02:45:42,697 calibrate INFO holdout ratio: MAE%=14.8 bias=-9.3% R=0.979 PI cov=72% CI cov=24%
+2026-11-15 02:45:42,697 calibrate INFO holdout loglog: MAE%=10.7 bias=-2.3% R=0.983 PI cov=85% CI cov=24%
+2026-11-15 02:45:42,697 calibrate INFO holdout poisson_log: MAE%=10.3 bias=-2.2% R=0.984 PI cov=83% CI cov=19%
+2026-11-15 02:45:42,697 calibrate INFO selected model: poisson_log
+=== 05_calibrate done in 115.9s
+=== 06_harmonize
+2026-11-15 02:45:43,258 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 02:45:54,737 harmonize INFO cell-months in: 855862, out: 855862; pre-2012 MODIS 399562 -> harmonized 687877
+=== 06_harmonize done in 12.0s
+=== 07_validate
+2026-11-15 02:45:55,581 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 02:45:56,937 validate INFO temporal holdout
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: overflow encountered in exp
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: invalid value encountered in multiply
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+2026-11-15 02:46:07,730 validate INFO jump test
+2026-11-15 02:46:15,908 validate INFO wrote reports/validation_kz.md
+=== 07_validate done in 21.1s
+=== 07b_validation_package
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: overflow encountered in exp
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: invalid value encountered in multiply
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: overflow encountered in exp
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: invalid value encountered in multiply
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: overflow encountered in exp
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: invalid value encountered in multiply
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+2026-11-15 02:46:30,407 package INFO transfer KAZ: as-is 6.5% (bias +0.1%) vs local 6.5% -> True
+2026-11-15 02:46:32,891 package INFO transfer UZB: as-is 35.5% (bias -32.4%) vs local 17.7% -> False
+2026-11-15 02:46:36,976 package INFO transfer TKM: as-is 42.3% (bias -34.9%) vs local 22.9% -> False
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: overflow encountered in exp
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: invalid value encountered in multiply
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+2026-11-15 02:46:39,480 package INFO transfer KGZ: as-is 24.2% (bias -5.8%) vs local 20.8% -> True
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: overflow encountered in exp
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: invalid value encountered in multiply
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+2026-11-15 02:46:41,981 package INFO transfer TJK: as-is 49.3% (bias +26.0%) vs local 37.4% -> False
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: overflow encountered in exp
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: invalid value encountered in multiply
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+2026-11-15 02:46:44,497 package INFO transfer PRT: as-is 61.7% (bias +58.9%) vs local 15.6% -> False
+2026-11-15 02:46:47,167 package INFO transfer AUS: as-is 33.3% (bias -32.6%) vs local 5.2% -> False
+2026-11-15 02:46:49,828 package INFO transfer USA: as-is 27.4% (bias -26.7%) vs local 8.3% -> False
+2026-11-15 02:46:52,890 package INFO transfer IND: as-is 64.6% (bias -64.6%) vs local 9.2% -> False
+2026-11-15 02:46:58,727 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 02:46:59,684 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 02:47:00,552 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 02:47:00,959 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 02:47:01,150 package INFO wrote reports/validation.json and reports/VALIDATION.md
+=== 07b_validation_package done in 45.2s
+=== 08_export_web
+2026-11-15 02:47:01,250 export_web INFO export 2001-01 .. 2026-10 for ['KAZ', 'UZB', 'TKM', 'KGZ', 'TJK', 'PRT', 'AUS', 'USA', 'IND']
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: overflow encountered in exp
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: invalid value encountered in multiply
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: overflow encountered in exp
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: invalid value encountered in multiply
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: overflow encountered in exp
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: invalid value encountered in multiply
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: overflow encountered in exp
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: invalid value encountered in multiply
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: overflow encountered in exp
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+C:\Users\hp\OneDrive\Документы\firewatch\pipeline\intervals.py:61: RuntimeWarning: invalid value encountered in multiply
+  lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
+2026-11-15 02:47:27,628 export_web INFO KAZ: 52 hex files
+2026-11-15 02:47:27,840 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 02:47:30,588 export_web INFO UZB: 52 hex files
+2026-11-15 02:47:30,784 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 02:47:31,713 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 02:47:32,212 calibrate INFO no land cover file, strata = month/season/region
+2026-11-15 02:47:33,155 export_web INFO boundaries: 5 files; files > 5 MB: 0
+size per folder:
+  data                                 0.04 MB
+  data/boundaries                      0.15 MB
+  data/hex                            37.58 MB
+  data/regions                         0.28 MB
+  data/series                          0.11 MB
+=== 08_export_web done in 32.1s
+EXIT 0

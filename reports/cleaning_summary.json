@@ -72,35 +72,28 @@
         {
           "step": "nrt_static_mask",
           "rows_in": 3185020,
-          "rows_out": 3171270,
-          "removed": 13750
+          "rows_out": 3172931,
+          "removed": 12089
         },
         {
           "step": "exact_duplicates",
-          "rows_in": 3171270,
-          "rows_out": 3171270,
+          "rows_in": 3172931,
+          "rows_out": 3172931,
           "removed": 0
         },
         {
           "step": "nrt_overlaps_sp",
-          "rows_in": 3171270,
-          "rows_out": 3171270,
+          "rows_in": 3172931,
+          "rows_out": 3172931,
           "removed": 0
         }
       ],
-      "static_mask_cells": 189,
+      "static_mask_cells": 91,
       "rows_by_platform": {
-        "Aqua": 534657,
-        "NOAA20": 666759,
-        "SNPP": 1405957,
-        "Terra": 563897
-      },
-      "outage": {
-        "threshold": 20,
-        "typical_daily_noaa20": 87.0,
-        "reference_country": "KAZ",
-        "reference_typical_daily_noaa20": 87.0,
-        "outage_days": 56
+        "Aqua": 534684,
+        "NOAA20": 667548,
+        "SNPP": 1406755,
+        "Terra": 563944
       },
       "first_date": "2000-11-01",
       "last_date": "2026-11-13"
@@ -172,36 +165,29 @@
         {
           "step": "nrt_static_mask",
           "rows_in": 317233,
-          "rows_out": 311155,
-          "removed": 6078
+          "rows_out": 312778,
+          "removed": 4455
         },
         {
           "step": "exact_duplicates",
-          "rows_in": 311155,
-          "rows_out": 311155,
+          "rows_in": 312778,
+          "rows_out": 312778,
           "removed": 0
         },
         {
           "step": "nrt_overlaps_sp",
-          "rows_in": 311155,
-          "rows_out": 311155,
+          "rows_in": 312778,
+          "rows_out": 312778,
           "removed": 0
         }
       ],
-      "static_mask_cells": 200,
+      "static_mask_cells": 91,
       "rows_by_platform": {
-        "Aqua": 27650,
-        "NOAA20": 83935,
-        "NOAA21": 32999,
-        "SNPP": 140502,
-        "Terra": 26069
-      },
-      "outage": {
-        "threshold": 5,
-        "typical_daily_noaa20": 18.0,
-        "reference_country": "KAZ",
-        "reference_typical_daily_noaa20": 87.0,
-        "outage_days": 64
+        "Aqua": 27683,
+        "NOAA20": 84480,
+        "NOAA21": 33492,
+        "SNPP": 141025,
+        "Terra": 26098
       },
       "first_date": "2000-11-02",
       "last_date": "2026-11-13"
@@ -273,36 +259,29 @@
         {
           "step": "nrt_static_mask",
           "rows_in": 327205,
-          "rows_out": 305188,
-          "removed": 22017
+          "rows_out": 308900,
+          "removed": 18305
         },
         {
           "step": "exact_duplicates",
-          "rows_in": 305188,
-          "rows_out": 305188,
+          "rows_in": 308900,
+          "rows_out": 308900,
           "removed": 0
         },
         {
           "step": "nrt_overlaps_sp",
-          "rows_in": 305188,
-          "rows_out": 305188,
+          "rows_in": 308900,
+          "rows_out": 308900,
           "removed": 0
         }
       ],
-      "static_mask_cells": 286,
+      "static_mask_cells": 165,
       "rows_by_platform": {
-        "Aqua": 25034,
-        "NOAA20": 84455,
-        "NOAA21": 34503,
-        "SNPP": 141151,
-        "Terra": 20045
-      },
-      "outage": {
-        "threshold": 5,
-        "typical_daily_noaa20": 18.0,
-        "reference_country": "KAZ",
-        "reference_typical_daily_noaa20": 87.0,
-        "outage_days": 64
+        "Aqua": 25038,
+        "NOAA20": 85758,
+        "NOAA21": 35719,
+        "SNPP": 142330,
+        "Terra": 20055
       },
       "first_date": "2000-11-02",
       "last_date": "2026-11-13"
@@ -374,36 +353,29 @@
         {
           "step": "nrt_static_mask",
           "rows_in": 42759,
-          "rows_out": 42112,
-          "removed": 647
+          "rows_out": 42117,
+          "removed": 642
         },
         {
           "step": "exact_duplicates",
-          "rows_in": 42112,
-          "rows_out": 42112,
+          "rows_in": 42117,
+          "rows_out": 42117,
           "removed": 0
         },
         {
           "step": "nrt_overlaps_sp",
-          "rows_in": 42112,
-          "rows_out": 42112,
+          "rows_in": 42117,
+          "rows_out": 42117,
           "removed": 0
         }
       ],
-      "static_mask_cells": 24,
+      "static_mask_cells": 17,
       "rows_by_platform": {
         "Aqua": 6940,
         "NOAA20": 8973,
-        "NOAA21": 3895,
-        "SNPP": 16605,
+        "NOAA21": 3896,
+        "SNPP": 16609,
         "Terra": 5699
-      },
-      "outage": {
-        "threshold": 5,
-        "typical_daily_noaa20": 2.0,
-        "reference_country": "KAZ",
-        "reference_typical_daily_noaa20": 87.0,
-        "outage_days": 20
       },
       "first_date": "2000-11-02",
       "last_date": "2026-11-13"
@@ -475,36 +447,29 @@
         {
           "step": "nrt_static_mask",
           "rows_in": 16733,
-          "rows_out": 16280,
-          "removed": 453
+          "rows_out": 16308,
+          "removed": 425
         },
         {
           "step": "exact_duplicates",
-          "rows_in": 16280,
-          "rows_out": 16280,
+          "rows_in": 16308,
+          "rows_out": 16308,
           "removed": 0
         },
         {
           "step": "nrt_overlaps_sp",
-          "rows_in": 16280,
-          "rows_out": 16280,
+          "rows_in": 16308,
+          "rows_out": 16308,
           "removed": 0
         }
       ],
-      "static_mask_cells": 18,
+      "static_mask_cells": 11,
       "rows_by_platform": {
         "Aqua": 1810,
-        "NOAA20": 4063,
-        "NOAA21": 2029,
-        "SNPP": 6955,
+        "NOAA20": 4076,
+        "NOAA21": 2035,
+        "SNPP": 6964,
         "Terra": 1423
-      },
-      "outage": {
-        "threshold": 5,
-        "typical_daily_noaa20": 2.0,
-        "reference_country": "KAZ",
-        "reference_typical_daily_noaa20": 87.0,
-        "outage_days": 29
       },
       "first_date": "2000-11-01",
       "last_date": "2026-11-07"
@@ -576,36 +541,29 @@
         {
           "step": "nrt_static_mask",
           "rows_in": 256881,
-          "rows_out": 256569,
-          "removed": 312
+          "rows_out": 256580,
+          "removed": 301
         },
         {
           "step": "exact_duplicates",
-          "rows_in": 256569,
-          "rows_out": 256569,
+          "rows_in": 256580,
+          "rows_out": 256580,
           "removed": 0
         },
         {
           "step": "nrt_overlaps_sp",
-          "rows_in": 256569,
-          "rows_out": 256569,
+          "rows_in": 256580,
+          "rows_out": 256580,
           "removed": 0
         }
       ],
-      "static_mask_cells": 17,
+      "static_mask_cells": 5,
       "rows_by_platform": {
-        "Aqua": 38455,
-        "NOAA20": 49329,
-        "NOAA21": 26765,
-        "SNPP": 105549,
+        "Aqua": 38456,
+        "NOAA20": 49335,
+        "NOAA21": 26767,
+        "SNPP": 105551,
         "Terra": 36471
-      },
-      "outage": {
-        "threshold": 5,
-        "typical_daily_noaa20": 4.0,
-        "reference_country": "KAZ",
-        "reference_typical_daily_noaa20": 87.0,
-        "outage_days": 60
       },
       "first_date": "2000-11-06",
       "last_date": "2026-11-13"
@@ -677,36 +635,29 @@
         {
           "step": "nrt_static_mask",
           "rows_in": 13317762,
-          "rows_out": 13261143,
-          "removed": 56619
+          "rows_out": 13267444,
+          "removed": 50318
         },
         {
           "step": "exact_duplicates",
-          "rows_in": 13261143,
-          "rows_out": 13261137,
+          "rows_in": 13267444,
+          "rows_out": 13267438,
           "removed": 6
         },
         {
           "step": "nrt_overlaps_sp",
-          "rows_in": 13261137,
-          "rows_out": 13261137,
+          "rows_in": 13267438,
+          "rows_out": 13267438,
           "removed": 0
         }
       ],
-      "static_mask_cells": 910,
+      "static_mask_cells": 516,
       "rows_by_platform": {
-        "Aqua": 1239900,
-        "NOAA20": 3670528,
-        "NOAA21": 1513672,
-        "SNPP": 6319301,
-        "Terra": 517736
-      },
-      "outage": {
-        "threshold": 150,
-        "typical_daily_noaa20": 653.0,
-        "reference_country": "KAZ",
-        "reference_typical_daily_noaa20": 87.0,
-        "outage_days": 27
+        "Aqua": 1239914,
+        "NOAA20": 3672802,
+        "NOAA21": 1515867,
+        "SNPP": 6321077,
+        "Terra": 517778
       },
       "first_date": "2000-11-01",
       "last_date": "2026-11-13"
@@ -778,36 +729,29 @@
         {
           "step": "nrt_static_mask",
           "rows_in": 14036463,
-          "rows_out": 13936931,
-          "removed": 99532
+          "rows_out": 13955547,
+          "removed": 80916
         },
         {
           "step": "exact_duplicates",
-          "rows_in": 13936931,
-          "rows_out": 13936929,
+          "rows_in": 13955547,
+          "rows_out": 13955545,
           "removed": 2
         },
         {
           "step": "nrt_overlaps_sp",
-          "rows_in": 13936929,
-          "rows_out": 13936929,
+          "rows_in": 13955545,
+          "rows_out": 13955545,
           "removed": 0
         }
       ],
-      "static_mask_cells": 2252,
+      "static_mask_cells": 878,
       "rows_by_platform": {
-        "Aqua": 1456180,
-        "NOAA20": 3742172,
-        "NOAA21": 1382595,
-        "SNPP": 6022891,
-        "Terra": 1333091
-      },
-      "outage": {
-        "threshold": 174,
-        "typical_daily_noaa20": 758.0,
-        "reference_country": "KAZ",
-        "reference_typical_daily_noaa20": 87.0,
-        "outage_days": 61
+        "Aqua": 1456348,
+        "NOAA20": 3748483,
+        "NOAA21": 1388954,
+        "SNPP": 6028444,
+        "Terra": 1333316
       },
       "first_date": "2000-11-01",
       "last_date": "2026-11-13"
@@ -879,36 +823,29 @@
         {
           "step": "nrt_static_mask",
           "rows_in": 35601646,
-          "rows_out": 35591989,
-          "removed": 9657
+          "rows_out": 35592553,
+          "removed": 9093
         },
         {
           "step": "exact_duplicates",
-          "rows_in": 35591989,
-          "rows_out": 35591968,
+          "rows_in": 35592553,
+          "rows_out": 35592532,
           "removed": 21
         },
         {
           "step": "nrt_overlaps_sp",
-          "rows_in": 35591968,
-          "rows_out": 35591968,
+          "rows_in": 35592532,
+          "rows_out": 35592532,
           "removed": 0
         }
       ],
-      "static_mask_cells": 285,
+      "static_mask_cells": 120,
       "rows_by_platform": {
-        "Aqua": 3394854,
-        "NOAA20": 9185652,
-        "NOAA21": 4301865,
-        "SNPP": 15894877,
-        "Terra": 2814720
-      },
-      "outage": {
-        "threshold": 512,
-        "typical_daily_noaa20": 2228.5,
-        "reference_country": "KAZ",
-        "reference_typical_daily_noaa20": 87.0,
-        "outage_days": 62
+        "Aqua": 3394859,
+        "NOAA20": 9185873,
+        "NOAA21": 4302020,
+        "SNPP": 15895044,
+        "Terra": 2814736
       },
       "first_date": "2000-11-01",
       "last_date": "2026-11-13"
@@ -980,29 +917,29 @@
         {
           "step": "nrt_static_mask",
           "rows_in": 42034343,
-          "rows_out": 42020904,
-          "removed": 13439
+          "rows_out": 42023862,
+          "removed": 10481
         },
         {
           "step": "exact_duplicates",
-          "rows_in": 42020904,
-          "rows_out": 42020892,
+          "rows_in": 42023862,
+          "rows_out": 42023850,
           "removed": 12
         },
         {
           "step": "nrt_overlaps_sp",
-          "rows_in": 42020892,
-          "rows_out": 42020892,
+          "rows_in": 42023850,
+          "rows_out": 42023850,
           "removed": 0
         }
       ],
-      "static_mask_cells": 1752,
+      "static_mask_cells": 193,
       "rows_by_platform": {
-        "Aqua": 5923808,
-        "NOAA20": 10358183,
-        "NOAA21": 4272393,
-        "SNPP": 17905455,
-        "Terra": 3561053
+        "Aqua": 5923862,
+        "NOAA20": 10359141,
+        "NOAA21": 4273399,
+        "SNPP": 17906312,
+        "Terra": 3561136
       },
       "first_date": "2000-11-01",
       "last_date": "2026-11-13"

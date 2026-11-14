@@ -59,17 +59,22 @@ cleaning:
   static_mask:
     min_detections: 10
     min_type2_share: 0.5
+    rules: [type2]           # since C3 review; 'persistent' removed real recurring farm fires (TM -18%)
+    recent_years: 5          # rebuild from the last 5 years of SP data each run (new sites, e.g. UZ 2025); null = all
     min_months_per_year: 8   # cell active in >= N months of a year -> persistent
     min_years_persistent: 2
 
-# S-NPP outage day = no S-NPP detection in the country but >= threshold NOAA-20 detections. The threshold scales with
-# the country's typical day: reference_threshold * median(daily NOAA-20 | day has any) / same for reference_country,
-# never below min_threshold (tiny countries: S-NPP missing 1-2 small fires is not an outage).
+# S-NPP outage days: ONE satellite-wide list from all countries combined (an outage is a property of the satellite).
+# Day = outage when, summed over all manifest countries, S-NPP <= max_snpp_share x NOAA-20 and NOAA-20 >= min_noaa20_total.
 outage:
-  reference_country: KAZ
-  reference_threshold: 20
-  min_threshold: 5
-  typical_from: "2018-04-01"    # NOAA-20 era
+  max_snpp_share: 0.01          # data: 59 days with exactly 0, 2 with <0.4%, then a gap up to partial days (7-28%)
+  min_noaa20_total: 500         # 1st percentile of combined NOAA-20 days is ~1,000: a quiet day never qualifies
+  file: data/aggregated/outage_days.parquet
+  per_country_superseded:       # the post-C1 per-country threshold, kept only for pipeline/outage_check.py
+    reference_country: KAZ
+    reference_threshold: 20
+    min_threshold: 5
+    typical_from: "2018-04-01"
 
 # C2: honest test of the static mask (build before split, test on archive rows split..test_end)
 mask_check:
@@ -114,12 +119,63 @@ validation:
       year: 2022
       month: 9
       bbox: [62.5, 51.5, 65.5, 53.5]
+      adm1: KZ-KUS
     - name: Abai region forest fire (Semey Ormany)
       year: 2023
       month: 6
       bbox: [79.0, 49.8, 82.0, 51.2]
+      adm1: KZ-VOS          # Abai oblast was split from East Kazakhstan in 2022; boundaries file is pre-2022
+
+# C4 validation package (pipeline/07b_validation_package.py -> reports/validation.json, reports/VALIDATION.md)
+package:
+  test_country: UZB
+  stress_country: TKM
+  annual_countries: [KGZ, TJK]
+  overlap: [2012, 2019]           # MODIS and S-NPP both fly; = calibration period
+  holdout: [2020, 2025]
+  step_monthly: [2003, 2019]      # monthly step regression: full Terra+Aqua years, before 2020 drift
+  transfers_if:                   # "KZ model transfers" = as-is error close to a local refit, small bias
+    max_mae_ratio: 1.5
+    max_abs_bias_pct: 15
+  burned_area:
+    file: data/external/burned_area.csv
+    sep: ";"
+    years: [2003, 2025]
+    names: {Kazakhstan: KAZ, Uzbekistan: UZB, Turkmenistan: TKM, Kyrgyzstan: KGZ, Tajikistan: TJK}
+  events:
+    years: [2001, 2025]
+    top_n: 3
+    h3_res: 4                     # ~1,770 km2 hexagons, ~40 km across: the scale of a large fire
+    min_excess_cell_days: 30      # cell-days above the hexagon's normal for that calendar month
 
 api:
   max_cells: 200000
   max_export_rows: 500000
   base_period_start: 2001
+
+# Phase D: static website export (pipeline/08_export_web.py)
+web:
+  out_dir: web/public/data
+  first_ym: "2001-01"          # first full year of MODIS Terra (Nov 2000 start is partial)
+  hex_countries: [KAZ, UZB]
+  hex_res: [5, 7]
+  simplify_deg: 0.01           # ~1 km; boundaries are for display only
+  coord_decimals_geom: 3       # ~100 m (3 significant digits would move borders by ~10 km)
+  coord_decimals_meta: 2       # bbox / centers / event markers
+  warn_file_mb: 5
+  anomaly_normal_floor: 10     # anomaly_pct = 100 * (value - normal) / max(normal, 10)
+  countries:                   # bbox from data/boundaries/*_ADM1.geojson when not given (display extents)
+    KAZ: {name: Kazakhstan}
+    UZB: {name: Uzbekistan}
+    TKM: {name: Turkmenistan}
+    KGZ: {name: Kyrgyzstan}
+    TJK: {name: Tajikistan}
+    PRT: {name: Portugal, bbox: [-9.6, 36.9, -6.1, 42.2]}            # mainland
+    AUS: {name: Australia, bbox: [112.9, -43.7, 153.7, -10.6]}
+    BRA: {name: Brazil, bbox: [-74.0, -33.8, -34.7, 5.3]}
+    USA: {name: United States, bbox: [-125.0, 24.4, -66.9, 49.4]}    # contiguous states
+    IND: {name: India, bbox: [68.1, 6.7, 97.4, 35.5]}
+
+# Regression reference for KZ (pipeline/regression_check.py); phase_b = before Phase C (history)
+regression:
+  snapshot: phase_c4

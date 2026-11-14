@@ -118,11 +118,6 @@ def run_country(cfg, man, country):
         daily = con.execute(ingest.daily_counts_sql("clean")).df()
         (AGG / "country_day").mkdir(parents=True, exist_ok=True)
         daily.to_parquet(AGG / "country_day" / f"{country}.parquet", index=False)
-        thr, outage = ingest.outage_threshold(cfg, country, daily)
-        outage["outage_days"] = int(con.execute(f"SELECT count(*) FROM ({ingest.outage_days_sql('clean', thr)})")
-                                    .fetchall()[0][0])
-        log.info("  S-NPP outage threshold %d (typical day %.0f NOAA-20 detections) -> %d outage days",
-                 thr, outage["typical_daily_noaa20"], outage["outage_days"])
         span = con.execute("SELECT min(date), max(date) FROM clean").fetchall()[0]
         if level == "cell":
             out = PROCESSED / "hotspots" / f"country={country}"
@@ -132,7 +127,7 @@ def run_country(cfg, man, country):
             con.execute(f"""COPY (SELECT {cols} FROM clean ORDER BY src_order) TO '{out.as_posix()}'
                             (FORMAT parquet, PARTITION_BY (sensor, year))""")
         else:
-            cm = con.execute(ingest.country_month_query("clean", thr)).df()
+            cm = con.execute(ingest.country_month_query("clean")).df()    # outage columns: 02b_outage
             cm.insert(0, "country", country)
             (AGG / "country_month").mkdir(parents=True, exist_ok=True)
             cm.to_parquet(AGG / "country_month" / f"{country}.parquet", index=False)
@@ -140,7 +135,7 @@ def run_country(cfg, man, country):
         con.close()
         ingest.remove_work(path)
     return {"role": files["role"].iloc[0], "level": level, "files": per_file, "steps": steps,
-            "static_mask_cells": len(mask), "rows_by_platform": by_platform, "outage": outage,
+            "static_mask_cells": len(mask), "rows_by_platform": by_platform,
             "first_date": str(span[0]), "last_date": str(span[1])}
 
 
@@ -158,7 +153,10 @@ def main(only=None):
         if only and c not in only:
             continue
         summary[c] = run_country(cfg, man, c)
-    write_json(p, {"countries": summary})
+        # re-read + write after EVERY country: a crash (or a parallel run) never loses finished countries
+        cur = (__import__("json").loads(p.read_text(encoding="utf-8")).get("countries", {}) if p.exists() else {})
+        cur[c] = summary[c]
+        write_json(p, {"countries": cur})
 
 
 if __name__ == "__main__":
