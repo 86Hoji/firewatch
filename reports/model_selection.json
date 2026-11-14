@@ -1,0 +1,45 @@
+{
+  "criterion": "v2: reports/model_protocol.md (backcast, LORO, LOYO); v1: holdout MAE % of mean",
+  "holdout_years": [
+    2020,
+    2025
+  ],
+  "results": {
+    "ratio": {
+      "n_months": 72,
+      "mae": 281.4449325906468,
+      "mae_pct_of_mean": 14.832979017314392,
+      "bias_total_pct": -9.285450060432817,
+      "bias_median_rel_pct": -13.837919319205467,
+      "pearson_r": 0.9786889560375108,
+      "spearman_rho": 0.9855212277931443,
+      "coverage": 0.7222222222222222,
+      "coverage_ci": 0.2361111111111111
+    },
+    "loglog": {
+      "n_months": 72,
+      "mae": 201.73605764322076,
+      "mae_pct_of_mean": 10.632085937784138,
+      "bias_total_pct": -2.3159983975040697,
+      "bias_median_rel_pct": -0.41215064646678534,
+      "pearson_r": 0.9825452528032672,
+      "spearman_rho": 0.9906983851675891,
+      "coverage": 0.8472222222222222,
+      "coverage_ci": 0.2361111111111111
+    },
+    "poisson_log": {
+      "n_months": 72,
+      "mae": 195.6988852651763,
+      "mae_pct_of_mean": 10.31390912648695,
+      "bias_total_pct": -2.2065217459649413,
+      "bias_median_rel_pct": -1.4542355794429214,
+      "pearson_r": 0.9837049242108568,
+      "spearman_rho": 0.9911164352854882,
+      "coverage": 0.8333333333333334,
+      "coverage_ci": 0.19444444444444445
+    }
+  },
+  "selected": "poisson_log",
+  "v1_choice": "poisson_log",
+  "interval_method": "hetero"
+}

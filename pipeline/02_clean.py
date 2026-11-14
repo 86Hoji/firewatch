@@ -1,5 +1,6 @@
 """Unify MODIS/VIIRS schemas, filter confidence/type, build static-source mask."""
 import re
+import zipfile
 import shutil
 
 import h3
@@ -8,7 +9,7 @@ import pandas as pd
 import pyarrow as pa
 import pyarrow.dataset as ds
 
-from pipeline.common import PROCESSED, RAW, REF, REPORTS, ensure_dirs, get_logger, load_config, write_json
+from pipeline.common import PROCESSED, RAW, REF, REPORTS, ROOT, ensure_dirs, get_logger, load_config, write_json
 
 log = get_logger("clean")
 
@@ -27,8 +28,11 @@ def modis_conf_class(c):
     return np.select([c >= 80, c >= 30], ["h", "n"], "l")
 
 
-def unify(df):
-    is_modis = "brightness" in df.columns
+def unify(df, is_modis=None):
+    # FIRMS archive-download VIIRS files also name the column "brightness", so callers that know the
+    # sensor (zip file name) pass it; the column check is the fallback for yearly country CSVs.
+    if is_modis is None:
+        is_modis = "brightness" in df.columns and "bright_ti4" not in df.columns
     out = pd.DataFrame({
         "sensor": "MODIS" if is_modis else "VIIRS",
         "platform": df["satellite"].astype(str).str.strip().map(PLATFORMS),
@@ -51,7 +55,54 @@ def unify(df):
     return out
 
 
-def load_raw():
+ZIP_NAME = re.compile(r"DL_FIRE_([A-Z0-9]+-C\d+)_(\d{6})")
+
+
+def find_zips(cfg):
+    """{request_id: (sensor_code, path)} for the configured ids; a duplicate id (e.g. 'x (2).zip') is an error."""
+    inp = cfg["inputs"]
+    d = ROOT / inp["zips_dir"]
+    found = {}
+    for p in sorted(d.glob("*.zip")):
+        m = ZIP_NAME.match(p.name)
+        if not m:
+            continue
+        sensor, rid = m.group(1), int(m.group(2))
+        if rid in found:
+            raise SystemExit(f"request id {rid} appears twice: {found[rid][1].name}, {p.name}")
+        found[rid] = (sensor, p)
+    want = [int(r) for r in inp["request_ids"]]
+    missing = [r for r in want if r not in found]
+    if missing:
+        raise SystemExit(f"zips not found in {d} for request ids {missing}")
+    return {r: found[r] for r in want}
+
+
+def load_zips(cfg):
+    """Read fire_archive_*.csv and fire_nrt_*.csv straight from the zips (raw files are never modified)."""
+    frames = []
+    for rid, (sensor, path) in find_zips(cfg).items():
+        expected = set(cfg["inputs"]["sensors"][sensor])
+        with zipfile.ZipFile(path) as z:
+            for name in sorted(n for n in z.namelist() if n.endswith(".csv")):
+                with z.open(name) as fh:
+                    df = pd.read_csv(fh, dtype={"acq_time": str, "version": str, "confidence": str})
+                if df.empty:
+                    continue
+                u = unify(df, is_modis=sensor.startswith("M-"))
+                if "fire_nrt_" in name:
+                    u["processing"] = "NRT"
+                bad = set(u["platform"].dropna().unique()) - expected
+                if bad:
+                    raise SystemExit(f"{path.name}/{name}: platforms {bad} do not match sensor {sensor}")
+                log.info("%s %-34s %9d rows (%s..%s)", rid, name, len(u), u["date"].min(), u["date"].max())
+                frames.append(u)
+    return pd.concat(frames, ignore_index=True)
+
+
+def load_raw(cfg=None):
+    if cfg is not None and cfg.get("inputs", {}).get("source") == "zips":
+        return load_zips(cfg)
     frames = []
     for p in sorted(RAW.rglob("*.csv")):
         df = pd.read_csv(p, dtype={"acq_time": str, "version": str, "confidence": str})
@@ -124,7 +175,7 @@ def clean(df, cfg, steps):
 def main():
     ensure_dirs()
     cfg = load_config()
-    raw = load_raw()
+    raw = load_raw(cfg)
     log.info("loaded %d raw rows", len(raw))
     versions = raw.groupby(["sensor", "version", "processing"]).size().rename("rows").reset_index()
     steps = []

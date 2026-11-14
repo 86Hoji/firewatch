@@ -1,0 +1,33 @@
+=== experiments
+2026-11-14 22:28:06,352 calibrate INFO no land cover file, strata = month/season/region
+2026-11-14 22:28:10,736 experiments INFO C0 Terra\u222aAqua, ratio                      score 11.31 | T1 8.9 T3 17.0 T4 8.0 | T2 14.8 bias -9.3
+2026-11-14 22:28:11,720 experiments INFO C1 Terra\u222aAqua, OLS log1p (v1)             score 9.81 | T1 7.8 T3 15.3 T4 6.4 | T2 10.6 bias -2.3
+2026-11-14 22:28:13,752 experiments INFO C2 Terra\u222aAqua, Poisson log-link           score 9.68 | T1 6.9 T3 15.6 T4 6.5 | T2 10.3 bias -2.2
+2026-11-14 22:28:15,022 experiments INFO C3 Terra\u222aAqua day+night, ratio            score 10.55 | T1 7.9 T3 16.2 T4 7.5 | T2 13.3 bias -4.1
+2026-11-14 22:28:15,621 experiments INFO C4 Aqua, ratio                            score 13.29 | T1 10.8 T3 19.1 T4 10.0 | T2 18.3 bias -12.8
+2026-11-14 22:28:17,100 experiments INFO C5 Aqua day+night, ratio                  score 12.58 | T1 10.0 T3 18.1 T4 9.6 | T2 18.3 bias -7.6
+2026-11-14 22:28:18,772 experiments INFO C6 Aqua, Poisson log-link                 score 14.82 | T1 11.7 T3 21.7 T4 11.1 | T2 16.2 bias -2.8
+2026-11-14 22:28:22,992 experiments INFO C7 Aqua day+night, Poisson log-link       score 15.87 | T1 12.5 T3 23.8 T4 11.3 | T2 16.4 bias 2.1
+2026-11-14 22:28:30,133 experiments INFO interval season coverage 81% (T1 71%, T4 85%), median width 33% of pred
+2026-11-14 22:28:41,621 experiments INFO interval hetero coverage 90% (T1 94%, T4 89%), median width 34% of pred
+2026-11-14 22:28:41,671 experiments INFO selected C2, intervals hetero
+=== experiments done in 39.4s
+=== 05_calibrate
+2026-11-14 22:28:41,822 calibrate INFO no land cover file, strata = month/season/region
+2026-11-14 22:30:02,612 calibrate INFO holdout ratio: MAE%=14.8 bias=-9.3% R=0.979 PI cov=72% CI cov=24%
+2026-11-14 22:30:02,612 calibrate INFO holdout loglog: MAE%=10.6 bias=-2.3% R=0.983 PI cov=85% CI cov=24%
+2026-11-14 22:30:02,612 calibrate INFO holdout poisson_log: MAE%=10.3 bias=-2.2% R=0.984 PI cov=83% CI cov=19%
+2026-11-14 22:30:02,612 calibrate INFO selected model: poisson_log
+=== 05_calibrate done in 81.0s
+=== 06_harmonize
+2026-11-14 22:30:02,858 calibrate INFO no land cover file, strata = month/season/region
+2026-11-14 22:30:05,652 harmonize INFO cell-months in: 855761, out: 855761; pre-2012 MODIS 399562 -> harmonized 687877 [628209, 755955]
+=== 06_harmonize done in 3.0s
+=== 07_validate
+2026-11-14 22:30:07,156 calibrate INFO no land cover file, strata = month/season/region
+2026-11-14 22:30:07,592 validate INFO temporal holdout
+2026-11-14 22:30:10,683 validate INFO spatial CV
+2026-11-14 22:39:47,244 validate INFO jump test
+2026-11-14 22:39:51,064 validate INFO wrote reports/validation.md
+=== 07_validate done in 585.4s
+EXIT 0

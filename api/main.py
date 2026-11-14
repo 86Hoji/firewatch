@@ -418,4 +418,5 @@ def index():
     return FileResponse(ROOT / "web" / "index.html")
 
 
-app.mount("/", StaticFiles(directory=ROOT / "web"), name="web")
+if (ROOT / "web").is_dir():   # frontend is optional; the API works without it
+    app.mount("/", StaticFiles(directory=ROOT / "web"), name="web")

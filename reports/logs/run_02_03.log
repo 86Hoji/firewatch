@@ -1,0 +1,24 @@
+=== 02_clean
+2026-11-14 22:26:29,959 clean INFO 847148 fire_archive_M-C61_847148.csv         777034 rows (2000-11-01..2012-01-18)
+2026-11-14 22:26:30,850 clean INFO 847158 fire_archive_M-C61_847158.csv         258020 rows (2012-01-22..2018-03-31)
+2026-11-14 22:26:31,613 clean INFO 847199 fire_archive_M-C61_847199.csv         221560 rows (2018-04-01..2026-08-31)
+2026-11-14 22:26:31,633 clean INFO 847199 fire_nrt_M-C61_847199.csv               4449 rows (2026-09-01..2026-11-13)
+2026-11-14 22:26:34,049 clean INFO 847159 fire_archive_SV-C2_847159.csv         933875 rows (2012-01-20..2018-03-31)
+2026-11-14 22:26:36,299 clean INFO 847181 fire_archive_SV-C2_847181.csv         833595 rows (2018-04-01..2026-07-31)
+2026-11-14 22:26:36,415 clean INFO 847181 fire_nrt_SV-C2_847181.csv              29625 rows (2026-08-01..2026-11-02)
+2026-11-14 22:26:38,898 clean INFO 847180 fire_archive_J1V-C2_847180.csv        830218 rows (2018-04-01..2026-07-31)
+2026-11-14 22:26:39,003 clean INFO 847180 fire_nrt_J1V-C2_847180.csv             31181 rows (2026-08-01..2026-11-13)
+2026-11-14 22:26:39,103 clean INFO loaded 3919557 raw rows
+2026-11-14 22:26:39,466 clean INFO unknown_platform         3919557 ->   3919557
+2026-11-14 22:26:42,252 clean INFO confidence               3919557 ->   3667872
+2026-11-14 22:27:06,967 clean INFO type_not_vegetation      3667872 ->   3185020
+2026-11-14 22:27:07,518 clean INFO nrt_static_mask          3185020 ->   3171270
+2026-11-14 22:27:09,658 clean INFO exact_duplicates         3171270 ->   3171270
+2026-11-14 22:27:10,601 clean INFO nrt_overlaps_sp          3171270 ->   3171270
+2026-11-14 22:27:11,836 clean INFO wrote C:\Users\hp\OneDrive\Документы\firewatch\data\processed\hotspots (3171270 rows)
+=== 02_clean done in 46.1s
+=== 03_grid
+2026-11-14 22:27:24,842 grid INFO S-NPP outage days filled from NOAA-20: 56
+2026-11-14 22:27:26,419 grid INFO hotspots in: 3171270, cell-months out: 855761, cells: 242039
+2026-11-14 22:27:27,684 grid INFO wrote cell_month.parquet and raw_series.png
+=== 03_grid done in 15.8s

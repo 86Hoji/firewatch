@@ -6,6 +6,21 @@ region:
   bbox: [46.4, 40.5, 87.4, 55.5]
   iso3: KAZ
 
+# Local inputs (FIRMS archive-download zips). source: zips -> read zips in place, no internet;
+# source: download -> original behaviour (01_download fetches yearly country CSVs + API tail).
+inputs:
+  source: zips
+  zips_dir: data/raw/zips
+  # FIRMS request ids for this region (6 digits; suffixes like " (2)" in file names are ignored)
+  request_ids: [847148, 847158, 847199, 847159, 847181, 847180]
+  # sensor code in the file name -> expected platforms (checked on load)
+  sensors:
+    M-C61: [Terra, Aqua]
+    SV-C2: [SNPP]
+    J1V-C2: [NOAA20]
+    J2V-C2: [NOAA21]
+  boundaries: data/boundaries/KAZ_ADM1.geojson   # copied to data/reference/regions.geojson for the API
+
 years:
   start: 2000
   end: null            # null = latest available

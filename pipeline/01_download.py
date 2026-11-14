@@ -2,12 +2,13 @@
 import datetime as dt
 import io
 import os
+import shutil
 import time
 
 import pandas as pd
 import requests
 
-from pipeline.common import RAW, REF, REPORTS, ensure_dirs, get_logger, load_config, write_json
+from pipeline.common import RAW, REF, REPORTS, ROOT, ensure_dirs, get_logger, load_config, write_json
 
 log = get_logger("download")
 UA = {"User-Agent": "fire-calendar/0.1"}
@@ -146,9 +147,22 @@ def summary():
     write_json(REPORTS / "download_summary.json", s.to_dict(orient="records"))
 
 
+def use_local_inputs(cfg):
+    """inputs.source = zips: nothing to download; copy the local ADM1 file for the API."""
+    src = ROOT / cfg["inputs"]["boundaries"]
+    if src.exists():
+        shutil.copyfile(src, REF / "regions.geojson")
+        log.info("local inputs: zips in %s, boundaries %s", cfg["inputs"]["zips_dir"], src.name)
+    else:
+        log.warning("boundaries file not found: %s", src)
+
+
 def main():
     ensure_dirs()
     cfg = load_config()
+    if cfg.get("inputs", {}).get("source") == "zips":
+        use_local_inputs(cfg)
+        return
     download_archive(cfg)
     download_api_tail(cfg)
     download_boundaries(cfg)

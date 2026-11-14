@@ -9,3 +9,4 @@ __pycache__/
 # added: 1.8 GB of yearly MODIS zips, not in the original list
 data/modis/
 *.pyc
+data/reference/
