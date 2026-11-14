@@ -1,0 +1,11 @@
+data/raw/
+data/processed/
+data/aggregated/
+baseline_import/
+.env
+reports/**/*.png
+.venv/
+__pycache__/
+# added: 1.8 GB of yearly MODIS zips, not in the original list
+data/modis/
+*.pyc
