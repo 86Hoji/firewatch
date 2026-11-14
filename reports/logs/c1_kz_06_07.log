@@ -1,0 +1,12 @@
+=== 06_harmonize
+2026-11-14 23:31:10,203 calibrate INFO no land cover file, strata = month/season/region
+2026-11-14 23:31:17,538 harmonize INFO cell-months in: 855761, out: 855761; pre-2012 MODIS 399562 -> harmonized 687877 [628209, 755955]
+=== 06_harmonize done in 15.1s
+=== 07_validate
+2026-11-14 23:31:21,758 calibrate INFO no land cover file, strata = month/season/region
+2026-11-14 23:31:23,254 validate INFO temporal holdout
+2026-11-14 23:31:30,330 validate INFO spatial CV
+2026-11-14 23:45:21,660 validate INFO jump test
+2026-11-14 23:45:27,308 validate INFO wrote reports/validation.md
+=== 07_validate done in 849.7s
+EXIT 0

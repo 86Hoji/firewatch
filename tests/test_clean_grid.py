@@ -1,6 +1,7 @@
 import importlib
 
 import duckdb
+import numpy as np
 import pandas as pd
 
 clean = importlib.import_module("pipeline.02_clean")
@@ -55,3 +56,27 @@ def test_cell_day_dedup(tmp_path):
     assert cm.loc["a", "n_viirs_all"] == 2        # NOAA-20 on an S-NPP day adds nothing
     assert cm.loc["a", "n_viirs_snpp_d"] == 2 and cm.loc["a", "n_viirs_snpp_n"] == 1
     assert cm.loc["b", "n_modis"] == 1 and cm.loc["b", "n_modis_aqua"] == 1 and cm.loc["b", "n_modis_terra"] == 0
+
+
+def test_country_month_equals_sum_of_cell_months(tmp_path):
+    """Transfer countries get country-month totals straight from points; they must equal summed cell-months."""
+    from pipeline import ingest
+    rng = np.random.default_rng(1)
+    n = 3000
+    df = pd.DataFrame({"h3_cell": rng.choice(list("abcdefgh"), n),
+                       "date": pd.to_datetime("2019-01-01") + pd.to_timedelta(rng.integers(0, 120, n), unit="D"),
+                       "platform": rng.choice(["Terra", "Aqua", "SNPP", "NOAA20", "NOAA21"], n),
+                       "daynight": rng.choice(["D", "N"], n)})
+    df["date"] = df["date"].dt.date
+    df["sensor"] = np.where(df["platform"].isin(["Terra", "Aqua"]), "MODIS", "VIIRS")
+    df["year"], df["month"] = [d.year for d in df["date"]], [d.month for d in df["date"]]
+    p = tmp_path / "h.parquet"
+    df.to_parquet(p)
+    src = f"read_parquet('{p.as_posix()}')"
+    con = duckdb.connect()
+    cm = con.execute(ingest.cell_month_query(src)).df()
+    gap, _ = ingest.outage_fill(con, src, 1)
+    cm = cm.merge(gap, on=["h3_cell", "year", "month"], how="left").fillna({"n_viirs_noaa20_gap": 0})
+    tot = con.execute(ingest.country_month_query(src, 1)).df().set_index(["year", "month"])
+    s = cm.groupby(["year", "month"])[[c for c in cm.columns if c.startswith(("n_", "p_"))]].sum()
+    assert (s - tot[s.columns]).abs().to_numpy().max() == 0

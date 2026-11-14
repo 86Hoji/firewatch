@@ -37,7 +37,7 @@ def main():
     except ImportError:
         log.warning("pyhdf not installed: skipping land cover")
         return
-    cells = pd.read_parquet(AGG / "cell_month.parquet", columns=["h3_cell", "lat", "lon"]).drop_duplicates("h3_cell")
+    cells = pd.read_parquet(AGG / "cell_month_all.parquet", columns=["h3_cell", "lat", "lon"]).drop_duplicates("h3_cell")
     cells["igbp"] = sample(grid, cells["lat"].to_numpy(), cells["lon"].to_numpy())
     cells["land_cover"] = cells["igbp"].map(IGBP_GROUPS).fillna("other")
     cells[["h3_cell", "igbp", "land_cover"]].to_parquet(REF / "landcover_cells.parquet", index=False)

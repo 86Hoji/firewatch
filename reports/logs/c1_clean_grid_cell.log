@@ -1,0 +1,92 @@
+2026-11-14 23:25:14,180 clean INFO KAZ (cell, train): [847148, 847158, 847199, 847159, 847181, 847180]
+2026-11-14 23:25:16,798 ingest INFO   847148 fire_archive_M-C61_847148.csv          777034 rows
+2026-11-14 23:25:17,772 ingest INFO   847158 fire_archive_M-C61_847158.csv          258020 rows
+2026-11-14 23:25:18,634 ingest INFO   847199 fire_archive_M-C61_847199.csv          221560 rows
+2026-11-14 23:25:18,683 ingest INFO   847199 fire_nrt_M-C61_847199.csv                4449 rows
+2026-11-14 23:25:21,178 ingest INFO   847159 fire_archive_SV-C2_847159.csv          933875 rows
+2026-11-14 23:25:23,451 ingest INFO   847181 fire_archive_SV-C2_847181.csv          833595 rows
+2026-11-14 23:25:23,587 ingest INFO   847181 fire_nrt_SV-C2_847181.csv               29625 rows
+2026-11-14 23:25:25,809 ingest INFO   847180 fire_archive_J1V-C2_847180.csv         830218 rows
+2026-11-14 23:25:25,981 ingest INFO   847180 fire_nrt_J1V-C2_847180.csv              31181 rows
+ 99% ▕█████████████████████████████████████▌▏ (<1 second remaining)     100% ▕██████████████████████████████████████▏ (00:00:03.17 elapsed)     
+ 94% ▕███████████████████████████████████▋  ▏ (<1 second remaining)      97% ▕████████████████████████████████████▊ ▏ (<1 second remaining)      99% ▕█████████████████████████████████████▌▏ (<1 second remaining)     100% ▕██████████████████████████████████████▏ (00:00:04.56 elapsed)     
+2026-11-14 23:25:35,692 ingest INFO   unknown_platform          3919557 ->    3919557
+2026-11-14 23:25:35,692 ingest INFO   confidence                3919557 ->    3667872
+2026-11-14 23:25:35,692 ingest INFO   type_not_vegetation       3667872 ->    3185020
+2026-11-14 23:25:35,692 ingest INFO   nrt_static_mask           3185020 ->    3171270
+2026-11-14 23:25:35,692 ingest INFO   exact_duplicates          3171270 ->    3171270
+2026-11-14 23:25:35,692 ingest INFO   nrt_overlaps_sp           3171270 ->    3171270
+ 99% ▕█████████████████████████████████████▌▏ (<1 second remaining)     100% ▕██████████████████████████████████████▏ (00:00:02.04 elapsed)     
+2026-11-14 23:25:38,508 clean INFO UZB (cell, test): [847909, 847912, 847910, 847911]
+2026-11-14 23:25:39,024 ingest INFO   847909 fire_archive_M-C61_847909.csv           97386 rows
+2026-11-14 23:25:39,049 ingest INFO   847909 fire_nrt_M-C61_847909.csv                 335 rows
+2026-11-14 23:25:39,906 ingest INFO   847912 fire_archive_SV-C2_847912.csv          268472 rows
+2026-11-14 23:25:39,978 ingest INFO   847912 fire_nrt_SV-C2_847912.csv                3532 rows
+2026-11-14 23:25:40,521 ingest INFO   847910 fire_archive_J1V-C2_847910.csv         139330 rows
+2026-11-14 23:25:40,556 ingest INFO   847910 fire_nrt_J1V-C2_847910.csv               3773 rows
+2026-11-14 23:25:41,111 ingest INFO   847911 fire_archive_J2V-C2_847911.csv          52198 rows
+2026-11-14 23:25:41,148 ingest INFO   847911 fire_nrt_J2V-C2_847911.csv               3379 rows
+2026-11-14 23:25:43,016 ingest INFO   unknown_platform           568405 ->     568405
+2026-11-14 23:25:43,017 ingest INFO   confidence                 568405 ->     524484
+2026-11-14 23:25:43,017 ingest INFO   type_not_vegetation        524484 ->     317233
+2026-11-14 23:25:43,017 ingest INFO   nrt_static_mask            317233 ->     311155
+2026-11-14 23:25:43,017 ingest INFO   exact_duplicates           311155 ->     311155
+2026-11-14 23:25:43,017 ingest INFO   nrt_overlaps_sp            311155 ->     311155
+2026-11-14 23:25:43,459 clean INFO TKM (cell, stress): [848066, 848011, 848009, 848010]
+2026-11-14 23:25:43,847 ingest INFO   848066 fire_archive_M-C61_848066.csv           69898 rows
+2026-11-14 23:25:43,872 ingest INFO   848066 fire_nrt_M-C61_848066.csv                 220 rows
+2026-11-14 23:25:45,094 ingest INFO   848011 fire_archive_SV-C2_848011.csv          372292 rows
+2026-11-14 23:25:45,203 ingest INFO   848011 fire_nrt_SV-C2_848011.csv               10081 rows
+2026-11-14 23:25:45,953 ingest INFO   848009 fire_archive_J1V-C2_848009.csv         224479 rows
+2026-11-14 23:25:46,014 ingest INFO   848009 fire_nrt_J1V-C2_848009.csv              11132 rows
+2026-11-14 23:25:46,544 ingest INFO   848010 fire_archive_J2V-C2_848010.csv          87967 rows
+2026-11-14 23:25:46,602 ingest INFO   848010 fire_nrt_J2V-C2_848010.csv              10385 rows
+2026-11-14 23:25:48,133 ingest INFO   unknown_platform           786454 ->     786454
+2026-11-14 23:25:48,133 ingest INFO   confidence                 786454 ->     752750
+2026-11-14 23:25:48,133 ingest INFO   type_not_vegetation        752750 ->     327205
+2026-11-14 23:25:48,133 ingest INFO   nrt_static_mask            327205 ->     305188
+2026-11-14 23:25:48,133 ingest INFO   exact_duplicates           305188 ->     305188
+2026-11-14 23:25:48,133 ingest INFO   nrt_overlaps_sp            305188 ->     305188
+2026-11-14 23:25:48,480 clean INFO KGZ (cell, extra): [847969, 847972, 847970, 847971]
+2026-11-14 23:25:48,621 ingest INFO   847969 fire_archive_M-C61_847969.csv           14829 rows
+2026-11-14 23:25:48,638 ingest INFO   847969 fire_nrt_M-C61_847969.csv                  76 rows
+2026-11-14 23:25:48,784 ingest INFO   847972 fire_archive_SV-C2_847972.csv           31749 rows
+2026-11-14 23:25:48,805 ingest INFO   847972 fire_nrt_SV-C2_847972.csv                 624 rows
+2026-11-14 23:25:48,902 ingest INFO   847970 fire_archive_J1V-C2_847970.csv          17094 rows
+2026-11-14 23:25:48,921 ingest INFO   847970 fire_nrt_J1V-C2_847970.csv                753 rows
+2026-11-14 23:25:48,965 ingest INFO   847971 fire_archive_J2V-C2_847971.csv           5959 rows
+2026-11-14 23:25:48,985 ingest INFO   847971 fire_nrt_J2V-C2_847971.csv                706 rows
+2026-11-14 23:25:49,481 ingest INFO   unknown_platform            71790 ->      71790
+2026-11-14 23:25:49,481 ingest INFO   confidence                  71790 ->      67198
+2026-11-14 23:25:49,481 ingest INFO   type_not_vegetation         67198 ->      42759
+2026-11-14 23:25:49,481 ingest INFO   nrt_static_mask             42759 ->      42112
+2026-11-14 23:25:49,481 ingest INFO   exact_duplicates            42112 ->      42112
+2026-11-14 23:25:49,481 ingest INFO   nrt_overlaps_sp             42112 ->      42112
+2026-11-14 23:25:49,692 clean INFO TJK (cell, extra): [847982, 847996, 847994, 847995]
+2026-11-14 23:25:49,780 ingest INFO   847982 fire_archive_M-C61_847982.csv            3906 rows
+2026-11-14 23:25:49,799 ingest INFO   847982 fire_nrt_M-C61_847982.csv                  21 rows
+2026-11-14 23:25:49,860 ingest INFO   847996 fire_archive_SV-C2_847996.csv           11742 rows
+2026-11-14 23:25:49,878 ingest INFO   847996 fire_nrt_SV-C2_847996.csv                 297 rows
+2026-11-14 23:25:49,922 ingest INFO   847994 fire_archive_J1V-C2_847994.csv           7669 rows
+2026-11-14 23:25:49,948 ingest INFO   847994 fire_nrt_J1V-C2_847994.csv                315 rows
+2026-11-14 23:25:49,978 ingest INFO   847995 fire_archive_J2V-C2_847995.csv           3140 rows
+2026-11-14 23:25:49,999 ingest INFO   847995 fire_nrt_J2V-C2_847995.csv                358 rows
+2026-11-14 23:25:50,180 ingest INFO   unknown_platform            27448 ->      27448
+2026-11-14 23:25:50,181 ingest INFO   confidence                  27448 ->      25617
+2026-11-14 23:25:50,181 ingest INFO   type_not_vegetation         25617 ->      16733
+2026-11-14 23:25:50,181 ingest INFO   nrt_static_mask             16733 ->      16280
+2026-11-14 23:25:50,181 ingest INFO   exact_duplicates            16280 ->      16280
+2026-11-14 23:25:50,181 ingest INFO   nrt_overlaps_sp             16280 ->      16280
+  2% ▕▊                                     ▏ (~1.8 minutes remaining)    3% ▕█▏                                    ▏ (~1.8 minutes remaining)    4% ▕█▌                                    ▏ (~1.4 minutes remaining)    5% ▕█▉                                    ▏ (~1.1 minutes remaining)    6% ▕██▎                                   ▏ (~58 seconds remaining)     8% ▕███                                   ▏ (~47 seconds remaining)     9% ▕███▍                                  ▏ (~39 seconds remaining)    10% ▕███▊                                  ▏ (~33 seconds remaining)    11% ▕████▏                                 ▏ (~28 seconds remaining)    12% ▕████▌                                 ▏ (~24 seconds remaining)    13% ▕████▉                                 ▏ (~22 seconds remaining)    14% ▕█████▎                                ▏ (~19 seconds remaining)    15% ▕█████▋                                ▏ (~17 seconds remaining)    16% ▕██████                                ▏ (~16 seconds remaining)    17% ▕██████▍                               ▏ (~15 seconds remaining)    18% ▕██████▊                               ▏ (~14 seconds remaining)    19% ▕███████▏                              ▏ (~13 seconds remaining)    20% ▕███████▌                              ▏ (~12 seconds remaining)    21% ▕███████▉                              ▏ (~12 seconds remaining)    22% ▕████████▎                             ▏ (~12 seconds remaining)    23% ▕████████▋                             ▏ (~12 seconds remaining)    24% ▕█████████                             ▏ (~12 seconds remaining)    25% ▕█████████▌                            ▏ (~12 seconds remaining)    26% ▕█████████▉                            ▏ (~12 seconds remaining)    27% ▕██████████▎                           ▏ (~12 seconds remaining)    28% ▕██████████▋                           ▏ (~12 seconds remaining)    28% ▕██████████▋                           ▏ (~11 seconds remaining)    28% ▕██████████▋                           ▏ (~10 seconds remaining)    29% ▕███████████                           ▏ (~10 seconds remaining)    30% ▕███████████▍                          ▏ (~10 seconds remaining)    30% ▕███████████▍                          ▏ (~9 seconds remaining)     31% ▕███████████▊                          ▏ (~9 seconds remaining)     32% ▕████████████▏                         ▏ (~9 seconds remaining)     33% ▕████████████▌                         ▏ (~9 seconds remaining)     34% ▕████████████▉                         ▏ (~9 seconds remaining)     35% ▕█████████████▎                        ▏ (~9 seconds remaining)     36% ▕█████████████▋                        ▏ (~9 seconds remaining)     37% ▕██████████████                        ▏ (~9 seconds remaining)     38% ▕██████████████▍                       ▏ (~9 seconds remaining)     38% ▕██████████████▍                       ▏ (~8 seconds remaining)     39% ▕██████████████▊                       ▏ (~8 seconds remaining)     40% ▕███████████████▏                      ▏ (~8 seconds remaining)     41% ▕███████████████▌                      ▏ (~8 seconds remaining)     42% ▕███████████████▉                      ▏ (~8 seconds remaining)    100% ▕██████████████████████████████████████▏ (00:00:13.01 elapsed)     
+Traceback (most recent call last):
+  File "<string>", line 4, in <module>
+  File "C:\Users\hp\OneDrive\���������\firewatch\pipeline\03_grid.py", line 74, in main
+    cm, cmon = build(con, cfg, c)
+               ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\OneDrive\���������\firewatch\pipeline\03_grid.py", line 36, in build
+    cells = ingest.cells_table(con, cm["h3_cell"].unique(), cfg["grid"]["coarse_res"])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\OneDrive\���������\firewatch\pipeline\ingest.py", line 258, in cells_table
+    con.register("cells_in", pd.DataFrame({"h3_cell": cells}))
+_duckdb.ResourceInUseException: Resource In Use Error: connection has an unfinished result from execute(); call complete() or abort(), or fetch until a fetch returns no rows, before other work on this connection, or use a separate connection from cursor()
+clean s 38

@@ -9,8 +9,13 @@ from pipeline.metrics import series_metrics
 log = get_logger("calibrate")
 
 
-def load_cell_month():
-    cm = pd.read_parquet(AGG / "cell_month.parquet")
+def load_cell_month(country=None, cfg=None):
+    """Unharmonized cell-months of one country (default: config train_country)."""
+    cfg = cfg or load_config()
+    country = country or cfg["train_country"]
+    cm = pd.read_parquet(AGG / "cell_month_all.parquet", filters=[("country", "==", country)])
+    if cm.empty:
+        raise SystemExit(f"no cell-months for {country}: run 02_clean and 03_grid")
     lc = REF / "landcover_cells.parquet"
     cm = cm.drop(columns=[c for c in ("land_cover",) if c in cm])
     if lc.exists():

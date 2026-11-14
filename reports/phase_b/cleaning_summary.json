@@ -1,0 +1,79 @@
+{
+  "steps": [
+    {
+      "step": "unknown_platform",
+      "rows_in": 3919557,
+      "rows_out": 3919557,
+      "removed": 0
+    },
+    {
+      "step": "confidence",
+      "rows_in": 3919557,
+      "rows_out": 3667872,
+      "removed": 251685
+    },
+    {
+      "step": "type_not_vegetation",
+      "rows_in": 3667872,
+      "rows_out": 3185020,
+      "removed": 482852
+    },
+    {
+      "step": "nrt_static_mask",
+      "rows_in": 3185020,
+      "rows_out": 3171270,
+      "removed": 13750
+    },
+    {
+      "step": "exact_duplicates",
+      "rows_in": 3171270,
+      "rows_out": 3171270,
+      "removed": 0
+    },
+    {
+      "step": "nrt_overlaps_sp",
+      "rows_in": 3171270,
+      "rows_out": 3171270,
+      "removed": 0
+    }
+  ],
+  "static_mask_cells": 189,
+  "rows_by_platform": {
+    "Aqua": 534657,
+    "NOAA20": 666759,
+    "SNPP": 1405957,
+    "Terra": 563897
+  },
+  "versions": [
+    {
+      "sensor": "MODIS",
+      "version": "6.03",
+      "processing": "SP",
+      "rows": 1202953
+    },
+    {
+      "sensor": "MODIS",
+      "version": "6.1NRT",
+      "processing": "NRT",
+      "rows": 4449
+    },
+    {
+      "sensor": "MODIS",
+      "version": "61.03",
+      "processing": "NRT",
+      "rows": 53661
+    },
+    {
+      "sensor": "VIIRS",
+      "version": "2",
+      "processing": "SP",
+      "rows": 2597688
+    },
+    {
+      "sensor": "VIIRS",
+      "version": "2.0NRT",
+      "processing": "NRT",
+      "rows": 60806
+    }
+  ]
+}

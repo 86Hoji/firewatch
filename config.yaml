@@ -1,3 +1,6 @@
+# country whose MODIS/VIIRS overlap is used to fit the model (ISO3, as in pipeline/manifest.csv)
+train_country: KAZ
+
 region:
   name: Kazakhstan
   # FIRMS per-country yearly archive files (names as used by FIRMS)
@@ -11,8 +14,13 @@ region:
 inputs:
   source: zips
   zips_dir: data/raw/zips
-  # FIRMS request ids for this region (6 digits; suffixes like " (2)" in file names are ignored)
-  request_ids: [847148, 847158, 847199, 847159, 847181, 847180]
+  manifest: pipeline/manifest.csv   # request_id, country (ISO3), role
+  # roles from the manifest: cell-level outputs (maps, cell_month) vs country-month totals only; others skipped
+  cell_level_roles: [train, test, stress, extra]
+  totals_only_roles: [transfer]
+  chunk_rows: 1000000          # rows per pandas chunk when streaming a CSV out of a zip
+  duckdb_memory_limit: 4GB     # DuckDB spills to disk above this
+  work_dir: null               # null = system temp (keeps big temporary files out of OneDrive)
   # sensor code in the file name -> expected platforms (checked on load)
   sensors:
     M-C61: [Terra, Aqua]

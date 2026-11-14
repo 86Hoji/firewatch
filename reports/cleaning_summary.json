@@ -1,79 +1,948 @@
 {
-  "steps": [
-    {
-      "step": "unknown_platform",
-      "rows_in": 3919557,
-      "rows_out": 3919557,
-      "removed": 0
+  "countries": {
+    "KAZ": {
+      "role": "train",
+      "level": "cell",
+      "files": [
+        {
+          "request_id": 847148,
+          "file": "fire_archive_M-C61_847148.csv",
+          "rows": 777034
+        },
+        {
+          "request_id": 847158,
+          "file": "fire_archive_M-C61_847158.csv",
+          "rows": 258020
+        },
+        {
+          "request_id": 847199,
+          "file": "fire_archive_M-C61_847199.csv",
+          "rows": 221560
+        },
+        {
+          "request_id": 847199,
+          "file": "fire_nrt_M-C61_847199.csv",
+          "rows": 4449
+        },
+        {
+          "request_id": 847159,
+          "file": "fire_archive_SV-C2_847159.csv",
+          "rows": 933875
+        },
+        {
+          "request_id": 847181,
+          "file": "fire_archive_SV-C2_847181.csv",
+          "rows": 833595
+        },
+        {
+          "request_id": 847181,
+          "file": "fire_nrt_SV-C2_847181.csv",
+          "rows": 29625
+        },
+        {
+          "request_id": 847180,
+          "file": "fire_archive_J1V-C2_847180.csv",
+          "rows": 830218
+        },
+        {
+          "request_id": 847180,
+          "file": "fire_nrt_J1V-C2_847180.csv",
+          "rows": 31181
+        }
+      ],
+      "steps": [
+        {
+          "step": "unknown_platform",
+          "rows_in": 3919557,
+          "rows_out": 3919557,
+          "removed": 0
+        },
+        {
+          "step": "confidence",
+          "rows_in": 3919557,
+          "rows_out": 3667872,
+          "removed": 251685
+        },
+        {
+          "step": "type_not_vegetation",
+          "rows_in": 3667872,
+          "rows_out": 3185020,
+          "removed": 482852
+        },
+        {
+          "step": "nrt_static_mask",
+          "rows_in": 3185020,
+          "rows_out": 3171270,
+          "removed": 13750
+        },
+        {
+          "step": "exact_duplicates",
+          "rows_in": 3171270,
+          "rows_out": 3171270,
+          "removed": 0
+        },
+        {
+          "step": "nrt_overlaps_sp",
+          "rows_in": 3171270,
+          "rows_out": 3171270,
+          "removed": 0
+        }
+      ],
+      "static_mask_cells": 189,
+      "rows_by_platform": {
+        "Aqua": 534657,
+        "NOAA20": 666759,
+        "SNPP": 1405957,
+        "Terra": 563897
+      },
+      "first_date": "2000-11-01",
+      "last_date": "2026-11-13"
     },
-    {
-      "step": "confidence",
-      "rows_in": 3919557,
-      "rows_out": 3667872,
-      "removed": 251685
+    "UZB": {
+      "role": "test",
+      "level": "cell",
+      "files": [
+        {
+          "request_id": 847909,
+          "file": "fire_archive_M-C61_847909.csv",
+          "rows": 97386
+        },
+        {
+          "request_id": 847909,
+          "file": "fire_nrt_M-C61_847909.csv",
+          "rows": 335
+        },
+        {
+          "request_id": 847912,
+          "file": "fire_archive_SV-C2_847912.csv",
+          "rows": 268472
+        },
+        {
+          "request_id": 847912,
+          "file": "fire_nrt_SV-C2_847912.csv",
+          "rows": 3532
+        },
+        {
+          "request_id": 847910,
+          "file": "fire_archive_J1V-C2_847910.csv",
+          "rows": 139330
+        },
+        {
+          "request_id": 847910,
+          "file": "fire_nrt_J1V-C2_847910.csv",
+          "rows": 3773
+        },
+        {
+          "request_id": 847911,
+          "file": "fire_archive_J2V-C2_847911.csv",
+          "rows": 52198
+        },
+        {
+          "request_id": 847911,
+          "file": "fire_nrt_J2V-C2_847911.csv",
+          "rows": 3379
+        }
+      ],
+      "steps": [
+        {
+          "step": "unknown_platform",
+          "rows_in": 568405,
+          "rows_out": 568405,
+          "removed": 0
+        },
+        {
+          "step": "confidence",
+          "rows_in": 568405,
+          "rows_out": 524484,
+          "removed": 43921
+        },
+        {
+          "step": "type_not_vegetation",
+          "rows_in": 524484,
+          "rows_out": 317233,
+          "removed": 207251
+        },
+        {
+          "step": "nrt_static_mask",
+          "rows_in": 317233,
+          "rows_out": 311155,
+          "removed": 6078
+        },
+        {
+          "step": "exact_duplicates",
+          "rows_in": 311155,
+          "rows_out": 311155,
+          "removed": 0
+        },
+        {
+          "step": "nrt_overlaps_sp",
+          "rows_in": 311155,
+          "rows_out": 311155,
+          "removed": 0
+        }
+      ],
+      "static_mask_cells": 200,
+      "rows_by_platform": {
+        "Aqua": 27650,
+        "NOAA20": 83935,
+        "NOAA21": 32999,
+        "SNPP": 140502,
+        "Terra": 26069
+      },
+      "first_date": "2000-11-02",
+      "last_date": "2026-11-13"
     },
-    {
-      "step": "type_not_vegetation",
-      "rows_in": 3667872,
-      "rows_out": 3185020,
-      "removed": 482852
+    "TKM": {
+      "role": "stress",
+      "level": "cell",
+      "files": [
+        {
+          "request_id": 848066,
+          "file": "fire_archive_M-C61_848066.csv",
+          "rows": 69898
+        },
+        {
+          "request_id": 848066,
+          "file": "fire_nrt_M-C61_848066.csv",
+          "rows": 220
+        },
+        {
+          "request_id": 848011,
+          "file": "fire_archive_SV-C2_848011.csv",
+          "rows": 372292
+        },
+        {
+          "request_id": 848011,
+          "file": "fire_nrt_SV-C2_848011.csv",
+          "rows": 10081
+        },
+        {
+          "request_id": 848009,
+          "file": "fire_archive_J1V-C2_848009.csv",
+          "rows": 224479
+        },
+        {
+          "request_id": 848009,
+          "file": "fire_nrt_J1V-C2_848009.csv",
+          "rows": 11132
+        },
+        {
+          "request_id": 848010,
+          "file": "fire_archive_J2V-C2_848010.csv",
+          "rows": 87967
+        },
+        {
+          "request_id": 848010,
+          "file": "fire_nrt_J2V-C2_848010.csv",
+          "rows": 10385
+        }
+      ],
+      "steps": [
+        {
+          "step": "unknown_platform",
+          "rows_in": 786454,
+          "rows_out": 786454,
+          "removed": 0
+        },
+        {
+          "step": "confidence",
+          "rows_in": 786454,
+          "rows_out": 752750,
+          "removed": 33704
+        },
+        {
+          "step": "type_not_vegetation",
+          "rows_in": 752750,
+          "rows_out": 327205,
+          "removed": 425545
+        },
+        {
+          "step": "nrt_static_mask",
+          "rows_in": 327205,
+          "rows_out": 305188,
+          "removed": 22017
+        },
+        {
+          "step": "exact_duplicates",
+          "rows_in": 305188,
+          "rows_out": 305188,
+          "removed": 0
+        },
+        {
+          "step": "nrt_overlaps_sp",
+          "rows_in": 305188,
+          "rows_out": 305188,
+          "removed": 0
+        }
+      ],
+      "static_mask_cells": 286,
+      "rows_by_platform": {
+        "Aqua": 25034,
+        "NOAA20": 84455,
+        "NOAA21": 34503,
+        "SNPP": 141151,
+        "Terra": 20045
+      },
+      "first_date": "2000-11-02",
+      "last_date": "2026-11-13"
     },
-    {
-      "step": "nrt_static_mask",
-      "rows_in": 3185020,
-      "rows_out": 3171270,
-      "removed": 13750
+    "KGZ": {
+      "role": "extra",
+      "level": "cell",
+      "files": [
+        {
+          "request_id": 847969,
+          "file": "fire_archive_M-C61_847969.csv",
+          "rows": 14829
+        },
+        {
+          "request_id": 847969,
+          "file": "fire_nrt_M-C61_847969.csv",
+          "rows": 76
+        },
+        {
+          "request_id": 847972,
+          "file": "fire_archive_SV-C2_847972.csv",
+          "rows": 31749
+        },
+        {
+          "request_id": 847972,
+          "file": "fire_nrt_SV-C2_847972.csv",
+          "rows": 624
+        },
+        {
+          "request_id": 847970,
+          "file": "fire_archive_J1V-C2_847970.csv",
+          "rows": 17094
+        },
+        {
+          "request_id": 847970,
+          "file": "fire_nrt_J1V-C2_847970.csv",
+          "rows": 753
+        },
+        {
+          "request_id": 847971,
+          "file": "fire_archive_J2V-C2_847971.csv",
+          "rows": 5959
+        },
+        {
+          "request_id": 847971,
+          "file": "fire_nrt_J2V-C2_847971.csv",
+          "rows": 706
+        }
+      ],
+      "steps": [
+        {
+          "step": "unknown_platform",
+          "rows_in": 71790,
+          "rows_out": 71790,
+          "removed": 0
+        },
+        {
+          "step": "confidence",
+          "rows_in": 71790,
+          "rows_out": 67198,
+          "removed": 4592
+        },
+        {
+          "step": "type_not_vegetation",
+          "rows_in": 67198,
+          "rows_out": 42759,
+          "removed": 24439
+        },
+        {
+          "step": "nrt_static_mask",
+          "rows_in": 42759,
+          "rows_out": 42112,
+          "removed": 647
+        },
+        {
+          "step": "exact_duplicates",
+          "rows_in": 42112,
+          "rows_out": 42112,
+          "removed": 0
+        },
+        {
+          "step": "nrt_overlaps_sp",
+          "rows_in": 42112,
+          "rows_out": 42112,
+          "removed": 0
+        }
+      ],
+      "static_mask_cells": 24,
+      "rows_by_platform": {
+        "Aqua": 6940,
+        "NOAA20": 8973,
+        "NOAA21": 3895,
+        "SNPP": 16605,
+        "Terra": 5699
+      },
+      "first_date": "2000-11-02",
+      "last_date": "2026-11-13"
     },
-    {
-      "step": "exact_duplicates",
-      "rows_in": 3171270,
-      "rows_out": 3171270,
-      "removed": 0
+    "TJK": {
+      "role": "extra",
+      "level": "cell",
+      "files": [
+        {
+          "request_id": 847982,
+          "file": "fire_archive_M-C61_847982.csv",
+          "rows": 3906
+        },
+        {
+          "request_id": 847982,
+          "file": "fire_nrt_M-C61_847982.csv",
+          "rows": 21
+        },
+        {
+          "request_id": 847996,
+          "file": "fire_archive_SV-C2_847996.csv",
+          "rows": 11742
+        },
+        {
+          "request_id": 847996,
+          "file": "fire_nrt_SV-C2_847996.csv",
+          "rows": 297
+        },
+        {
+          "request_id": 847994,
+          "file": "fire_archive_J1V-C2_847994.csv",
+          "rows": 7669
+        },
+        {
+          "request_id": 847994,
+          "file": "fire_nrt_J1V-C2_847994.csv",
+          "rows": 315
+        },
+        {
+          "request_id": 847995,
+          "file": "fire_archive_J2V-C2_847995.csv",
+          "rows": 3140
+        },
+        {
+          "request_id": 847995,
+          "file": "fire_nrt_J2V-C2_847995.csv",
+          "rows": 358
+        }
+      ],
+      "steps": [
+        {
+          "step": "unknown_platform",
+          "rows_in": 27448,
+          "rows_out": 27448,
+          "removed": 0
+        },
+        {
+          "step": "confidence",
+          "rows_in": 27448,
+          "rows_out": 25617,
+          "removed": 1831
+        },
+        {
+          "step": "type_not_vegetation",
+          "rows_in": 25617,
+          "rows_out": 16733,
+          "removed": 8884
+        },
+        {
+          "step": "nrt_static_mask",
+          "rows_in": 16733,
+          "rows_out": 16280,
+          "removed": 453
+        },
+        {
+          "step": "exact_duplicates",
+          "rows_in": 16280,
+          "rows_out": 16280,
+          "removed": 0
+        },
+        {
+          "step": "nrt_overlaps_sp",
+          "rows_in": 16280,
+          "rows_out": 16280,
+          "removed": 0
+        }
+      ],
+      "static_mask_cells": 18,
+      "rows_by_platform": {
+        "Aqua": 1810,
+        "NOAA20": 4063,
+        "NOAA21": 2029,
+        "SNPP": 6955,
+        "Terra": 1423
+      },
+      "first_date": "2000-11-01",
+      "last_date": "2026-11-07"
     },
-    {
-      "step": "nrt_overlaps_sp",
-      "rows_in": 3171270,
-      "rows_out": 3171270,
-      "removed": 0
+    "PRT": {
+      "role": "transfer",
+      "level": "totals",
+      "files": [
+        {
+          "request_id": 848384,
+          "file": "fire_archive_M-C61_848384.csv",
+          "rows": 78694
+        },
+        {
+          "request_id": 848384,
+          "file": "fire_nrt_M-C61_848384.csv",
+          "rows": 358
+        },
+        {
+          "request_id": 848385,
+          "file": "fire_archive_J1V-C2_848385.csv",
+          "rows": 52454
+        },
+        {
+          "request_id": 848385,
+          "file": "fire_nrt_J1V-C2_848385.csv",
+          "rows": 1853
+        },
+        {
+          "request_id": 848386,
+          "file": "fire_archive_J2V-C2_848386.csv",
+          "rows": 27658
+        },
+        {
+          "request_id": 848386,
+          "file": "fire_nrt_J2V-C2_848386.csv",
+          "rows": 1841
+        },
+        {
+          "request_id": 848387,
+          "file": "fire_archive_SV-C2_848387.csv",
+          "rows": 114364
+        },
+        {
+          "request_id": 848387,
+          "file": "fire_nrt_SV-C2_848387.csv",
+          "rows": 1642
+        }
+      ],
+      "steps": [
+        {
+          "step": "unknown_platform",
+          "rows_in": 278864,
+          "rows_out": 278864,
+          "removed": 0
+        },
+        {
+          "step": "confidence",
+          "rows_in": 278864,
+          "rows_out": 266168,
+          "removed": 12696
+        },
+        {
+          "step": "type_not_vegetation",
+          "rows_in": 266168,
+          "rows_out": 256881,
+          "removed": 9287
+        },
+        {
+          "step": "nrt_static_mask",
+          "rows_in": 256881,
+          "rows_out": 256569,
+          "removed": 312
+        },
+        {
+          "step": "exact_duplicates",
+          "rows_in": 256569,
+          "rows_out": 256569,
+          "removed": 0
+        },
+        {
+          "step": "nrt_overlaps_sp",
+          "rows_in": 256569,
+          "rows_out": 256569,
+          "removed": 0
+        }
+      ],
+      "static_mask_cells": 17,
+      "rows_by_platform": {
+        "Aqua": 38455,
+        "NOAA20": 49329,
+        "NOAA21": 26765,
+        "SNPP": 105549,
+        "Terra": 36471
+      },
+      "first_date": "2000-11-06",
+      "last_date": "2026-11-13"
+    },
+    "IND": {
+      "role": "transfer",
+      "level": "totals",
+      "files": [
+        {
+          "request_id": 848532,
+          "file": "fire_archive_M-C61_848532.csv",
+          "rows": 1917344
+        },
+        {
+          "request_id": 848532,
+          "file": "fire_nrt_M-C61_848532.csv",
+          "rows": 11027
+        },
+        {
+          "request_id": 848533,
+          "file": "fire_archive_J1V-C2_848533.csv",
+          "rows": 5109832
+        },
+        {
+          "request_id": 848533,
+          "file": "fire_nrt_J1V-C2_848533.csv",
+          "rows": 54258
+        },
+        {
+          "request_id": 848534,
+          "file": "fire_archive_J2V-C2_848534.csv",
+          "rows": 2135511
+        },
+        {
+          "request_id": 848534,
+          "file": "fire_nrt_J2V-C2_848534.csv",
+          "rows": 50604
+        },
+        {
+          "request_id": 848535,
+          "file": "fire_archive_SV-C2_848535.csv",
+          "rows": 8726813
+        },
+        {
+          "request_id": 848535,
+          "file": "fire_nrt_SV-C2_848535.csv",
+          "rows": 31579
+        }
+      ],
+      "steps": [
+        {
+          "step": "unknown_platform",
+          "rows_in": 18036968,
+          "rows_out": 18036968,
+          "removed": 0
+        },
+        {
+          "step": "confidence",
+          "rows_in": 18036968,
+          "rows_out": 15148229,
+          "removed": 2888739
+        },
+        {
+          "step": "type_not_vegetation",
+          "rows_in": 15148229,
+          "rows_out": 13317762,
+          "removed": 1830467
+        },
+        {
+          "step": "nrt_static_mask",
+          "rows_in": 13317762,
+          "rows_out": 13261143,
+          "removed": 56619
+        },
+        {
+          "step": "exact_duplicates",
+          "rows_in": 13261143,
+          "rows_out": 13261137,
+          "removed": 6
+        },
+        {
+          "step": "nrt_overlaps_sp",
+          "rows_in": 13261137,
+          "rows_out": 13261137,
+          "removed": 0
+        }
+      ],
+      "static_mask_cells": 910,
+      "rows_by_platform": {
+        "Aqua": 1239900,
+        "NOAA20": 3670528,
+        "NOAA21": 1513672,
+        "SNPP": 6319301,
+        "Terra": 517736
+      },
+      "first_date": "2000-11-01",
+      "last_date": "2026-11-13"
+    },
+    "USA": {
+      "role": "transfer",
+      "level": "totals",
+      "files": [
+        {
+          "request_id": 848503,
+          "file": "fire_archive_M-C61_848503.csv",
+          "rows": 3158265
+        },
+        {
+          "request_id": 848503,
+          "file": "fire_nrt_M-C61_848503.csv",
+          "rows": 13683
+        },
+        {
+          "request_id": 848504,
+          "file": "fire_archive_J1V-C2_848504.csv",
+          "rows": 4523389
+        },
+        {
+          "request_id": 848504,
+          "file": "fire_nrt_J1V-C2_848504.csv",
+          "rows": 189277
+        },
+        {
+          "request_id": 848505,
+          "file": "fire_archive_J2V-C2_848505.csv",
+          "rows": 1629419
+        },
+        {
+          "request_id": 848505,
+          "file": "fire_nrt_J2V-C2_848505.csv",
+          "rows": 181657
+        },
+        {
+          "request_id": 848506,
+          "file": "fire_archive_SV-C2_848506.csv",
+          "rows": 7448386
+        },
+        {
+          "request_id": 848506,
+          "file": "fire_nrt_SV-C2_848506.csv",
+          "rows": 167353
+        }
+      ],
+      "steps": [
+        {
+          "step": "unknown_platform",
+          "rows_in": 17311429,
+          "rows_out": 17311429,
+          "removed": 0
+        },
+        {
+          "step": "confidence",
+          "rows_in": 17311429,
+          "rows_out": 16497066,
+          "removed": 814363
+        },
+        {
+          "step": "type_not_vegetation",
+          "rows_in": 16497066,
+          "rows_out": 14036463,
+          "removed": 2460603
+        },
+        {
+          "step": "nrt_static_mask",
+          "rows_in": 14036463,
+          "rows_out": 13936931,
+          "removed": 99532
+        },
+        {
+          "step": "exact_duplicates",
+          "rows_in": 13936931,
+          "rows_out": 13936929,
+          "removed": 2
+        },
+        {
+          "step": "nrt_overlaps_sp",
+          "rows_in": 13936929,
+          "rows_out": 13936929,
+          "removed": 0
+        }
+      ],
+      "static_mask_cells": 2252,
+      "rows_by_platform": {
+        "Aqua": 1456180,
+        "NOAA20": 3742172,
+        "NOAA21": 1382595,
+        "SNPP": 6022891,
+        "Terra": 1333091
+      },
+      "first_date": "2000-11-01",
+      "last_date": "2026-11-13"
+    },
+    "AUS": {
+      "role": "transfer",
+      "level": "totals",
+      "files": [
+        {
+          "request_id": 848403,
+          "file": "fire_archive_M-C61_848403.csv",
+          "rows": 6554801
+        },
+        {
+          "request_id": 848403,
+          "file": "fire_nrt_M-C61_848403.csv",
+          "rows": 61394
+        },
+        {
+          "request_id": 848404,
+          "file": "fire_archive_J1V-C2_848404.csv",
+          "rows": 9932750
+        },
+        {
+          "request_id": 848404,
+          "file": "fire_nrt_J1V-C2_848404.csv",
+          "rows": 378673
+        },
+        {
+          "request_id": 848405,
+          "file": "fire_archive_J2V-C2_848405.csv",
+          "rows": 4444845
+        },
+        {
+          "request_id": 848405,
+          "file": "fire_nrt_J2V-C2_848405.csv",
+          "rows": 378995
+        },
+        {
+          "request_id": 848406,
+          "file": "fire_archive_SV-C2_848406.csv",
+          "rows": 17518493
+        },
+        {
+          "request_id": 848406,
+          "file": "fire_nrt_SV-C2_848406.csv",
+          "rows": 278603
+        }
+      ],
+      "steps": [
+        {
+          "step": "unknown_platform",
+          "rows_in": 39548554,
+          "rows_out": 39548554,
+          "removed": 0
+        },
+        {
+          "step": "confidence",
+          "rows_in": 39548554,
+          "rows_out": 36012064,
+          "removed": 3536490
+        },
+        {
+          "step": "type_not_vegetation",
+          "rows_in": 36012064,
+          "rows_out": 35601646,
+          "removed": 410418
+        },
+        {
+          "step": "nrt_static_mask",
+          "rows_in": 35601646,
+          "rows_out": 35591989,
+          "removed": 9657
+        },
+        {
+          "step": "exact_duplicates",
+          "rows_in": 35591989,
+          "rows_out": 35591968,
+          "removed": 21
+        },
+        {
+          "step": "nrt_overlaps_sp",
+          "rows_in": 35591968,
+          "rows_out": 35591968,
+          "removed": 0
+        }
+      ],
+      "static_mask_cells": 285,
+      "rows_by_platform": {
+        "Aqua": 3394854,
+        "NOAA20": 9185652,
+        "NOAA21": 4301865,
+        "SNPP": 15894877,
+        "Terra": 2814720
+      },
+      "first_date": "2000-11-01",
+      "last_date": "2026-11-13"
+    },
+    "BRA": {
+      "role": "transfer",
+      "level": "totals",
+      "files": [
+        {
+          "request_id": 848492,
+          "file": "fire_archive_M-C61_848492.csv",
+          "rows": 10062320
+        },
+        {
+          "request_id": 848492,
+          "file": "fire_nrt_M-C61_848492.csv",
+          "rows": 121700
+        },
+        {
+          "request_id": 848493,
+          "file": "fire_archive_J1V-C2_848493.csv",
+          "rows": 10981074
+        },
+        {
+          "request_id": 848493,
+          "file": "fire_nrt_J1V-C2_848493.csv",
+          "rows": 580239
+        },
+        {
+          "request_id": 848494,
+          "file": "fire_archive_J2V-C2_848494.csv",
+          "rows": 4212752
+        },
+        {
+          "request_id": 848494,
+          "file": "fire_nrt_J2V-C2_848494.csv",
+          "rows": 563694
+        },
+        {
+          "request_id": 848495,
+          "file": "fire_archive_SV-C2_848495.csv",
+          "rows": 19373658
+        },
+        {
+          "request_id": 848495,
+          "file": "fire_nrt_SV-C2_848495.csv",
+          "rows": 531290
+        }
+      ],
+      "steps": [
+        {
+          "step": "unknown_platform",
+          "rows_in": 46426727,
+          "rows_out": 46426727,
+          "removed": 0
+        },
+        {
+          "step": "confidence",
+          "rows_in": 46426727,
+          "rows_out": 42659766,
+          "removed": 3766961
+        },
+        {
+          "step": "type_not_vegetation",
+          "rows_in": 42659766,
+          "rows_out": 42034343,
+          "removed": 625423
+        },
+        {
+          "step": "nrt_static_mask",
+          "rows_in": 42034343,
+          "rows_out": 42020904,
+          "removed": 13439
+        },
+        {
+          "step": "exact_duplicates",
+          "rows_in": 42020904,
+          "rows_out": 42020892,
+          "removed": 12
+        },
+        {
+          "step": "nrt_overlaps_sp",
+          "rows_in": 42020892,
+          "rows_out": 42020892,
+          "removed": 0
+        }
+      ],
+      "static_mask_cells": 1752,
+      "rows_by_platform": {
+        "Aqua": 5923808,
+        "NOAA20": 10358183,
+        "NOAA21": 4272393,
+        "SNPP": 17905455,
+        "Terra": 3561053
+      },
+      "first_date": "2000-11-01",
+      "last_date": "2026-11-13"
     }
-  ],
-  "static_mask_cells": 189,
-  "rows_by_platform": {
-    "Aqua": 534657,
-    "NOAA20": 666759,
-    "SNPP": 1405957,
-    "Terra": 563897
-  },
-  "versions": [
-    {
-      "sensor": "MODIS",
-      "version": "6.03",
-      "processing": "SP",
-      "rows": 1202953
-    },
-    {
-      "sensor": "MODIS",
-      "version": "6.1NRT",
-      "processing": "NRT",
-      "rows": 4449
-    },
-    {
-      "sensor": "MODIS",
-      "version": "61.03",
-      "processing": "NRT",
-      "rows": 53661
-    },
-    {
-      "sensor": "VIIRS",
-      "version": "2",
-      "processing": "SP",
-      "rows": 2597688
-    },
-    {
-      "sensor": "VIIRS",
-      "version": "2.0NRT",
-      "processing": "NRT",
-      "rows": 60806
-    }
-  ]
+  }
 }

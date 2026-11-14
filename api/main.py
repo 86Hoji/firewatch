@@ -51,7 +51,8 @@ def load_state(agg=AGG, ref=REF, processed=PROCESSED):
     S.cells = cm[["h3_cell", "lat", "lon"]].drop_duplicates("h3_cell").reset_index(drop=True)
     S.meta = json.loads((agg / "meta.json").read_text(encoding="utf-8"))
     S.cut = CFG["calibration"]["period"][0]
-    S.hotspots = (processed / "hotspots").as_posix()
+    by_country = processed / "hotspots" / f"country={CFG['train_country']}"
+    S.hotspots = (by_country if by_country.is_dir() else processed / "hotspots").as_posix()
     # S-NPP outage days (same rule as 03_grid): NOAA-20 points stand in for S-NPP on the map
     try:
         src = f"read_parquet('{S.hotspots}/**/*.parquet', hive_partitioning = true)"
@@ -339,7 +340,7 @@ def export_points(q: Query):
     src = f"read_parquet('{S.hotspots}/**/*.parquet', hive_partitioning = true)"
     month = f"AND h.month = {int(q.month)}" if q.month else ""
     n = cur.execute(f"SELECT count(*) FROM {src} h WHERE CAST(h.year AS INT) BETWEEN {y0} AND {y1} {month} "
-                      f"AND h.h3_cell IN (SELECT h3_cell FROM sel_df)").fetchone()[0]
+                      f"AND h.h3_cell IN (SELECT h3_cell FROM sel_df)").fetchall()[0][0]
     if n > CFG["api"]["max_export_rows"]:
         cur.unregister("sel_df")
         raise HTTPException(413, f"{n} points: narrow the area or period (limit {CFG['api']['max_export_rows']})")

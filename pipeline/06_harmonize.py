@@ -22,8 +22,9 @@ def main():
     draws = calib.draws_from_table(d[d["model"] == model])
     out = calib.harmonize(cm, coefs, cfg, draws=draws)
     out.to_parquet(AGG / "cell_month.parquet", index=False)
-    src = f"read_parquet('{(PROCESSED / 'hotspots').as_posix()}/**/*.parquet', hive_partitioning = true)"
-    first, last = duckdb.connect().execute(f"SELECT min(date), max(date) FROM {src}").fetchone()
+    src = (f"read_parquet('{(PROCESSED / 'hotspots' / ('country=' + cfg['train_country'])).as_posix()}/**/*.parquet', "
+           "hive_partitioning = true)")
+    first, last = duckdb.connect().execute(f"SELECT min(date), max(date) FROM {src}").fetchall()[0]
     write_json(AGG / "meta.json", {
         "region": cfg["region"]["name"], "first_date": first, "last_date": last, "model": model,
         "h3_res": cfg["grid"]["h3_res"], "calibration_period": cfg["calibration"]["period"],
