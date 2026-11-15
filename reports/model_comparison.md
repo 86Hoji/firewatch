@@ -15,7 +15,7 @@ MAE as % of the mean monthly total; bias = total over the test period. Score = m
 
 Selected by the protocol rule: **C2** (Terra∪Aqua, Poisson log-link).
 
-## 90% intervals: before (baseline) vs after (negative binomial at the predicted level)
+## 90% intervals: before (baseline) vs after (conformal, sized at the predicted level)
 
 Country: baseline interval (leave-one-year-out log errors, width shrinking with size). Region: percentiles of leave-one-region-out errors for predictions of similar size. Coverage is cross-fitted: the interval for a held-out year/region is fitted on the others only.
 
