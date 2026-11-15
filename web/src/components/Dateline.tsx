@@ -1,6 +1,7 @@
 import { useStore } from '../store';
 import { useCount, useSeries } from '../lib/hooks';
 import { fmtCD, ymLong } from '../lib/format';
+import { InfoHint } from './InfoHint';
 
 const NAMES = { KAZ: 'Kazakhstan', UZB: 'Uzbekistan', TKM: 'Turkmenistan', KGZ: 'Kyrgyzstan', TJK: 'Tajikistan' } as Record<
   string,
@@ -35,13 +36,10 @@ export function Dateline() {
       <p className="num m-0 mt-2 text-[15px] leading-snug text-text-map-2 md:mt-3">
         <span className="font-medium text-text">{NAMES[country] ?? country}</span>
         <span className="ml-3 text-text">{fmtCD(shown)}</span>
-        <abbr
-          className="ml-1 cursor-help no-underline decoration-text-3 decoration-dotted underline-offset-4 hover:underline"
-          style={{ pointerEvents: 'auto' }}
-          title="One cell-day is one hexagon of about 5 km² with at least one fire detection on one day."
-        >
-          cell-days
-        </abbr>
+        <span className="ml-1">cell-days</span>
+        <span className="ml-1.5">
+          <InfoHint />
+        </span>
         <br className="md:hidden" />
         <span className="md:ml-3">
           {Number.isFinite(lo) ? (observed ? 'observed by VIIRS' : `90% range ${fmtCD(lo)}–${fmtCD(hi)}`) : ''}

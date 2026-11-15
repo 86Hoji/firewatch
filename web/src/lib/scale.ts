@@ -33,8 +33,8 @@ export function rampCSS(t: number): string {
   return `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`;
 }
 
-/** Cell-day tops per hexagon resolution (≈ 99.9th percentile over 2001–2026, KZ + UZ). */
-export const HEX_TOP = { r5: 90, r7: 16 } as const;
+/** Cell-day tops per hexagon resolution: r5 ≈ 99.9th percentile (2001–2026, KZ + UZ); r7 ≈ 99th, so fine cells read. */
+export const HEX_TOP = { r5: 90, r7: 9 } as const;
 export type Res = keyof typeof HEX_TOP;
 
 /** Log scale with a floor at top/span: for country totals, where log1p would flatten the seasons. */

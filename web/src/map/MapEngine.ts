@@ -15,11 +15,13 @@ const GIBS_BLACK_MARBLE =
   'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_Black_Marble/default/2016-01-01/GoogleMapsCompatible_Level8/{z}/{y}/{x}.png';
 const TERRARIUM = 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png';
 
-/** Column height (m) at the top of the log scale. */
-const MAX_H: Record<Res, number> = { r5: 230_000, r7: 46_000 };
-/** Glow sprite diameter (m) at the top of the scale. */
-const GLOW_SIZE: Record<Res, number> = { r5: 190_000, r7: 32_000 };
+/** Column height (m) at the top of the log scale (r7 is drawn flat). */
+const MAX_H = 140_000;
+/** Glow diameter (m) at the top of the scale. */
+const GLOW_SIZE: Record<Res, number> = { r5: 170_000, r7: 46_000 };
 const R7_ZOOM = 6;
+/** Past this the Black Marble raster (native z8) starts to blur. */
+const MAX_ZOOM = 8;
 
 export interface CameraSpec {
   center: [number, number];
@@ -191,11 +193,14 @@ export class MapEngine {
   private bornAt = performance.now();
   /** True once the style has parsed (isStyleLoaded() also waits for every tile). */
   private styleReady = false;
+  private firstMonth!: Promise<void>;
+  private resolveFirst!: (p: Promise<void>) => void;
 
   constructor(container: HTMLElement, cb: EngineCallbacks, reduced: boolean) {
     this.container = container;
     this.cb = cb;
     this.reduced = reduced;
+    this.firstMonth = new Promise<void>((res) => (this.resolveFirst = (p) => p.then(res)));
     const start: CameraSpec = reduced
       ? finalCamera(container.clientWidth, container.clientHeight)
       : { center: [28, 26], zoom: 1.25, pitch: 0, bearing: 0 };
@@ -206,7 +211,7 @@ export class MapEngine {
       ...start,
       maxPitch: 70,
       minZoom: 1,
-      maxZoom: 10,
+      maxZoom: MAX_ZOOM,
       attributionControl: false,
       fadeDuration: 200,
       canvasContextAttributes: { antialias: true },
@@ -217,7 +222,7 @@ export class MapEngine {
     this.lighting = new LightingEffect({
       ambient: new AmbientLight({ color: [255, 242, 224], intensity: 0.6 }),
       // From the south-west, slightly gold, so columns show a lit and a shaded side.
-      sun: new DirectionalLight({ color: [255, 214, 150], intensity: 1.1, direction: [1, 1.2, -0.9] }),
+      sun: new DirectionalLight({ color: [255, 214, 150], intensity: 0.95, direction: [1, 1.2, -0.9] }),
     });
     this.overlay = new MapboxOverlay({ interleaved: true, layers: [], effects: [this.lighting] });
     this.map.addControl(this.overlay as unknown as maplibregl.IControl);
@@ -379,7 +384,7 @@ export class MapEngine {
         if (cam)
           this.map.easeTo({
             ...cam,
-            zoom: Math.min(cam.zoom ?? 6, 7.2),
+            zoom: Math.min(cam.zoom ?? 6, 7.4),
             pitch: 45,
             duration: this.reduced ? 0 : 1000,
             easing: easeOut,
@@ -388,53 +393,46 @@ export class MapEngine {
     }
   }
 
-  /** The intro: globe fades in turning, flies to Central Asia, then the hexagons rise. */
-  runIntro(firstYm: string) {
+  /** First month to show once the data has arrived; the intro waits for it only at the very end. */
+  setFirstMonth(ym: string) {
+    this.resolveFirst(this.setMonth(ym, 0));
+  }
+
+  /**
+   * The intro, started the moment the map exists (not when the data arrives): the globe is on screen
+   * by ~0.8 s, turns, flies ~4 s to Central Asia, then the hexagons rise.
+   */
+  startIntro() {
     const done = () => {
       this.cb.onIntroDone();
       this.updateEventPulse();
     };
-    const monthReady = this.setMonth(firstYm, 0);
     if (this.reduced) {
       this.container.style.opacity = '1';
-      // No flight: hexagons appear as soon as the style and the month are ready.
-      const go = () => monthReady.then(() => { this.rise(0); done(); });
+      const go = () => this.firstMonth.then(() => { this.rise(0); done(); });
       if (this.styleReady) go();
       else this.map.once('style.load', go);
       return;
     }
     this.container.style.opacity = '0';
     const t = (ms: number, f: () => void) => this.introTimers.push(window.setTimeout(f, ms));
-    let begun = false;
-    const begin = () => {
-      if (begun || this.destroyed) return;
-      begun = true;
-      if (import.meta.env.DEV) console.info('intro: begin', Math.round(performance.now() - this.bornAt));
-      const lag = performance.now() - this.bornAt;
-      t(Math.max(0, 800 - lag), () => {
-        this.container.style.transition = 'opacity 1200ms cubic-bezier(0.22,1,0.36,1)';
-        this.container.style.opacity = '1';
-        this.map.easeTo({ center: [44, 30], duration: 1600, easing: (x) => x });
-      });
-      t(Math.max(1500, 2300 - lag), () => {
-        const final = finalCamera(this.container.clientWidth, this.container.clientHeight);
-        this.map.flyTo({ ...final, duration: 4000, curve: 1.25, easing: easeFlight, essential: true });
-        if (import.meta.env.DEV) console.info('intro: fly', Math.round(performance.now() - this.bornAt));
-        this.map.once('moveend', () => {
-          if (import.meta.env.DEV) console.info('intro: landed', Math.round(performance.now() - this.bornAt));
-          monthReady.then(() => {
-            this.rise(900);
-            t(950, done);
-          });
+    const lag = performance.now() - this.bornAt;
+    // The navy globe body draws as soon as the style parses; tiles fade in on top of it.
+    t(Math.max(0, 450 - lag), () => {
+      this.container.style.transition = 'opacity 700ms cubic-bezier(0.22,1,0.36,1)';
+      this.container.style.opacity = '1';
+      this.map.easeTo({ center: [42, 29], duration: 1500, easing: (x) => x });
+    });
+    t(Math.max(0, 1800 - lag), () => {
+      const final = finalCamera(this.container.clientWidth, this.container.clientHeight);
+      this.map.flyTo({ ...final, duration: 4000, curve: 1.25, easing: easeFlight, essential: true });
+      this.map.once('moveend', () => {
+        this.firstMonth.then(() => {
+          this.rise(900);
+          t(950, done);
         });
       });
-    };
-    // Start when the first tiles are in, but never keep the screen black for long.
-    if (this.map.loaded()) begin();
-    else {
-      this.map.once('load', begin);
-      this.map.once('style.load', () => t(400, begin));
-    }
+    });
   }
 
   flyToCountry(cc: CountryCode, bbox: [number, number, number, number]) {
@@ -617,28 +615,28 @@ export class MapEngine {
 
   private writeFrame(now: number) {
     const top = HEX_TOP[this.res];
+    const flat = this.res === 'r7';
     // Columns grow slower than the ground when zooming in, so a close view stays readable.
     const z = this.map.getZoom();
-    const maxH = MAX_H[this.res] * Math.min(1.4, Math.max(0.2, Math.pow(2, -(z - 4.3) * 0.5)));
+    const maxH = MAX_H * Math.min(1.3, Math.max(0.35, Math.pow(2, -(z - 4.3) * 0.5)));
     const sel = this.selected ? this.regionIndex.get(this.selected) ?? -2 : -1;
     const rgb = [0, 0, 0];
     for (let i = 0; i < this.ids.length; i++) {
       const v = this.hidden ? 0 : this.valueAt(i, now);
       const t = logNorm(v, top);
-      // Power on the log scale: ordinary months stay low, the big fire months stand up.
-      this.elev[i] = Math.pow(Math.max(0, t), 1.7) * maxH;
-      // Small months sit dark amber, the big ones go pale gold.
-      rampRGB(0.14 + 0.86 * Math.pow(t, 1.15), rgb);
-      let a = Math.min(1, v / 0.6) * 235;
+      // Weak cells: low tiles in dark ember. Strong cells: tall, pale gold. Hierarchy first.
+      this.elev[i] = flat ? 0 : Math.pow(t, 2.2) * maxH;
+      rampRGB(flat ? 0.4 + 0.6 * Math.pow(t, 1.2) : 0.3 + 0.7 * Math.pow(t, 1.8), rgb);
+      const a = Math.min(1, v / 0.6) * (flat ? 245 : 235);
       const dim = sel !== -1 && this.reg[i] !== sel ? 0.4 : 1;
       const o = i * 4;
       this.col[o] = rgb[0] * dim;
       this.col[o + 1] = rgb[1] * dim;
       this.col[o + 2] = rgb[2] * dim;
       this.col[o + 3] = a;
-      const g = Math.max(0, (t - 0.3) / 0.7);
-      this.glowA[i] = Math.pow(g, 1.3) * (sel !== -1 && this.reg[i] !== sel ? 0.25 : 1);
-      this.glowS[i] = (0.55 + 0.45 * t) * GLOW_SIZE[this.res];
+      const g = Math.max(0, (t - (flat ? 0.15 : 0.55)) / (flat ? 0.85 : 0.45));
+      this.glowA[i] = Math.pow(g, 1.2) * (dim < 1 ? 0.25 : 1);
+      this.glowS[i] = (0.6 + 0.4 * t) * GLOW_SIZE[this.res];
     }
     this.version++;
     this.overlay.setProps({ layers: this.layers() });
@@ -652,8 +650,8 @@ export class MapEngine {
         id: 'hex',
         data: this.ids,
         getHexagon: (d) => d,
-        extruded: true,
-        coverage: 0.86,
+        extruded: this.res === 'r5',
+        coverage: this.res === 'r5' ? 0.93 : 0.96,
         // True polygons: the instanced shortcut draws the wrong footprint on the globe.
         highPrecision: true,
         elevationScale: 1,
@@ -666,7 +664,8 @@ export class MapEngine {
           target[3] = col[o + 3];
           return target as [number, number, number, number];
         },
-        material: { ambient: 0.55, diffuse: 0.75, shininess: 28, specularColor: [255, 226, 170] },
+        // Flat r7 cells are unlit so they read as glowing tiles.
+        material: this.res === 'r5' ? { ambient: 0.42, diffuse: 0.62, shininess: 24, specularColor: [255, 226, 170] } : false,
         pickable: false,
         updateTriggers: { getElevation: v, getFillColor: v },
       }),
@@ -683,7 +682,7 @@ export class MapEngine {
           return target as [number, number, number];
         },
         getRadius: (_: string, { index }) => (glowA[index] > 0 ? glowS[index] * 0.5 : 0),
-        getFillColor: (_: string, { index }) => [255, 190, 90, Math.round(glowA[index] * 150)],
+        getFillColor: (_: string, { index }) => [255, 190, 90, Math.round(glowA[index] * (this.res === 'r7' ? 170 : 150))],
         parameters: {
           blend: true,
           blendColorOperation: 'add',

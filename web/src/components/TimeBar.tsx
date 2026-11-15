@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useStore } from '../store';
 import { useSeries } from '../lib/hooks';
-import { logNormFloor, rampCSS } from '../lib/scale';
+import { rampCSS } from '../lib/scale';
 import { ymLong } from '../lib/format';
 import { STEP_MS } from '../map/MapStage';
 
@@ -43,10 +43,11 @@ export function TimeBar() {
     for (let i = 0; i < n; i++) {
       const j = series.ym.indexOf(yms[i]);
       const v = j >= 0 ? series.harmonized[j] : 0;
-      const t = logNormFloor(v, top);
-      ctx.fillStyle = rampCSS(t);
-      // Height also follows the value a little, so peaks read even in greyscale.
-      const bh = h * (0.16 + 0.84 * t);
+      // Square-root scale: quiet winters stay near the floor, the fire seasons and the big years
+      // (2002–2003, 2008, 2012) stand out in both height and colour.
+      const t = Math.sqrt(Math.max(0, v) / top);
+      ctx.fillStyle = rampCSS(0.1 + 0.9 * t);
+      const bh = Math.max(2, h * t);
       ctx.fillRect(i * colW, h - bh, Math.max(1, colW - (colW > 2.2 ? 0.6 : 0)), bh);
     }
   }, [series, width, n, yms]);

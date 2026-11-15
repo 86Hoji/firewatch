@@ -67,6 +67,7 @@ export function MapStage() {
       reduced,
     );
     engine = e;
+    e.startIntro();
 
     let cancelled = false;
     Promise.all([loadMeta(), loadSeries('KAZ'), loadAdm1(), loadAnomalies()]).then(([, kz, adm1, anomalies]) => {
@@ -77,7 +78,7 @@ export function MapStage() {
       e.setRegions(adm1);
       const abai = anomalies.find((a) => /abai/i.test(a.title));
       if (abai) e.setEvent(abai);
-      e.runIntro(yms[start]);
+      e.setFirstMonth(yms[start]);
     });
 
     const unsubs = [

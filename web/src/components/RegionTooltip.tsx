@@ -4,6 +4,7 @@ import { useStore } from '../store';
 import { useMediaQuery, useRegions } from '../lib/hooks';
 import { fmtCD, fmtPct, ymLong } from '../lib/format';
 import { pointer } from '../map/pointer';
+import { CELL_DAY } from './InfoHint';
 
 const W = 248;
 
@@ -66,6 +67,12 @@ export function RegionTooltip() {
           )}
         </div>
       )}
+      <div className="mt-2.5 flex gap-1.5 border-t border-[rgba(148,170,220,0.12)] pt-2.5 text-[13px] leading-snug text-text-map-2">
+        <span aria-hidden className="mt-[2px] grid h-[13px] w-[13px] shrink-0 place-items-center rounded-full border border-current text-[9px] font-semibold leading-none">
+          i
+        </span>
+        <span>{CELL_DAY}</span>
+      </div>
     </div>
   );
 
