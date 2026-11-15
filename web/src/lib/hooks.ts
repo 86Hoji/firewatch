@@ -64,3 +64,33 @@ export function useMediaQuery(q: string): boolean {
   }, [q]);
   return m;
 }
+
+/** Live content width of an element. */
+export function useWidth<T extends HTMLElement>(): [React.RefObject<T>, number] {
+  const ref = useRef<T>(null);
+  const [w, setW] = useState(0);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => setW(el.clientWidth));
+    ro.observe(el);
+    setW(el.clientWidth);
+    return () => ro.disconnect();
+  }, []);
+  return [ref, w];
+}
+
+/** Mean of the same calendar month over 2012–2019 (the "normal"), for each month index 0..11. */
+export function monthlyNormal(ym: string[], v: number[]): number[] {
+  const sum = new Array(12).fill(0);
+  const n = new Array(12).fill(0);
+  ym.forEach((d, i) => {
+    const y = Number(d.slice(0, 4));
+    if (y >= 2012 && y <= 2019 && Number.isFinite(v[i])) {
+      const m = Number(d.slice(5, 7)) - 1;
+      sum[m] += v[i];
+      n[m] += 1;
+    }
+  });
+  return sum.map((s, m) => (n[m] ? s / n[m] : 0));
+}

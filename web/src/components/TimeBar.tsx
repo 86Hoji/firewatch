@@ -9,8 +9,8 @@ import { STEP_MS } from '../map/MapStage';
  * The time control. Its track is the data: one column per month, coloured by the country's
  * harmonized total, so the fire seasons are visible in the scrubber itself.
  */
-export function TimeBar() {
-  const { yms, ymIndex, playing, speed, country, introDone, reducedMotion } = useStore();
+export function TimeBar({ rightInset = 300 }: { rightInset?: number }) {
+  const { yms, ymIndex, playing, speed, country, introDone, reducedMotion, hoverIndex } = useStore();
   const { setYmIndex, setPlaying, setSpeed } = useStore.getState();
   const series = useSeries(country);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -101,8 +101,9 @@ export function TimeBar() {
 
   return (
     <div
-      className="glass pointer-events-auto absolute bottom-[var(--gutter)] left-[var(--gutter)] right-[var(--gutter)] flex items-center gap-4 rounded-[14px] px-4 py-3 md:right-auto md:w-[min(920px,calc(100vw-2*var(--gutter)-300px))] md:gap-5 md:px-5 md:py-4"
+      className="glass pointer-events-auto absolute bottom-[var(--gutter)] left-[var(--gutter)] right-[var(--gutter)] flex items-center gap-4 rounded-[14px] px-4 py-3 md:right-auto md:w-[var(--tb-w)] md:gap-5 md:px-5 md:py-4"
       style={{
+        ['--tb-w' as string]: `min(920px, calc(100vw - 2 * var(--gutter) - ${rightInset}px))`,
         opacity: introDone || reducedMotion ? 1 : 0,
         transform: introDone || reducedMotion ? 'none' : 'translateY(8px)',
         transition: 'opacity 600ms var(--ease), transform 600ms var(--ease)',
@@ -162,6 +163,13 @@ export function TimeBar() {
               aria-hidden
               className="absolute -bottom-1 -top-1 w-px bg-ice/70"
               style={{ left: (seam / n) * width }}
+            />
+          )}
+          {hoverIndex != null && hoverIndex !== ymIndex && (
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -bottom-1 -top-1 w-px -translate-x-1/2 bg-[rgba(238,242,251,0.7)]"
+              style={{ left: x(hoverIndex) }}
             />
           )}
           <div

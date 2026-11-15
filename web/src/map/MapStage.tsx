@@ -50,7 +50,12 @@ export function MapStage() {
             st().setHover({ iso: h.iso, name: h.name, country: h.country });
           }
         },
-        onSelect: (iso) => st().setSelected(iso),
+        onSelect: (iso) => {
+          // Clicking a region in the other country moves the panels there too (no camera jump).
+          const cc = iso?.startsWith('UZ-') ? 'UZB' : iso?.startsWith('KZ-') ? 'KAZ' : null;
+          if (cc && cc !== st().country) st().setCountry(cc);
+          st().setSelected(iso);
+        },
         onIntroDone: () => st().setIntroDone(),
         onEventClick: (ym) => {
           const i = st().yms.indexOf(ym);

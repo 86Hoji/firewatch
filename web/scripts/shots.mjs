@@ -97,5 +97,30 @@ if (which === 'all' || which === 'play')
 if (which === 'all' || which === 'reduced') await shoot('desktop-reduced-1s', desktop, '/explore', { wait: 2500, reducedMotion: 'reduce' });
 if (which === 'all' || which === 'modelled') await shoot('desktop-2003', desktop, '/explore?ym=2003-10');
 
+if (which === 'all' || which === 'f2') {
+  await shoot('desktop-chart-hover', desktop, '/explore', {
+    actions: async (p) => {
+      const box = await p.locator('[aria-label^="Naive and harmonized"]').boundingBox();
+      if (box) {
+        await p.mouse.move(box.x + box.width * 0.3, box.y + box.height * 0.5);
+        await p.waitForTimeout(150);
+        await p.mouse.move(box.x + box.width * 0.32, box.y + box.height * 0.5);
+        await p.waitForTimeout(400);
+      }
+    },
+  });
+  await shoot('desktop-uz', desktop, '/explore', {
+    actions: async (p) => {
+      await p.getByRole('radio', { name: /UZ/ }).click();
+      await p.waitForTimeout(2200);
+    },
+  });
+  await shoot('mobile-sheet', mobile, '/explore', {
+    actions: async (p) => {
+      await p.locator('section[aria-label="Details"] > button').click();
+      await p.waitForTimeout(900);
+    },
+  });
+}
 await browser.close();
 console.log('saved to', fileURLToPath(out));

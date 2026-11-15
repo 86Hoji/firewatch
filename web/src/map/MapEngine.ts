@@ -46,11 +46,21 @@ export interface EngineCallbacks {
   onMove?: (map: maplibregl.Map) => void;
 }
 
+/**
+ * Screen space taken by page UI on the right (desktop only), so framing centres on what is left.
+ * Pages set it on mount; the engine reads it whenever it frames the camera.
+ */
+export const frame = { right: 0 };
+
 function finalCamera(w: number, h: number): CameraSpec {
   // Kazakhstan + Uzbekistan framed under the dateline and above the time bar.
   if (w < 768) return { center: [67.6, 47.4], zoom: 2.92 + Math.log2(Math.min(w, 430) / 390), pitch: 45, bearing: -12 };
-  const z = 4.3 + Math.log2(Math.min(w / 1440, h / 900) * 1.0);
-  return { center: [67.4, 45.9], zoom: Math.max(3.4, z), pitch: 45, bearing: -12 };
+  const usable = w - frame.right;
+  const z = 4.3 + Math.log2(Math.min((usable + frame.right * 0.25) / 1440, h / 900));
+  const zoom = Math.max(3.4, z);
+  // Shift the centre east by half the inset, converted to degrees at this zoom.
+  const pxPerDeg = (512 * 2 ** zoom) / 360;
+  return { center: [67.4 + frame.right / 2 / pxPerDeg, 45.9], zoom, pitch: 45, bearing: -12 };
 }
 
 function buildStyle(): StyleSpecification {
@@ -190,6 +200,7 @@ export class MapEngine {
   private eventMarker: { el: HTMLElement; lngLat: [number, number] } | null = null;
   private introTimers: number[] = [];
   private destroyed = false;
+  private introFinished = false;
   private bornAt = performance.now();
   /** True once the style has parsed (isStyleLoaded() also waits for every tile). */
   private styleReady = false;
@@ -404,6 +415,7 @@ export class MapEngine {
    */
   startIntro() {
     const done = () => {
+      this.introFinished = true;
       this.cb.onIntroDone();
       this.updateEventPulse();
     };
@@ -451,6 +463,13 @@ export class MapEngine {
     if (cam) this.map.easeTo({ ...cam, pitch: 45, duration: this.reduced ? 0 : 1000, easing: easeOut });
   }
 
+  /** Re-frame the home view after the page's UI inset changed (no-op until the intro is done). */
+  reframe() {
+    if (!this.introFinished) return;
+    const final = finalCamera(this.container.clientWidth, this.container.clientHeight);
+    this.map.easeTo({ ...final, duration: this.reduced ? 0 : 1000, easing: easeOut });
+  }
+
   destroy() {
     this.destroyed = true;
     this.introTimers.forEach(clearTimeout);
@@ -464,7 +483,7 @@ export class MapEngine {
     const w = this.container.clientWidth;
     return w < 768
       ? { top: 170, bottom: 190, left: 24, right: 24 }
-      : { top: 200, bottom: 170, left: 80, right: 80 };
+      : { top: 200, bottom: 170, left: 80, right: 80 + frame.right };
   }
 
   private bindEvents() {

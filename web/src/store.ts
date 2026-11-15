@@ -20,6 +20,8 @@ interface State {
   hover: HoverInfo | null;
   introDone: boolean;
   reducedMotion: boolean;
+  /** Month under the cursor in a chart (ghost playhead on the time bar). */
+  hoverIndex: number | null;
 
   setYms: (yms: string[], start: number) => void;
   setYmIndex: (i: number, user?: boolean) => void;
@@ -29,6 +31,7 @@ interface State {
   setSelected: (iso: string | null) => void;
   setHover: (h: HoverInfo | null) => void;
   setIntroDone: () => void;
+  setHoverIndex: (i: number | null) => void;
 }
 
 const reduced =
@@ -45,6 +48,7 @@ export const useStore = create<State>((set, get) => ({
   hover: null,
   introDone: false,
   reducedMotion: !!reduced,
+  hoverIndex: null,
 
   setYms: (yms, start) => set({ yms, ymIndex: start }),
   setYmIndex: (i, user = true) => {
@@ -59,4 +63,5 @@ export const useStore = create<State>((set, get) => ({
   setSelected: (selected) => set({ selected }),
   setHover: (hover) => set({ hover }),
   setIntroDone: () => set({ introDone: true }),
+  setHoverIndex: (hoverIndex) => set({ hoverIndex }),
 }));
