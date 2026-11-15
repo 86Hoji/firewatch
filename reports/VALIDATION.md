@@ -87,18 +87,25 @@ Monthly burned area (`data/external/burned_area.csv`) vs monthly cell-days, 2003
 | KAZ | naive | 0.86 | 0.86 | 0.88 | ×2.41 (1.77–3.27) |
 | KAZ | harmonized | 0.88 | 0.86 | 0.89 | ×1.16 (0.88–1.53) |
 | KAZ | harmonized_local | 0.88 | 0.86 | 0.89 | ×1.16 (0.88–1.53) |
+| KAZ | modis_only | 0.88 | 0.86 | 0.89 | ×1.22 (0.82–1.83) |
 | KGZ | naive | 0.57 | 0.75 | 0.53 | ×1.77 (1.18–2.64) |
 | KGZ | harmonized | 0.66 | 0.78 | 0.53 | ×0.56 (0.38–0.83) |
 | KGZ | harmonized_local | 0.66 | 0.75 | 0.53 | ×0.54 (0.37–0.80) |
+| KGZ | modis_only | 0.68 | 0.75 | 0.57 | ×0.62 (0.43–0.90) |
 | TJK | naive | 0.35 | 0.56 | 0.38 | ×2.26 (1.50–3.41) |
 | TJK | harmonized | 0.49 | 0.58 | 0.37 | ×0.62 (0.42–0.94) |
 | TJK | harmonized_local | 0.47 | 0.56 | 0.37 | ×0.71 (0.47–1.07) |
+| TJK | modis_only | 0.53 | 0.56 | 0.43 | ×0.84 (0.55–1.27) |
 | TKM | naive | 0.39 | 0.62 | 0.53 | ×3.93 (2.96–5.21) |
 | TKM | harmonized | 0.55 | 0.64 | 0.53 | ×1.45 (1.11–1.91) |
 | TKM | harmonized_local | 0.55 | 0.60 | 0.53 | ×1.14 (0.87–1.49) |
+| TKM | modis_only | 0.56 | 0.62 | 0.52 | ×1.44 (1.09–1.90) |
 | UZB | naive | 0.51 | 0.68 | 0.65 | ×3.87 (2.88–5.21) |
 | UZB | harmonized | 0.63 | 0.67 | 0.65 | ×1.40 (1.06–1.85) |
 | UZB | harmonized_local | 0.65 | 0.69 | 0.65 | ×1.04 (0.80–1.35) |
+| UZB | modis_only | 0.69 | 0.68 | 0.71 | ×1.06 (0.77–1.46) |
+
+MODIS alone has no sensor change at 2012, so its step is the change in fire regime; the seam test for the harmonized series is its step relative to MODIS alone.
 
 **Takeaway.** Holding burned area fixed, naive: continuous (95% CI includes 1) in none; KZ-harmonized: continuous (95% CI includes 1) in KAZ; locally harmonized: continuous (95% CI includes 1) in KAZ, TJK, TKM, UZB. The naive series jumps ×1.8–×3.9 everywhere. Correlation with burned area is high in Kazakhstan and weak in Kyrgyzstan/Tajikistan (few fires; much burned area there is not seen as active fire).
 

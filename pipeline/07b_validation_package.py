@@ -224,13 +224,16 @@ def burned_area(cfg, harm_series):
         naive = np.where(pre, d["n_modis"], d["n_viirs_snpp"])
         r = {"months": int(len(d))}
         for name, x in (("naive", naive), ("harmonized", d["n_harm"].to_numpy()),
-                        ("harmonized_local", d["n_harm_local"].to_numpy())):
+                        ("harmonized_local", d["n_harm_local"].to_numpy()), ("modis_only", d["n_modis"].to_numpy())):
             lx, lb = np.log1p(x), np.log1p(d["burned_ha"].to_numpy())
             r[name] = {"r_log_all": float(stats.pearsonr(lb, lx)[0]),
                        "r_log_pre2012": float(stats.pearsonr(lb[pre], lx[pre])[0]),
                        "r_log_post2012": float(stats.pearsonr(lb[~pre], lx[~pre])[0]),
                        "step_given_burned_area": step_test(d["year"], d["month"], x, cut,
                                                            covariate=d["burned_ha"].to_numpy())}
+        # MODIS alone has no sensor change at 2012: its step is the fire-regime change; the seam is the excess over it
+        r["excess_vs_modis"] = float(r["harmonized_local"]["step_given_burned_area"]["step_factor"]
+                                     / r["modis_only"]["step_given_burned_area"]["step_factor"])
         out[c] = r
     return out
 
@@ -391,12 +394,14 @@ def write_md(R, cfg):
               "| country | series | R (log) all | R before 2012 | R from 2012 | step at 2012 given burned area (95% CI) |",
               "|---|---|---|---|---|---|"])
     for c, x in R["burned_area"].items():
-        for k in ("naive", "harmonized", "harmonized_local"):
+        for k in ("naive", "harmonized", "harmonized_local", "modis_only"):
             y = x[k]
             s = y["step_given_burned_area"]
             L.append(f"| {c} | {k} | {f(y['r_log_all'], 2)} | {f(y['r_log_pre2012'], 2)} | {f(y['r_log_post2012'], 2)} | "
                      f"×{f(s['step_factor'], 2)} ({f(s['ci_low'], 2)}–{f(s['ci_high'], 2)}) |")
-    L.extend(["", f"**Takeaway.** {TAKE['ba']}", ""])
+    L.extend(["", "MODIS alone has no sensor change at 2012, so its step is the change in fire regime; the seam test for "
+                  "the harmonized series is its step relative to MODIS alone.",
+              "", f"**Takeaway.** {TAKE['ba']}", ""])
 
     ev = cfg["package"]["events"]
     L.extend(["## 6. Events for the demo", "",

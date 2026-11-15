@@ -799,7 +799,20 @@
           "n_months": 270,
           "ci_includes_1": true
         }
-      }
+      },
+      "modis_only": {
+        "r_log_all": 0.8838193131266295,
+        "r_log_pre2012": 0.8640723660585912,
+        "r_log_post2012": 0.8895863016174522,
+        "step_given_burned_area": {
+          "step_factor": 1.2233984531898565,
+          "ci_low": 0.8165596407177969,
+          "ci_high": 1.8329387109454198,
+          "n_months": 270,
+          "ci_includes_1": true
+        }
+      },
+      "excess_vs_modis": 0.9474191207419226
     },
     "KGZ": {
       "months": 258,
@@ -838,7 +851,20 @@
           "n_months": 258,
           "ci_includes_1": false
         }
-      }
+      },
+      "modis_only": {
+        "r_log_all": 0.6822665010255676,
+        "r_log_pre2012": 0.7456170638262581,
+        "r_log_post2012": 0.5678024644613958,
+        "step_given_burned_area": {
+          "step_factor": 0.6171074002870924,
+          "ci_low": 0.4250020564608344,
+          "ci_high": 0.8960463548349629,
+          "n_months": 258,
+          "ci_includes_1": false
+        }
+      },
+      "excess_vs_modis": 0.8763140053167804
     },
     "TJK": {
       "months": 260,
@@ -877,7 +903,20 @@
           "n_months": 260,
           "ci_includes_1": true
         }
-      }
+      },
+      "modis_only": {
+        "r_log_all": 0.5267680705464902,
+        "r_log_pre2012": 0.5645817549705848,
+        "r_log_post2012": 0.43179356958442033,
+        "step_given_burned_area": {
+          "step_factor": 0.8380628215072409,
+          "ci_low": 0.5526397480600816,
+          "ci_high": 1.2708989812226097,
+          "n_months": 260,
+          "ci_includes_1": true
+        }
+      },
+      "excess_vs_modis": 0.8500322606387202
     },
     "TKM": {
       "months": 276,
@@ -916,7 +955,20 @@
           "n_months": 276,
           "ci_includes_1": true
         }
-      }
+      },
+      "modis_only": {
+        "r_log_all": 0.5609947738483936,
+        "r_log_pre2012": 0.6246178425613518,
+        "r_log_post2012": 0.5198836221676854,
+        "step_given_burned_area": {
+          "step_factor": 1.4384819310727346,
+          "ci_low": 1.0876192669724096,
+          "ci_high": 1.90253182235621,
+          "n_months": 276,
+          "ci_includes_1": false
+        }
+      },
+      "excess_vs_modis": 0.7927475497796863
     },
     "UZB": {
       "months": 275,
@@ -955,7 +1007,20 @@
           "n_months": 275,
           "ci_includes_1": true
         }
-      }
+      },
+      "modis_only": {
+        "r_log_all": 0.6913561049592624,
+        "r_log_pre2012": 0.6807158303481227,
+        "r_log_post2012": 0.7096861150084071,
+        "step_given_burned_area": {
+          "step_factor": 1.0575190549699212,
+          "ci_low": 0.7684298636286769,
+          "ci_high": 1.4553658109322074,
+          "n_months": 275,
+          "ci_includes_1": true
+        }
+      },
+      "excess_vs_modis": 0.9830265558555162
     }
   },
   "events": {
