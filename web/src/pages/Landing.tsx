@@ -4,7 +4,6 @@ import { useStore } from '../store';
 import { frame } from '../map/MapEngine';
 import { engine } from '../map/MapStage';
 import { loadValidation, type Validation } from '../lib/validation';
-import { loadMeta } from '../lib/data';
 
 /** Width of the text column plus gutter, kept clear when framing the globe. */
 const COLUMN_INSET = 520 + 28;
@@ -15,7 +14,6 @@ const ok = (...xs: unknown[]) => xs.every((x) => typeof x === 'number' && Number
 export function Landing() {
   const shown = useStore((s) => s.introDone || s.reducedMotion);
   const [v, setV] = useState<Validation | null>(null);
-  const [holdout, setHoldout] = useState<string | null>(null);
   const how = useRef<HTMLElement>(null);
 
   useLayoutEffect(() => {
@@ -27,20 +25,22 @@ export function Landing() {
   }, []);
   useEffect(() => {
     loadValidation().then(setV).catch(() => {});
-    loadMeta()
-      .then((m) => setHoldout(typeof m.model.holdout === 'string' ? m.model.holdout : null))
-      .catch(() => {});
   }, []);
 
-  // Every number below is read from data/validation.json; a sentence whose values are missing is left out.
-  const cov = v?.transfer?.KAZ?.holdout_as_is?.coverage;
+  // Numbers are read from data/validation.json; a sentence whose values are missing is left out.
+  // Exception: the interval coverage pair is not exported there. It is the leave-one-region-out test in
+  // reports/validation_kz.md ("before 50%, after 92%" over the same region-months), kept here by hand.
+  const COVERAGE = { before: 50, after: 92 };
   const uzNaive = v?.uz_test?.steps?.naive?.step_ratio;
   const uzLocal = v?.uz_test?.steps?.harmonized_local?.step_ratio;
   const baNaive = v?.burned_area?.KAZ?.naive?.step_given_burned_area?.step_factor;
   const baHarm = v?.burned_area?.KAZ?.harmonized?.step_given_burned_area?.step_factor;
   const proofs = [
-    ok(cov) &&
-      `On Kazakhstan’s ${holdout ? `${holdout} ` : ''}holdout, months the model never saw, the 90% ranges contain the true value ${Math.round((cov as number) * 100)}% of the time.`,
+    <>
+      Tested on regions the model never saw, the 90% ranges contain the true value{' '}
+      <span className="num text-gold-pale">{COVERAGE.after}%</span> of the time, up from{' '}
+      <span className="num text-gold-pale">{COVERAGE.before}%</span> on the same data.
+    </>,
     ok(uzNaive, uzLocal) && (
       <>
         In Uzbekistan the naive record jumps <span className="num text-gold-pale">{x2(uzNaive!)}</span> at 2012; ours
