@@ -107,7 +107,7 @@ Monthly burned area (`data/external/burned_area.csv`) vs monthly cell-days, 2003
 
 MODIS alone has no sensor change at 2012, so its step is the change in fire regime; the seam test for the harmonized series is its step relative to MODIS alone.
 
-**Takeaway.** Holding burned area fixed, naive: continuous (95% CI includes 1) in none; KZ-harmonized: continuous (95% CI includes 1) in KAZ; locally harmonized: continuous (95% CI includes 1) in KAZ, TJK, TKM, UZB. The naive series jumps ×1.8–×3.9 everywhere. Correlation with burned area is high in Kazakhstan and weak in Kyrgyzstan/Tajikistan (few fires; much burned area there is not seen as active fire).
+**Takeaway.** Holding burned area fixed, naive: continuous (95% CI includes 1) in none; KZ-harmonized: continuous (95% CI includes 1) in KAZ; locally harmonized: continuous (95% CI includes 1) in KAZ, TJK, TKM, UZB. The naive series jumps ×1.8–×3.9 everywhere. Correlation with burned area is high in Kazakhstan and weak in Kyrgyzstan/Tajikistan (few fires; much burned area there is not seen as active fire). Relative to MODIS alone (no sensor change at 2012), the locally harmonized series is within ×0.79–×0.98 in all 5 countries and the naive series ×2.0–×3.7. MODIS alone itself shifts against burned area (KGZ ×0.62, TKM ×1.44, 95% CI excludes 1), so the test is inconclusive there: it confirms that the ×2–4 seam is removed, not a ±20% accuracy.
 
 ## 6. Events for the demo
 

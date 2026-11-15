@@ -484,6 +484,16 @@ def takeaways(R, cfg):
                   + f(max(x['naive']['step_given_burned_area']['step_factor'] for x in ba.values()), 1)
                   + " everywhere. Correlation with burned area is high in Kazakhstan and weak in Kyrgyzstan/Tajikistan "
                     "(few fires; much burned area there is not seen as active fire).")
+    if all("modis_only" in x for x in ba.values()):
+        sf = lambda x, k: x[k]["step_given_burned_area"]["step_factor"]  # noqa: E731
+        rel = [sf(x, "harmonized_local") / sf(x, "modis_only") for x in ba.values()]
+        nrel = [sf(x, "naive") / sf(x, "modis_only") for x in ba.values()]
+        shifted = [f"{c} ×{f(sf(x, 'modis_only'), 2)}" for c, x in ba.items() if not ci1(x["modis_only"]["step_given_burned_area"])]
+        TAKE["ba"] += (f" Relative to MODIS alone (no sensor change at 2012), the locally harmonized series is within ×"
+                       f"{f(min(rel), 2)}–×{f(max(rel), 2)} in all {len(rel)} countries and the naive series ×{f(min(nrel), 1)}"
+                       f"–×{f(max(nrel), 1)}. MODIS alone itself shifts against burned area"
+                       + (f" ({', '.join(shifted)}, 95% CI excludes 1), so the test is inconclusive there: it confirms "
+                          "that the ×2–4 seam is removed, not a ±20% accuracy." if shifted else "."))
     ev = R["events"].get(cfg["train_country"], {}).get("known_events", [])
     TAKE["events"] = " ".join(
         f"{k['name']} ({k['year']}-{k['month']:02d}): {f(k['n_harm'], 0)} cell-days in one hexagon vs a normal of "
