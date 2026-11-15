@@ -192,7 +192,7 @@ export function Landing() {
 
   return (
     <div className="pointer-events-none fixed inset-0">
-      <div ref={wrap} className="pointer-events-auto absolute inset-0 overflow-y-auto overscroll-contain">
+      <div ref={wrap} className="pointer-events-auto absolute inset-0 overflow-y-auto overscroll-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div ref={content} className="relative px-[var(--gutter)] pb-[var(--gutter)]">
           <header className="pt-[22px]">
             <SiteNav />

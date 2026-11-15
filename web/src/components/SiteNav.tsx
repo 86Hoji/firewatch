@@ -2,7 +2,6 @@ import { NavLink } from 'react-router-dom';
 
 const LINKS = [
   { to: '/explore', label: 'Map' },
-  { to: '/method', label: 'Method' },
   { to: '/evidence', label: 'Evidence' },
 ];
 
@@ -26,6 +25,14 @@ export function SiteNav({ className = '', onMap = true }: { className?: string; 
           {l.label}
         </NavLink>
       ))}
+      <a
+        href="https://github.com/86Hoji/firewatch"
+        target="_blank"
+        rel="noreferrer"
+        className={`text-[15px] no-underline underline-offset-4 transition-colors duration-[160ms] hover:underline ${onMap ? 'text-text-map-2 hover:text-text' : 'text-text-2 hover:text-text'}`}
+      >
+        GitHub
+      </a>
     </nav>
   );
 }

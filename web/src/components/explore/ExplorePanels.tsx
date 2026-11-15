@@ -16,13 +16,6 @@ function Credits() {
   return (
     <div className="m-0 px-1 pb-1 text-[13px] leading-[1.5] text-text-map-2">
       <p className="m-0">
-        Map covers five Central Asian countries. Five more are tested on the{' '}
-        <Link to="/evidence" className="text-text underline underline-offset-4 hover:text-gold-pale">
-          Evidence page
-        </Link>
-        .
-      </p>
-      <p className="m-0 mt-1.5">
         Fire detections from NASA FIRMS, MODIS and VIIRS. Night lights from NASA Black Marble, made by the same VIIRS
         instrument.
       </p>
@@ -40,6 +33,13 @@ export function ExplorePanels() {
   const body = (
     <>
       <CountrySwitch />
+      <p className="-mt-1 m-0 px-1 text-[13px] leading-[1.5] text-text-map-2">
+        Map covers five Central Asian countries. Five more are tested on the{' '}
+        <Link to="/evidence" className="pointer-events-auto text-text underline underline-offset-4 hover:text-gold-pale">
+          Evidence page
+        </Link>
+        .
+      </p>
       <ThisMonth series={series} />
       <BeforeAfter series={series} />
       <FireCalendar series={series} />
