@@ -58,9 +58,16 @@ cleaning:
   keep_type: 0
   static_mask:
     min_detections: 10
-    min_type2_share: 0.5
-    rules: [type2]           # since C3 review; 'persistent' removed real recurring farm fires (TM -18%)
-    recent_years: 5          # rebuild from the last 5 years of SP data each run (new sites, e.g. UZ 2025); null = all
+    min_type2_share: 0.5     # share of SP rows labelled a static type (static_types)
+    static_types: [2, 3]     # FIRMS type 2 = other static land source, 3 = offshore (Temirtau steel is labelled 3)
+    rules: [type2, static_site]   # 'persistent' (C2) removed real recurring farm fires (TM -18%): not used
+    recent_years: 5          # type2 rule on the last 5 years of SP data each run (new sites, e.g. UZ 2025); null = all
+    type_all_history: true   # ...and also on all history (flare sites that changed or stopped)
+    drop_all_rows: true      # drop EVERY row in masked cells (FIRMS calls 1-8% of flare detections type 0: they leaked)
+    static_site:             # static source that FIRMS labels type 0: all-year, mostly-night VIIRS activity
+      min_months: 36         # active in >= 36 distinct months (of ~170 VIIRS months, all history)
+      min_calendar_months: 8
+      min_night_share: 0.5   # night share of persistent cells is bimodal (farm ~0-0.1, flares 0.75-1.0)
     min_months_per_year: 8   # cell active in >= N months of a year -> persistent
     min_years_persistent: 2
 
@@ -178,4 +185,4 @@ web:
 
 # Regression reference for KZ (pipeline/regression_check.py); phase_b = before Phase C (history)
 regression:
-  snapshot: phase_c4
+  snapshot: phase_static   # after the static-site fix (reports/phase_c4 kept: before it)

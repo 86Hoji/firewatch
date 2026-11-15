@@ -7,36 +7,36 @@
   "results": {
     "ratio": {
       "n_months": 72,
-      "mae": 280.8959261963433,
-      "mae_pct_of_mean": 14.808329439454843,
-      "bias_total_pct": -9.259194881656711,
-      "bias_median_rel_pct": -13.837919319205467,
-      "pearson_r": 0.9787082034221896,
-      "spearman_rho": 0.9855212277931443,
-      "coverage": 0.7222222222222222,
-      "coverage_ci": 0.2361111111111111
+      "mae": 215.8964300304654,
+      "mae_pct_of_mean": 12.269459833498395,
+      "bias_total_pct": -6.746570882274674,
+      "bias_median_rel_pct": -11.243036385592337,
+      "pearson_r": 0.9815709210516514,
+      "spearman_rho": 0.993230858410537,
+      "coverage": 0.75,
+      "coverage_ci": 0.2777777777777778
     },
     "loglog": {
       "n_months": 72,
-      "mae": 202.2564759957512,
-      "mae_pct_of_mean": 10.662598665509819,
-      "bias_total_pct": -2.287726075948733,
-      "bias_median_rel_pct": -0.41215064646678534,
-      "pearson_r": 0.9825242982430248,
-      "spearman_rho": 0.9906983851675891,
-      "coverage": 0.8472222222222222,
-      "coverage_ci": 0.2361111111111111
+      "mae": 179.32877933093215,
+      "mae_pct_of_mean": 10.19130911372961,
+      "bias_total_pct": -1.105449237680052,
+      "bias_median_rel_pct": 0.40480436698003397,
+      "pearson_r": 0.9835327155270549,
+      "spearman_rho": 0.9941392118084029,
+      "coverage": 0.9027777777777778,
+      "coverage_ci": 0.25
     },
     "poisson_log": {
       "n_months": 72,
-      "mae": 196.21930361770674,
-      "mae_pct_of_mean": 10.344329765467569,
-      "bias_total_pct": -2.1782177389847206,
-      "bias_median_rel_pct": -1.4542355794429214,
-      "pearson_r": 0.9836859525084758,
-      "spearman_rho": 0.9911164352854882,
-      "coverage": 0.8333333333333334,
-      "coverage_ci": 0.19444444444444445
+      "mae": 171.87231619920294,
+      "mae_pct_of_mean": 9.767556044344426,
+      "bias_total_pct": -0.9272217801195329,
+      "bias_median_rel_pct": -0.11835531497224885,
+      "pearson_r": 0.9845605927856231,
+      "spearman_rho": 0.9951039506053736,
+      "coverage": 0.9027777777777778,
+      "coverage_ci": 0.25
     }
   },
   "selected": "poisson_log",

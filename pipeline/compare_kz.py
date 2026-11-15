@@ -1,7 +1,8 @@
-"""Kazakhstan headline metrics: Phase B snapshot vs C3 snapshot vs now -> reports/kz_before_after.{json,md}.
+"""Kazakhstan headline metrics: Phase B vs C3 vs C4 snapshots vs now -> reports/kz_before_after.{json,md}.
 
 Snapshots: reports/phase_b/ (before Phase C), reports/phase_c3/ (after C3, before the C3-review changes: type-2-only
-mask from the last 5 years, satellite-wide outage days).    python -m pipeline.compare_kz
+mask from the last 5 years, satellite-wide outage days), reports/phase_c4/ (before the static-site fix: every row in
+masked cells dropped + static_site rule).    python -m pipeline.compare_kz
 """
 import json
 
@@ -37,7 +38,7 @@ def extract(s, cfg):
     return {
         "hotspots after cleaning": _get(steps, "nrt_overlaps_sp", "rows_out"),
         "removed as static (type != 0)": _get(steps, "type_not_vegetation", "removed"),
-        "NRT removed by static mask": _get(steps, "nrt_static_mask", "removed"),
+        "removed by static mask": _get(steps, "static_mask", "removed") or _get(steps, "nrt_static_mask", "removed"),
         "static mask cells": (kz or {}).get("static_mask_cells"),
         "selected model": f"{sel} ({prod})" if sel else None,
         "step ratio 2012: naive points": _get(j, "naive_points", "step_ratio"),
@@ -71,7 +72,8 @@ def fmt(v):
 
 def main():
     cfg = load_config()
-    cols = {"Phase B": REPORTS / "phase_b", "after C3": REPORTS / "phase_c3", "now": REPORTS}
+    cols = {"Phase B": REPORTS / "phase_b", "after C3": REPORTS / "phase_c3", "C4 (before flare fix)": REPORTS / "phase_c4",
+            "now": REPORTS}
     T = {k: extract(load(p), cfg) for k, p in cols.items()}
     write_json(REPORTS / "kz_before_after.json", T)
     keys = list(T["now"].keys())

@@ -1,0 +1,520 @@
+{
+  "selected_model": "poisson_log",
+  "last_full_year": 2025,
+  "temporal_holdout": {
+    "in_sample": {
+      "ratio": {
+        "n_months": 96,
+        "mae": 182.15389576392295,
+        "mae_pct_of_mean": 5.905678803292324,
+        "bias_total_pct": 0.0,
+        "bias_median_rel_pct": -2.187544422266755,
+        "pearson_r": 0.9969862573928473,
+        "spearman_rho": 0.9963034561268397,
+        "coverage": 0.9166666666666666
+      },
+      "loglog": {
+        "n_months": 96,
+        "mae": 194.0962658165355,
+        "mae_pct_of_mean": 6.2928667982841695,
+        "bias_total_pct": 0.5023934979204933,
+        "bias_median_rel_pct": 2.333458904266112,
+        "pearson_r": 0.9961289348872604,
+        "spearman_rho": 0.99380051203158,
+        "coverage": 0.90625
+      },
+      "poisson_log": {
+        "n_months": 96,
+        "mae": 181.4940524942394,
+        "mae_pct_of_mean": 5.884285780678547,
+        "bias_total_pct": 4.4867372879827065e-06,
+        "bias_median_rel_pct": 1.6335057825143557,
+        "pearson_r": 0.9973007020010403,
+        "spearman_rho": 0.9943160056682747,
+        "coverage": 0.9270833333333334
+      }
+    },
+    "holdout": {
+      "ratio": {
+        "n_months": 72,
+        "mae": 215.8964300304654,
+        "mae_pct_of_mean": 12.269459833498395,
+        "bias_total_pct": -6.746570882274674,
+        "bias_median_rel_pct": -11.243036385592337,
+        "pearson_r": 0.9815709210516514,
+        "spearman_rho": 0.993230858410537,
+        "coverage": 0.75,
+        "coverage_ci": 0.2777777777777778
+      },
+      "loglog": {
+        "n_months": 72,
+        "mae": 179.32877933093215,
+        "mae_pct_of_mean": 10.19130911372961,
+        "bias_total_pct": -1.105449237680052,
+        "bias_median_rel_pct": 0.40480436698003397,
+        "pearson_r": 0.9835327155270549,
+        "spearman_rho": 0.9941392118084029,
+        "coverage": 0.9027777777777778,
+        "coverage_ci": 0.25
+      },
+      "poisson_log": {
+        "n_months": 72,
+        "mae": 171.87231619920294,
+        "mae_pct_of_mean": 9.767556044344426,
+        "bias_total_pct": -0.9272217801195329,
+        "bias_median_rel_pct": -0.11835531497224885,
+        "pearson_r": 0.9845605927856231,
+        "spearman_rho": 0.9951039506053736,
+        "coverage": 0.9166666666666666,
+        "coverage_ci": 0.25,
+        "coverage_baseline_method": 0.9027777777777778
+      }
+    },
+    "holdout_by_season": {
+      "DJF": {
+        "n_months": 18,
+        "mae": 40.444064098272534,
+        "mae_pct_of_mean": 37.16146777789207,
+        "bias_total_pct": 25.0005682360456,
+        "bias_median_rel_pct": 0.1706534158645457,
+        "pearson_r": 0.993556861408037,
+        "spearman_rho": 0.9374353671147878,
+        "coverage": 0.9444444444444444
+      },
+      "JJA": {
+        "n_months": 18,
+        "mae": 133.19604417724324,
+        "mae_pct_of_mean": 8.22649161457021,
+        "bias_total_pct": 6.489674284293825,
+        "bias_median_rel_pct": 5.062679153241098,
+        "pearson_r": 0.9938428060072038,
+        "spearman_rho": 0.9752321981424149,
+        "coverage": 1.0
+      },
+      "MAM": {
+        "n_months": 18,
+        "mae": 418.09447856997247,
+        "mae_pct_of_mean": 10.714277355928312,
+        "bias_total_pct": -5.099297121594383,
+        "bias_median_rel_pct": -6.793812798672066,
+        "pearson_r": 0.9716556273338238,
+        "spearman_rho": 0.9917440660474718,
+        "coverage": 0.7222222222222222
+      },
+      "SON": {
+        "n_months": 18,
+        "mae": 95.7546779513235,
+        "mae_pct_of_mean": 6.799137734133949,
+        "bias_total_pct": 0.10219279043253304,
+        "bias_median_rel_pct": -2.4802239736423273,
+        "pearson_r": 0.9950112435440658,
+        "spearman_rho": 0.9901911489928642,
+        "coverage": 1.0
+      }
+    },
+    "holdout_by_year": {
+      "2020": {
+        "actual": 34006.0,
+        "pred": 35549.47144305115,
+        "bias_pct": 4.5388209229287435
+      },
+      "2021": {
+        "actual": 28473.0,
+        "pred": 29260.493259330062,
+        "bias_pct": 2.7657544316723293
+      },
+      "2022": {
+        "actual": 20668.211820538403,
+        "pred": 18414.36794181846,
+        "bias_pct": -10.904880878375057
+      },
+      "2023": {
+        "actual": 16477.560260586317,
+        "pred": 16125.867384626199,
+        "bias_pct": -2.1343746913877415
+      },
+      "2024": {
+        "actual": 8521.197072687588,
+        "pred": 8222.446182160285,
+        "bias_pct": -3.5059732567959023
+      },
+      "2025": {
+        "actual": 18547.0,
+        "pred": 17945.598138951882,
+        "bias_pct": -3.24258295707186
+      }
+    }
+  },
+  "spatial_cv": [
+    {
+      "subregion": "KZ-KUS",
+      "name": "Kostanay Region",
+      "share": 0.12749828914351893,
+      "included": true,
+      "modis_cell_days": 21798,
+      "mae_pct_of_mean": 10.536544223170516,
+      "bias_total_pct": -3.269187570786089,
+      "pearson_r": 0.9909217139520226,
+      "coverage_before": 0.6770833333333334,
+      "coverage": 0.9375
+    },
+    {
+      "subregion": "KZ-SEV",
+      "name": "North Kazakhstan Region",
+      "share": 0.12285411804617265,
+      "included": true,
+      "modis_cell_days": 21004,
+      "mae_pct_of_mean": 9.954354884991698,
+      "bias_total_pct": 0.3716080440719658,
+      "pearson_r": 0.9971082804047887,
+      "coverage_before": 0.6041666666666666,
+      "coverage": 0.9270833333333334
+    },
+    {
+      "subregion": "KZ-KAR",
+      "name": "Karaganda Region",
+      "share": 0.12228675709347418,
+      "included": true,
+      "modis_cell_days": 20907,
+      "mae_pct_of_mean": 11.534174350285456,
+      "bias_total_pct": 1.099267648438782,
+      "pearson_r": 0.9942872564023495,
+      "coverage_before": 0.59375,
+      "coverage": 0.9583333333333334
+    },
+    {
+      "subregion": "KZ-AKM",
+      "name": "Akmola Region",
+      "share": 0.10461668041200933,
+      "included": true,
+      "modis_cell_days": 17886,
+      "mae_pct_of_mean": 11.352529900444646,
+      "bias_total_pct": 2.953957825767249,
+      "pearson_r": 0.996459472737144,
+      "coverage_before": 0.65625,
+      "coverage": 0.9583333333333334
+    },
+    {
+      "subregion": "KZ-KZY",
+      "name": "Kyzylorda Region",
+      "share": 0.1000894909543947,
+      "included": true,
+      "modis_cell_days": 17112,
+      "mae_pct_of_mean": 17.819686059768514,
+      "bias_total_pct": 3.6897995505671437,
+      "pearson_r": 0.9796640286810216,
+      "coverage_before": 0.4270833333333333,
+      "coverage": 0.75
+    },
+    {
+      "subregion": "KZ-ALM",
+      "name": "Almaty Region",
+      "share": 0.08366526873607187,
+      "included": true,
+      "modis_cell_days": 14304,
+      "mae_pct_of_mean": 12.70484384029831,
+      "bias_total_pct": -7.437997839281804,
+      "pearson_r": 0.9901743590048129,
+      "coverage_before": 0.5833333333333334,
+      "coverage": 0.9166666666666666
+    },
+    {
+      "subregion": "KZ-VOS",
+      "name": "East Kazakhstan Region",
+      "share": 0.07725467487877778,
+      "included": true,
+      "modis_cell_days": 13208,
+      "mae_pct_of_mean": 13.493645136821755,
+      "bias_total_pct": -0.8859586596064323,
+      "pearson_r": 0.9854167154378183,
+      "coverage_before": 0.5416666666666666,
+      "coverage": 0.9166666666666666
+    },
+    {
+      "subregion": "KZ-AKT",
+      "name": "Aktobe Region",
+      "share": 0.0756052337585616,
+      "included": true,
+      "modis_cell_days": 12926,
+      "mae_pct_of_mean": 13.050820403496761,
+      "bias_total_pct": -7.21166285639638,
+      "pearson_r": 0.993683203739954,
+      "coverage_before": 0.4166666666666667,
+      "coverage": 0.8229166666666666
+    },
+    {
+      "subregion": "KZ-ZAP",
+      "name": "West Kazakhstan Region",
+      "share": 0.05953195645943369,
+      "included": true,
+      "modis_cell_days": 10178,
+      "mae_pct_of_mean": 16.782182761837028,
+      "bias_total_pct": 10.879855668622676,
+      "pearson_r": 0.9960510571886633,
+      "coverage_before": 0.4479166666666667,
+      "coverage": 0.9583333333333334
+    },
+    {
+      "subregion": "KZ-PAV",
+      "name": "Pavlodar Region",
+      "share": 0.0415811238426129,
+      "included": true,
+      "modis_cell_days": 7109,
+      "mae_pct_of_mean": 15.586089154968159,
+      "bias_total_pct": -7.670997420148131,
+      "pearson_r": 0.9874612302170536,
+      "coverage_before": 0.375,
+      "coverage": 0.9375
+    },
+    {
+      "subregion": "KZ-ZHA",
+      "name": "Jambyl Region",
+      "share": 0.038065825568677,
+      "included": true,
+      "modis_cell_days": 6508,
+      "mae_pct_of_mean": 15.844562708028313,
+      "bias_total_pct": 3.3578436830159397,
+      "pearson_r": 0.9854290007176484,
+      "coverage_before": 0.4895833333333333,
+      "coverage": 0.9166666666666666
+    },
+    {
+      "subregion": "KZ-YUZ",
+      "name": "South Kazakhstan Region",
+      "share": 0.02526218510004855,
+      "included": true,
+      "modis_cell_days": 4319,
+      "mae_pct_of_mean": 19.911010226959064,
+      "bias_total_pct": -8.844906499168124,
+      "pearson_r": 0.9716129816380643,
+      "coverage_before": 0.5,
+      "coverage": 0.9375
+    },
+    {
+      "subregion": "KZ-ATY",
+      "name": "Atyrau Region",
+      "share": 0.020694052068527844,
+      "included": true,
+      "modis_cell_days": 3538,
+      "mae_pct_of_mean": 19.223665832676225,
+      "bias_total_pct": 1.8524527878030146,
+      "pearson_r": 0.9857790464518078,
+      "coverage_before": 0.4583333333333333,
+      "coverage": 0.90625
+    },
+    {
+      "subregion": "KZ-MAN",
+      "name": "Mangystau Region",
+      "share": 0.00047377564091315866,
+      "included": false,
+      "modis_cell_days": 81,
+      "mae_pct_of_mean": 80.22304556300945,
+      "bias_total_pct": -75.33889060907335,
+      "pearson_r": 0.5887625456156245,
+      "coverage_before": 0.3020833333333333,
+      "coverage": 0.8854166666666666
+    },
+    {
+      "subregion": "KZ-ALA",
+      "name": "Almaty",
+      "share": 0.00017547245959746618,
+      "included": false,
+      "modis_cell_days": 30,
+      "mae_pct_of_mean": 86.13814690006082,
+      "bias_total_pct": -83.2399191114044,
+      "pearson_r": 0.6240800944975088,
+      "coverage_before": 0.3333333333333333,
+      "coverage": 0.96875
+    },
+    {
+      "subregion": "KZ-AST",
+      "name": "Astana",
+      "share": 0.00016377429562430175,
+      "included": false,
+      "modis_cell_days": 28,
+      "mae_pct_of_mean": 71.02763620840807,
+      "bias_total_pct": -50.18320803840816,
+      "pearson_r": 0.7273703287310964,
+      "coverage_before": 0.6354166666666666,
+      "coverage": 0.9895833333333334
+    }
+  ],
+  "spatial_cv_median": {
+    "poisson_log": {
+      "mae_pct_of_mean": 13.493645136821755,
+      "bias_total_pct": 0.3716080440719658,
+      "pearson_r": 0.9901743590048129,
+      "coverage": 0.91796875,
+      "coverage_before": 0.5026041666666666,
+      "regions_included": 13,
+      "regions_total": 16
+    }
+  },
+  "jump": {
+    "naive_points": {
+      "step_ratio": 2.7582987367033125,
+      "pettitt_change_after_year": 2021,
+      "pettitt_p": 0.6282855541828256,
+      "monthly_step": {
+        "step_factor": 2.645174006888273,
+        "ci_low": 1.5031505192627932,
+        "ci_high": 4.654853547300739,
+        "n_months": 198,
+        "ci_includes_1": false
+      },
+      "excess_jump_vs_modis": 3.1216724346033553
+    },
+    "naive_cell_days": {
+      "step_ratio": 1.5844408765200846,
+      "pettitt_change_after_year": 2020,
+      "pettitt_p": 0.1882602918683802,
+      "excess_jump_vs_modis": 1.793172488054378
+    },
+    "harmonized": {
+      "step_ratio": 0.9242764551132989,
+      "pettitt_change_after_year": 2010,
+      "pettitt_p": 0.00216324660660987,
+      "monthly_step": {
+        "step_factor": 0.7925898662168858,
+        "ci_low": 0.49621321921978734,
+        "ci_high": 1.265985410500427,
+        "n_months": 198,
+        "ci_includes_1": true
+      },
+      "excess_jump_vs_modis": 1.0460391013804962
+    },
+    "modis_only_reference": {
+      "step_ratio": 0.8835964677548835,
+      "pettitt_change_after_year": 2010,
+      "pettitt_p": 0.0032137084042761447,
+      "monthly_step": {
+        "step_factor": 0.7060681798081799,
+        "ci_low": 0.3762058806605542,
+        "ci_high": 1.3251581119952125,
+        "n_months": 198,
+        "ci_includes_1": true
+      },
+      "excess_jump_vs_modis": 1.0
+    }
+  },
+  "seasonality": {
+    "table": [
+      {
+        "year": 2012,
+        "peak_modis": 4,
+        "peak_viirs": 4
+      },
+      {
+        "year": 2013,
+        "peak_modis": 4,
+        "peak_viirs": 4
+      },
+      {
+        "year": 2014,
+        "peak_modis": 4,
+        "peak_viirs": 4
+      },
+      {
+        "year": 2015,
+        "peak_modis": 8,
+        "peak_viirs": 8
+      },
+      {
+        "year": 2016,
+        "peak_modis": 4,
+        "peak_viirs": 4
+      },
+      {
+        "year": 2017,
+        "peak_modis": 7,
+        "peak_viirs": 7
+      },
+      {
+        "year": 2018,
+        "peak_modis": 4,
+        "peak_viirs": 4
+      },
+      {
+        "year": 2019,
+        "peak_modis": 4,
+        "peak_viirs": 4
+      },
+      {
+        "year": 2020,
+        "peak_modis": 4,
+        "peak_viirs": 4
+      },
+      {
+        "year": 2021,
+        "peak_modis": 4,
+        "peak_viirs": 4
+      },
+      {
+        "year": 2022,
+        "peak_modis": 4,
+        "peak_viirs": 4
+      },
+      {
+        "year": 2023,
+        "peak_modis": 4,
+        "peak_viirs": 4
+      },
+      {
+        "year": 2024,
+        "peak_modis": 4,
+        "peak_viirs": 4
+      },
+      {
+        "year": 2025,
+        "peak_modis": 4,
+        "peak_viirs": 4
+      }
+    ],
+    "agree_exact_2012_2019": 1.0,
+    "agree_within_1_2012_2019": 1.0,
+    "agree_exact_all": 1.0
+  },
+  "synthetic": {
+    "true": {
+      "A": 3.2,
+      "B": 2.1
+    },
+    "recovered_min_max": {
+      "A": {
+        "min": 3.1661002548853014,
+        "max": 3.21537946615346
+      },
+      "B": {
+        "min": 2.0635146103896105,
+        "max": 2.1349090148504497
+      }
+    },
+    "max_rel_error": 0.017373995052566427,
+    "passed": true
+  },
+  "known_events": [
+    {
+      "name": "Kostanay forest and steppe fires (Auliekol)",
+      "year": 2022,
+      "month": 9,
+      "value": 162.0,
+      "median_same_month": 140.5,
+      "rank_among_same_month": 11,
+      "of_years": 26,
+      "rank_among_all_months": 75,
+      "of_months": 222
+    },
+    {
+      "name": "Abai region forest fire (Semey Ormany)",
+      "year": 2023,
+      "month": 6,
+      "value": 222.0,
+      "median_same_month": 11.5,
+      "rank_among_same_month": 1,
+      "of_years": 26,
+      "rank_among_all_months": 9,
+      "of_months": 207
+    }
+  ],
+  "burned_area": null
+}

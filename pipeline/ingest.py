@@ -164,29 +164,50 @@ def type_ok_sql(cfg):
 def static_mask_sql(cfg, src, before=None, rules=None, recent_years="config"):
     """Static-source cells from SP rows (they carry FIRMS `type`) of src.
 
-    Rules (config cleaning.static_mask.rules): 'type2' = cell with >= min_detections and >= min_type2_share of
-    type-2 detections; 'persistent' = active >= min_months_per_year months in >= min_years_persistent years.
-    Window: only the last `recent_years` years of SP data before `before` (or before the newest SP row + 1 day), so
-    the mask is rebuilt from recent data on every refresh and new industrial sites are picked up. None = all history.
-    before: 'YYYY-MM-DD' for the honest train/test split (C2)."""
+    Rules (config cleaning.static_mask.rules):
+      'type2'       = cell with >= min_detections SP rows and >= min_type2_share of them labelled a static type
+                      (static_types; FIRMS 2 = other static land source, 3 = offshore). Evaluated on the last
+                      `recent_years` years before the end (new sites) and, if type_all_history, also on all history
+                      (sites that stopped or changed; their mislabelled type-0 rows exist in every year).
+      'static_site' = VIIRS (all processing, any type) active in >= static_site.min_months distinct months in
+                      >= static_site.min_calendar_months calendar months, with >= static_site.min_night_share of
+                      detections at night (gas flares / industry burn day and night all year; farm and wild fires
+                      are seasonal and mostly in the 13:30 overpass). Catches static sources FIRMS labels type 0.
+      'persistent'  = active >= min_months_per_year months in >= min_years_persistent years (C2, not in production).
+    End: `before` ('YYYY-MM-DD', honest train/test split) or the newest SP row + 1 day.
+    recent_years: override the config window of the type2 rule (None = all history only)."""
     m = cfg["cleaning"]["static_mask"]
     rules = m.get("rules", ["type2", "persistent"]) if rules is None else rules
     ry = m.get("recent_years") if recent_years == "config" else recent_years
     end = f"DATE '{before}'" if before else f"((SELECT max(date) FROM {src} WHERE type IS NOT NULL) + INTERVAL 1 DAY)"
     when = f"AND date < {end}" + (f" AND date >= {end} - INTERVAL {int(ry)} YEAR" if ry else "")
+    types = ", ".join(str(float(t)) for t in m.get("static_types", [2]))
+    t_all = bool(ry) and recent_years == "config" and m.get("type_all_history", False)
+    ss = m.get("static_site", {})
     parts = []
     if "type2" in rules:
         parts.append("SELECT h3_cell, 'type2' AS reason FROM by_type")
-    if "persistent" in rules:
-        parts.append("SELECT h3_cell, 'persistent' AS reason FROM by_persist "
+    if "static_site" in rules:
+        parts.append("SELECT h3_cell, 'static_site' AS reason FROM by_site "
                      + ("WHERE h3_cell NOT IN (SELECT h3_cell FROM by_type)" if "type2" in rules else ""))
+    if "persistent" in rules:
+        prior = [f"SELECT h3_cell FROM {t}" for r, t in (("type2", "by_type"), ("static_site", "by_site")) if r in rules]
+        parts.append("SELECT h3_cell, 'persistent' AS reason FROM by_persist "
+                     + (f"WHERE h3_cell NOT IN ({' UNION '.join(prior)})" if prior else ""))
     if not parts:
         return "SELECT NULL::VARCHAR AS h3_cell, NULL::VARCHAR AS reason WHERE false"
+    share = f"avg(CASE WHEN type IN ({types}) THEN 1.0 ELSE 0.0 END)"
+    all_hist = (f" UNION ALL SELECT h3_cell, count(*), {share} FROM {src} "
+                f"WHERE type IS NOT NULL AND date < {end} GROUP BY 1") if t_all else ""
     return f"""
         WITH sp AS (SELECT h3_cell, year, date, type FROM {src} WHERE type IS NOT NULL {when}),
-        per_cell AS (SELECT h3_cell, count(*) AS n, avg(CASE WHEN type = 2 THEN 1.0 ELSE 0.0 END) AS t2
-                     FROM sp GROUP BY 1),
-        by_type AS (SELECT h3_cell FROM per_cell WHERE n >= {int(m['min_detections'])} AND t2 >= {float(m['min_type2_share'])}),
+        per_cell AS (SELECT h3_cell, count(*) AS n, {share} AS t2 FROM sp GROUP BY 1{all_hist}),
+        by_type AS (SELECT DISTINCT h3_cell FROM per_cell
+                    WHERE n >= {int(m['min_detections'])} AND t2 >= {float(m['min_type2_share'])}),
+        by_site AS (SELECT h3_cell FROM {src} WHERE sensor <> 'MODIS' AND date < {end} GROUP BY 1
+                    HAVING count(DISTINCT year * 100 + month) >= {int(ss.get('min_months', 10 ** 9))}
+                       AND count(DISTINCT month) >= {int(ss.get('min_calendar_months', 12))}
+                       AND avg(CASE WHEN daynight = 'N' THEN 1.0 ELSE 0.0 END) >= {float(ss.get('min_night_share', 1.0))}),
         months AS (SELECT h3_cell, year, count(DISTINCT date_trunc('month', date)) AS nm FROM sp GROUP BY 1, 2),
         by_persist AS (SELECT h3_cell FROM months WHERE nm >= {int(m['min_months_per_year'])}
                        GROUP BY 1 HAVING count(*) >= {int(m['min_years_persistent'])})
@@ -205,15 +226,17 @@ def confident(con, cfg, src="raw", table="t1"):
 def clean(con, cfg, src="raw"):
     """Cleaning steps on table/view `src` -> tables `clean` and `static_mask`; returns the step log.
 
-    Order (identical to the baseline): unknown platform -> confidence -> H3 cell -> static mask (from SP rows) ->
-    type != keep_type dropped -> NRT rows (no type) in masked cells dropped -> exact duplicates (first by source
-    order kept) -> NRT rows on a day that has SP data for the same satellite dropped."""
+    Order: unknown platform -> confidence -> H3 cell -> static mask -> type != keep_type dropped -> rows in masked
+    cells dropped (static_mask.drop_all_rows true: every row, any sensor/type/processing, because FIRMS labels 1-8%
+    of a gas flare's archive detections type 0 and they leaked through; false: NRT rows only, as in the baseline) ->
+    exact duplicates (first by source order kept) -> NRT rows on a day that has SP data for the same satellite."""
     n_raw, n_plat = con.execute(f"SELECT count(*), count(platform) FROM {src}").fetchall()[0]
     confident(con, cfg, src)
     con.execute(f"CREATE OR REPLACE TABLE static_mask AS {static_mask_sql(cfg, 't1')}")
     con.execute(f"""CREATE OR REPLACE VIEW t2 AS SELECT * FROM t1 WHERE {type_ok_sql(cfg)}""")
-    con.execute("""CREATE OR REPLACE VIEW t3 AS SELECT * FROM t2
-                   WHERE NOT (type IS NULL AND h3_cell IN (SELECT h3_cell FROM static_mask))""")
+    which = "true" if cfg["cleaning"]["static_mask"].get("drop_all_rows") else "type IS NULL"
+    con.execute(f"""CREATE OR REPLACE VIEW t3 AS SELECT * FROM t2
+                    WHERE NOT ({which} AND h3_cell IN (SELECT h3_cell FROM static_mask))""")
     con.execute("""CREATE OR REPLACE TABLE t4 AS SELECT * FROM t3
                    QUALIFY row_number() OVER (PARTITION BY platform, lat, lon, datetime_utc ORDER BY src_order) = 1""")
     con.execute("""CREATE OR REPLACE TABLE clean AS
@@ -226,7 +249,7 @@ def clean(con, cfg, src="raw"):
     n4 = con.execute("SELECT count(*) FROM t4").fetchall()[0][0]
     n5 = con.execute("SELECT count(*) FROM clean").fetchall()[0][0]
     counts = [("unknown_platform", n_raw, n_plat), ("confidence", n_plat, n1), ("type_not_vegetation", n1, n2),
-              ("nrt_static_mask", n2, n3), ("exact_duplicates", n3, n4), ("nrt_overlaps_sp", n4, n5)]
+              ("static_mask", n2, n3), ("exact_duplicates", n3, n4), ("nrt_overlaps_sp", n4, n5)]
     steps = [{"step": s, "rows_in": int(a), "rows_out": int(b), "removed": int(a - b)} for s, a, b in counts]
     for s in steps:
         log.info("  %-22s %10d -> %10d", s["step"], s["rows_in"], s["rows_out"])

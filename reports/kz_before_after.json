@@ -2,7 +2,7 @@
   "Phase B": {
     "hotspots after cleaning": 3171270,
     "removed as static (type != 0)": 482852,
-    "NRT removed by static mask": 13750,
+    "removed by static mask": 13750,
     "static mask cells": 189,
     "selected model": "C2 (poisson_log)",
     "step ratio 2012: naive points": 2.8240041147884076,
@@ -24,7 +24,7 @@
   "after C3": {
     "hotspots after cleaning": 3171270,
     "removed as static (type != 0)": 482852,
-    "NRT removed by static mask": 13750,
+    "removed by static mask": 13750,
     "static mask cells": 189,
     "selected model": "C2 (poisson_log)",
     "step ratio 2012: naive points": 2.8240041147884076,
@@ -43,10 +43,10 @@
     "LORO coverage (region-months)": 0.912109375,
     "model score (mean T1, T3, T4)": 10.62729733454155
   },
-  "now": {
+  "C4 (before flare fix)": {
     "hotspots after cleaning": 3172931,
     "removed as static (type != 0)": 482852,
-    "NRT removed by static mask": 12089,
+    "removed by static mask": 12089,
     "static mask cells": 91,
     "selected model": "C2 (poisson_log)",
     "step ratio 2012: naive points": 2.8240041147884076,
@@ -64,5 +64,27 @@
     "LORO MAE % (median region)": 18.501008154542767,
     "LORO coverage (region-months)": 0.912109375,
     "model score (mean T1, T3, T4)": 10.62729733454155
+  },
+  "now": {
+    "hotspots after cleaning": 3107590,
+    "removed as static (type != 0)": 482852,
+    "removed by static mask": 77430,
+    "static mask cells": 424,
+    "selected model": "C2 (poisson_log)",
+    "step ratio 2012: naive points": 2.7582987367033125,
+    "step ratio 2012: naive cell-days": 1.5844408765200846,
+    "step ratio 2012: harmonized": 0.9242764551132989,
+    "step ratio 2012: MODIS alone": 0.8835964677548835,
+    "harmonized jump vs MODIS alone": 1.0460391013804962,
+    "monthly step factor, harmonized": 0.7925898662168858,
+    "backcast T1 MAE %": 6.966710306281798,
+    "backcast T1 bias %": -2.548281041522447,
+    "leave-one-year-out T4 MAE %": 6.3741481903742745,
+    "holdout 2020+ MAE %": 9.767556044344426,
+    "holdout 2020+ bias %": -0.9272217801195329,
+    "holdout 2020+ coverage": 0.9166666666666666,
+    "LORO MAE % (median region)": 13.493645136821755,
+    "LORO coverage (region-months)": 0.91796875,
+    "model score (mean T1, T3, T4)": 8.94483454449261
   }
 }

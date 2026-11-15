@@ -2,6 +2,11 @@
 
 ## Summary (read this first)
 
+**Update 10:30, static-source leak:** the columns on the map were gas flares and smelters that were in the mask, but
+their type-0-labelled archive rows leaked through. Masked cells now lose every row, plus a new `static_site` rule
+(#23–27, `docs/STATIC_SOURCES.md`). KZ hotspots −2.1%, holdout MAE 10.3 → 9.8%, LORO 18.5 → 13.5%; UZ local
+15.6%, TM 16.0%. AUS/IND/USA/BRA not yet re-cleaned with the new rule (transfer rows only).
+
 **Finished:** both C3-review changes, the full re-run of all 10 countries, C4 (`reports/VALIDATION.md`), the KZ
 before/after table (`reports/kz_before_after.md`), Phase D export (`web/public/data/`, 37.6 MB hex + < 1 MB rest,
 no file > 5 MB, largest 2.1 MB). Regression check OK against the new `reports/phase_c4` snapshot. Committed and
@@ -58,3 +63,13 @@ check of the product before 2012") is partly answered by the C4 burned-area test
 | 21 | 04:06 | Export empties `web/public/data/` instead of deleting the folder. | Windows refused to delete a folder a shell was inside. |
 | 22 | 04:06 | Site series for non-KZ countries use the KZ coefficients, exactly as your spec and the product's current state; the bias is documented in `docs/PHASE_D.md`, not silently corrected with local fits. | Switching the product to per-country coefficients changes what was validated as "the model" — your decision. |
 | 14 | 02:40 | `last_ym` = latest month complete in every exported country; `first_ym` = 2001-01. lo90 = hi90 = value from 2012 (observed). Hex months after `last_ym` are `null`. | One time axis for the whole site; partial months would look like a drop. |
+
+### Static-source leak fix (10:00–10:30, see `docs/STATIC_SOURCES.md`)
+
+| # | time | decision | why |
+|---|---|---|---|
+| 23 | 10:05 | Masked cells: drop **every** row (any sensor, type, processing), `cleaning.static_mask.drop_all_rows`. | The Tengiz/Aktobe/Kumkol columns were cells already in the mask. FIRMS labels 1–8% of their archive detections type 0, and the mask dropped only NRT rows. |
+| 24 | 10:05 | Type rule also evaluated on all history (`type_all_history`); type 3 counts as static (`static_types: [2, 3]`). | Leaked type-0 rows exist in every year, so sites that stopped flaring must be masked too. Temirtau steel is labelled type 3. |
+| 25 | 10:05 | New rule `static_site`: VIIRS-active ≥ 36 months, ≥ 8 calendar months, ≥ 50% night. Thresholds fixed from the distribution before the re-run, not tuned after. | Catches static sources FIRMS labels type 0 (Angren, Chirchiq, Ustyurt). C2's persistence rule removed farm fires; the night share separates them (bimodal: farm ~0–0.1, flares 0.75–1.0). |
+| 26 | 10:12 | On request, did not wait for Brazil: re-cleaned KZ, UZ, TM, KG, TJ, PRT; **AUS, IND, USA, BRA still on the old rule**. Re-ran 02b → 08 and re-exported. | AUS/IND/USA/BRA feed only the transfer table (and a minor share of the satellite-wide outage list, still 61 days). To redo later: `python -m pipeline.02_clean AUS IND USA BRA`, then `run_all 02b 03 experiments 05 06 07 08`. |
+| 27 | 10:20 | New regression snapshot `reports/phase_static` (config `regression.snapshot`); `reports/phase_c4` kept as "before the fix"; `compare_kz` shows both. | The fix changes KZ cleaning on purpose (−2.1% hotspots). |

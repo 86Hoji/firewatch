@@ -87,3 +87,35 @@ def test_static_mask_removes_nrt_detections_at_flares(cfg):
     out, mask = clean.clean(df, cfg, [])
     assert h3.latlng_to_cell(*flare, cfg["grid"]["h3_res"]) in set(mask["h3_cell"])
     assert len(out) == 1 and out["lat"].iloc[0] == field[0]   # NRT at the flare dropped, field fire kept
+
+
+def test_static_mask_drops_mislabelled_archive_rows_at_flares(cfg):
+    """FIRMS labels a few % of a flare's archive detections type 0; they must not leak through (Tengiz columns)."""
+    flare, field = (46.15, 53.40), (52.0, 64.0)
+    n = 12
+    rows = {"sensor": ["VIIRS"] * (n + 2), "platform": ["SNPP"] * (n + 2),
+            "lat": [flare[0]] * (n + 1) + [field[0]], "lon": [flare[1]] * (n + 1) + [field[1]],
+            "datetime_utc": pd.date_range("2024-01-01", periods=n + 2, freq="D"),
+            "confidence": ["n"] * (n + 2), "confidence_norm": ["n"] * (n + 2), "frp": [5.0] * (n + 2),
+            "type": [2.0] * n + [0.0, 0.0], "processing": ["SP"] * (n + 2), "daynight": ["N"] * (n + 2)}
+    df = pd.DataFrame(rows)
+    df["date"] = df["datetime_utc"].dt.date
+    out, _ = clean.clean(df, cfg, [])
+    assert len(out) == 1 and out["lat"].iloc[0] == field[0]   # type-0 row at the flare dropped, field fire kept
+
+
+def test_static_site_rule_catches_type0_all_year_night_source_not_seasonal_field(cfg):
+    ss = cfg["cleaning"]["static_mask"]["static_site"]
+    months = pd.date_range("2013-01-15", periods=ss["min_months"] + 2, freq="MS") + pd.Timedelta(days=14)
+    site, field = (44.05, 58.69), (52.0, 64.0)
+    field_days = pd.to_datetime([f"{y}-{m:02d}-10" for y in range(2012, 2026) for m in (4, 5, 9, 10)])
+    df = pd.concat([
+        pd.DataFrame({"lat": site[0], "lon": site[1], "datetime_utc": months, "daynight": "N"}),
+        pd.DataFrame({"lat": field[0], "lon": field[1], "datetime_utc": field_days, "daynight": "D"})])
+    df = df.assign(sensor="VIIRS", platform="SNPP", confidence="n", confidence_norm="n", frp=3.0, type=0.0,
+                   processing="SP").reset_index(drop=True)
+    df["date"] = df["datetime_utc"].dt.date
+    out, mask = clean.clean(df, cfg, [])
+    res = cfg["grid"]["h3_res"]
+    assert set(mask["h3_cell"]) == {h3.latlng_to_cell(*site, res)}
+    assert set(out["lat"]) == {field[0]}                       # 56 seasonal daytime field fires kept

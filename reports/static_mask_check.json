@@ -4,41 +4,53 @@
   "countries": {
     "KAZ": {
       "mask_cells": {
-        "mask": 86,
-        "c2_both_rules_all_history": 186,
-        "type2_all_history": 158,
+        "mask": 402,
+        "previous_type2_last5y": 200,
+        "c2_both_rules_all_history": 367,
+        "type2_all_history": 340,
         "persistent_rule_only": 134
       },
       "detection": {
         "mask": {
-          "precision": 0.9393398342718491,
-          "recall": 0.8844727993792568,
-          "f1": 0.9110810150751537,
-          "tp": 41036,
-          "fp": 2650,
-          "fn": 5360,
+          "precision": 0.8758513994092946,
+          "recall": 0.9395637554961634,
+          "f1": 0.906589578545655,
+          "tp": 43592,
+          "fp": 6179,
+          "fn": 2804,
+          "test_rows": 235202,
+          "test_type2_rows": 46396,
+          "type2_share": 0.19726022737901888
+        },
+        "previous_type2_last5y": {
+          "precision": 0.9192951148784296,
+          "recall": 0.8882662298474007,
+          "f1": 0.9035143489794577,
+          "tp": 41212,
+          "fp": 3618,
+          "fn": 5184,
           "test_rows": 235202,
           "test_type2_rows": 46396,
           "type2_share": 0.19726022737901888
         },
         "c2_both_rules_all_history": {
-          "precision": 0.8860264177177476,
+          "precision": 0.8833244222657874,
           "recall": 0.9614406414346064,
-          "f1": 0.9221943126492387,
+          "f1": 0.9207286237679962,
           "tp": 44607,
-          "fp": 5738,
+          "fp": 5892,
           "fn": 1789,
           "test_rows": 235202,
           "test_type2_rows": 46396,
           "type2_share": 0.19726022737901888
         },
         "type2_all_history": {
-          "precision": 0.922314864622557,
-          "recall": 0.8869299077506682,
-          "f1": 0.9042763591614292,
-          "tp": 41150,
-          "fp": 3466,
-          "fn": 5246,
+          "precision": 0.9027480449124033,
+          "recall": 0.890723338218812,
+          "f1": 0.8966953804760561,
+          "tp": 41326,
+          "fp": 4452,
+          "fn": 5070,
           "test_rows": 235202,
           "test_type2_rows": 46396,
           "type2_share": 0.19726022737901888
@@ -58,26 +70,52 @@
       "monthly": {
         "mask": {
           "MODIS": {
+            "total_prod": 17139,
+            "total_mask": 17332,
+            "total_pct": 1.1260867028414667,
+            "median_abs_monthly_pct": 1.3093289689034338,
+            "max_abs_monthly_pct": 12.849162011173188,
+            "months": 19
+          },
+          "NOAA20": {
+            "total_prod": 34406,
+            "total_mask": 35261,
+            "total_pct": 2.485031680520833,
+            "median_abs_monthly_pct": 5.069124423963123,
+            "max_abs_monthly_pct": 51.42857142857142,
+            "months": 19
+          },
+          "SNPP": {
+            "total_prod": 32439,
+            "total_mask": 33169,
+            "total_pct": 2.2503776318628876,
+            "median_abs_monthly_pct": 4.0348964013086075,
+            "max_abs_monthly_pct": 39.47368421052631,
+            "months": 19
+          }
+        },
+        "previous_type2_last5y": {
+          "MODIS": {
             "total_prod": 17318,
-            "total_mask": 17471,
-            "total_pct": 0.8834738422450528,
+            "total_mask": 17464,
+            "total_pct": 0.8430534703776527,
             "median_abs_monthly_pct": 0.7984969469234438,
             "max_abs_monthly_pct": 8.994708994709,
             "months": 19
           },
           "NOAA20": {
             "total_prod": 36225,
-            "total_mask": 37105,
-            "total_pct": 2.4292615596963385,
-            "median_abs_monthly_pct": 3.916581892166837,
+            "total_mask": 36826,
+            "total_pct": 1.6590752242926055,
+            "median_abs_monthly_pct": 2.501761804087388,
             "max_abs_monthly_pct": 52.38095238095237,
             "months": 19
           },
           "SNPP": {
             "total_prod": 34124,
-            "total_mask": 34831,
-            "total_pct": 2.0718555855116616,
-            "median_abs_monthly_pct": 2.751756440281028,
+            "total_mask": 34573,
+            "total_pct": 1.3157894736842035,
+            "median_abs_monthly_pct": 2.1186440677966045,
             "max_abs_monthly_pct": 47.72727272727273,
             "months": 19
           }
@@ -85,24 +123,24 @@
         "c2_both_rules_all_history": {
           "MODIS": {
             "total_prod": 17318,
-            "total_mask": 17336,
-            "total_pct": 0.10393809908766372,
+            "total_mask": 17335,
+            "total_pct": 0.09816376024944784,
             "median_abs_monthly_pct": 0.48859934853420217,
             "max_abs_monthly_pct": 7.9365079365079305,
             "months": 19
           },
           "NOAA20": {
             "total_prod": 36225,
-            "total_mask": 35170,
-            "total_pct": -2.912353347135954,
+            "total_mask": 35130,
+            "total_pct": -3.0227743271221574,
             "median_abs_monthly_pct": 4.522613065326631,
             "max_abs_monthly_pct": 23.809523809523814,
             "months": 19
           },
           "SNPP": {
             "total_prod": 34124,
-            "total_mask": 33064,
-            "total_pct": -3.106318133864727,
+            "total_mask": 33036,
+            "total_pct": -3.1883718204196443,
             "median_abs_monthly_pct": 6.622516556291391,
             "max_abs_monthly_pct": 22.64150943396226,
             "months": 19
@@ -111,25 +149,25 @@
         "type2_all_history": {
           "MODIS": {
             "total_prod": 17318,
-            "total_mask": 17410,
-            "total_pct": 0.5312391731146837,
+            "total_mask": 17403,
+            "total_pct": 0.4908188012472614,
             "median_abs_monthly_pct": 0.48442906574395206,
             "max_abs_monthly_pct": 7.9365079365079305,
             "months": 19
           },
           "NOAA20": {
             "total_prod": 36225,
-            "total_mask": 36827,
-            "total_pct": 1.661835748792262,
-            "median_abs_monthly_pct": 2.5432349949135347,
+            "total_mask": 36540,
+            "total_pct": 0.8695652173912993,
+            "median_abs_monthly_pct": 1.5625,
             "max_abs_monthly_pct": 52.38095238095237,
             "months": 19
           },
           "SNPP": {
             "total_prod": 34124,
-            "total_mask": 34594,
-            "total_pct": 1.377329738600408,
-            "median_abs_monthly_pct": 1.7285766826038884,
+            "total_mask": 34333,
+            "total_pct": 0.6124721603563366,
+            "median_abs_monthly_pct": 1.2872379551305713,
             "max_abs_monthly_pct": 40.90909090909092,
             "months": 19
           }
@@ -138,41 +176,53 @@
     },
     "UZB": {
       "mask_cells": {
-        "mask": 86,
-        "c2_both_rules_all_history": 189,
-        "type2_all_history": 152,
+        "mask": 237,
+        "previous_type2_last5y": 101,
+        "c2_both_rules_all_history": 214,
+        "type2_all_history": 178,
         "persistent_rule_only": 116
       },
       "detection": {
         "mask": {
-          "precision": 0.9400184558597354,
-          "recall": 0.746944761284015,
-          "f1": 0.8324329232305806,
-          "tp": 18336,
-          "fp": 1170,
-          "fn": 6212,
+          "precision": 0.8312968248305387,
+          "recall": 0.7593693987290207,
+          "f1": 0.7937068892105935,
+          "tp": 18641,
+          "fp": 3783,
+          "fn": 5907,
+          "test_rows": 82161,
+          "test_type2_rows": 24548,
+          "type2_share": 0.2987792261535278
+        },
+        "previous_type2_last5y": {
+          "precision": 0.937809187279152,
+          "recall": 0.7568029982075933,
+          "f1": 0.8376392082600659,
+          "tp": 18578,
+          "fp": 1232,
+          "fn": 5970,
           "test_rows": 82161,
           "test_type2_rows": 24548,
           "type2_share": 0.2987792261535278
         },
         "c2_both_rules_all_history": {
-          "precision": 0.8421454219030521,
+          "precision": 0.8404102839738422,
           "recall": 0.7643392537070229,
-          "f1": 0.8013581617835482,
+          "f1": 0.8005717455305713,
           "tp": 18763,
-          "fp": 3517,
+          "fp": 3563,
           "fn": 5785,
           "test_rows": 82161,
           "test_type2_rows": 24548,
           "type2_share": 0.2987792261535278
         },
         "type2_all_history": {
-          "precision": 0.8710872559730205,
-          "recall": 0.7470669708326544,
-          "f1": 0.8043244665687156,
-          "tp": 18339,
-          "fp": 2714,
-          "fn": 6209,
+          "precision": 0.8694899391670566,
+          "recall": 0.7569252077562327,
+          "f1": 0.8093122522757961,
+          "tp": 18581,
+          "fp": 2789,
+          "fn": 5967,
           "test_rows": 82161,
           "test_type2_rows": 24548,
           "type2_share": 0.2987792261535278
@@ -192,52 +242,78 @@
       "monthly": {
         "mask": {
           "MODIS": {
+            "total_prod": 2871,
+            "total_mask": 3982,
+            "total_pct": 38.69731800766283,
+            "median_abs_monthly_pct": 57.83132530120483,
+            "max_abs_monthly_pct": 232.50000000000003,
+            "months": 19
+          },
+          "NOAA20": {
+            "total_prod": 10438,
+            "total_mask": 11369,
+            "total_pct": 8.919333205594949,
+            "median_abs_monthly_pct": 9.71993410214167,
+            "max_abs_monthly_pct": 28.346456692913378,
+            "months": 19
+          },
+          "SNPP": {
+            "total_prod": 9659,
+            "total_mask": 10459,
+            "total_pct": 8.282430893467229,
+            "median_abs_monthly_pct": 8.695652173913038,
+            "max_abs_monthly_pct": 27.125506072874494,
+            "months": 19
+          }
+        },
+        "previous_type2_last5y": {
+          "MODIS": {
             "total_prod": 2957,
-            "total_mask": 4061,
-            "total_pct": 37.335136963138325,
+            "total_mask": 4060,
+            "total_pct": 37.30131890429489,
             "median_abs_monthly_pct": 49.20634920634921,
             "max_abs_monthly_pct": 206.81818181818184,
             "months": 19
           },
           "NOAA20": {
             "total_prod": 11265,
-            "total_mask": 11950,
-            "total_pct": 6.080781180648032,
-            "median_abs_monthly_pct": 4.94296577946769,
-            "max_abs_monthly_pct": 19.863013698630127,
+            "total_mask": 11860,
+            "total_pct": 5.281846426986236,
+            "median_abs_monthly_pct": 4.372623574144496,
+            "max_abs_monthly_pct": 18.11023622047243,
             "months": 19
           },
           "SNPP": {
             "total_prod": 10450,
-            "total_mask": 10998,
-            "total_pct": 5.244019138755984,
-            "median_abs_monthly_pct": 4.581673306772904,
-            "max_abs_monthly_pct": 20.640569395017792,
+            "total_mask": 10910,
+            "total_pct": 4.401913875598096,
+            "median_abs_monthly_pct": 4.249999999999998,
+            "max_abs_monthly_pct": 17.793594306049833,
             "months": 19
           }
         },
         "c2_both_rules_all_history": {
           "MODIS": {
             "total_prod": 2957,
-            "total_mask": 4005,
-            "total_pct": 35.44132566790665,
+            "total_mask": 4004,
+            "total_pct": 35.40750760906324,
             "median_abs_monthly_pct": 42.51968503937007,
             "max_abs_monthly_pct": 213.63636363636363,
             "months": 19
           },
           "NOAA20": {
             "total_prod": 11265,
-            "total_mask": 11384,
-            "total_pct": 1.0563692853972517,
+            "total_mask": 11372,
+            "total_pct": 0.949844651575682,
             "median_abs_monthly_pct": 2.0325203252032575,
             "max_abs_monthly_pct": 12.007874015748033,
             "months": 19
           },
           "SNPP": {
             "total_prod": 10450,
-            "total_mask": 10484,
-            "total_pct": 0.32535885167463974,
-            "median_abs_monthly_pct": 3.2573289902280145,
+            "total_mask": 10476,
+            "total_pct": 0.24880382775118726,
+            "median_abs_monthly_pct": 3.0944625407166138,
             "max_abs_monthly_pct": 12.455516014234869,
             "months": 19
           }
@@ -245,26 +321,26 @@
         "type2_all_history": {
           "MODIS": {
             "total_prod": 2957,
-            "total_mask": 4029,
-            "total_pct": 36.252959080148806,
+            "total_mask": 4028,
+            "total_pct": 36.21914102130537,
             "median_abs_monthly_pct": 43.307086614173215,
             "max_abs_monthly_pct": 215.9090909090909,
             "months": 19
           },
           "NOAA20": {
             "total_prod": 11265,
-            "total_mask": 11712,
-            "total_pct": 3.968042609853528,
+            "total_mask": 11619,
+            "total_pct": 3.1424766977363516,
             "median_abs_monthly_pct": 2.008032128514059,
-            "max_abs_monthly_pct": 17.808219178082197,
+            "max_abs_monthly_pct": 15.410958904109595,
             "months": 19
           },
           "SNPP": {
             "total_prod": 10450,
-            "total_mask": 10774,
-            "total_pct": 3.1004784688995146,
-            "median_abs_monthly_pct": 2.5210084033613356,
-            "max_abs_monthly_pct": 18.50533807829182,
+            "total_mask": 10685,
+            "total_pct": 2.248803827751189,
+            "median_abs_monthly_pct": 2.9268292682926855,
+            "max_abs_monthly_pct": 15.658362989323837,
             "months": 19
           }
         }
@@ -272,40 +348,52 @@
     },
     "TKM": {
       "mask_cells": {
-        "mask": 181,
-        "c2_both_rules_all_history": 274,
-        "type2_all_history": 233,
+        "mask": 343,
+        "previous_type2_last5y": 189,
+        "c2_both_rules_all_history": 288,
+        "type2_all_history": 247,
         "persistent_rule_only": 207
       },
       "detection": {
         "mask": {
-          "precision": 0.8612747565055212,
+          "precision": 0.7964988009592326,
+          "recall": 0.9642058814991146,
+          "f1": 0.8723652934455725,
+          "tp": 66428,
+          "fp": 16972,
+          "fn": 2466,
+          "test_rows": 134450,
+          "test_type2_rows": 68894,
+          "type2_share": 0.5124135366307178
+        },
+        "previous_type2_last5y": {
+          "precision": 0.8611600337442834,
           "recall": 0.844572822016431,
-          "f1": 0.8528420250344444,
+          "f1": 0.8527857776214448,
           "tp": 58186,
-          "fp": 9372,
+          "fp": 9381,
           "fn": 10708,
           "test_rows": 134450,
           "test_type2_rows": 68894,
           "type2_share": 0.5124135366307178
         },
         "c2_both_rules_all_history": {
-          "precision": 0.8234761161725475,
+          "precision": 0.823010073824406,
           "recall": 0.9498650100153859,
-          "f1": 0.8821665925236921,
+          "f1": 0.8818991017943897,
           "tp": 65440,
-          "fp": 14028,
+          "fp": 14073,
           "fn": 3454,
           "test_rows": 134450,
           "test_type2_rows": 68894,
           "type2_share": 0.5124135366307178
         },
         "type2_all_history": {
-          "precision": 0.8543046357615894,
+          "precision": 0.8537454545454546,
           "recall": 0.8519609835399309,
-          "f1": 0.853131200081396,
+          "f1": 0.8528522856063468,
           "tp": 58695,
-          "fp": 10010,
+          "fp": 10055,
           "fn": 10199,
           "test_rows": 134450,
           "test_type2_rows": 68894,
@@ -326,6 +414,32 @@
       "monthly": {
         "mask": {
           "MODIS": {
+            "total_prod": 3061,
+            "total_mask": 3111,
+            "total_pct": 1.6334531198954672,
+            "median_abs_monthly_pct": 1.8867924528301883,
+            "max_abs_monthly_pct": 10.256410256410264,
+            "months": 19
+          },
+          "NOAA20": {
+            "total_prod": 11483,
+            "total_mask": 12210,
+            "total_pct": 6.331098145084035,
+            "median_abs_monthly_pct": 6.784660766961648,
+            "max_abs_monthly_pct": 24.603174603174605,
+            "months": 19
+          },
+          "SNPP": {
+            "total_prod": 10189,
+            "total_mask": 10785,
+            "total_pct": 5.849445480420057,
+            "median_abs_monthly_pct": 7.910447761194028,
+            "max_abs_monthly_pct": 23.46041055718475,
+            "months": 19
+          }
+        },
+        "previous_type2_last5y": {
+          "MODIS": {
             "total_prod": 3309,
             "total_mask": 3288,
             "total_pct": -0.6346328195829587,
@@ -335,16 +449,16 @@
           },
           "NOAA20": {
             "total_prod": 16095,
-            "total_mask": 15816,
-            "total_pct": -1.7334575955265663,
-            "median_abs_monthly_pct": 3.966005665722383,
+            "total_mask": 15813,
+            "total_pct": -1.7520969245107154,
+            "median_abs_monthly_pct": 4.07142857142857,
             "max_abs_monthly_pct": 28.57142857142858,
             "months": 19
           },
           "SNPP": {
             "total_prod": 14526,
-            "total_mask": 13965,
-            "total_pct": -3.862040479140849,
+            "total_mask": 13963,
+            "total_pct": -3.87580889439626,
             "median_abs_monthly_pct": 4.29645542427497,
             "max_abs_monthly_pct": 25.333333333333343,
             "months": 19
@@ -361,18 +475,18 @@
           },
           "NOAA20": {
             "total_prod": 16095,
-            "total_mask": 13496,
-            "total_pct": -16.14787200994098,
+            "total_mask": 13485,
+            "total_pct": -16.216216216216218,
             "median_abs_monthly_pct": 16.631130063965884,
-            "max_abs_monthly_pct": 31.391304347826086,
+            "max_abs_monthly_pct": 31.65217391304348,
             "months": 19
           },
           "SNPP": {
             "total_prod": 14526,
-            "total_mask": 11842,
-            "total_pct": -18.4772132727523,
+            "total_mask": 11833,
+            "total_pct": -18.539171141401624,
             "median_abs_monthly_pct": 18.450184501845023,
-            "max_abs_monthly_pct": 36.809815950920246,
+            "max_abs_monthly_pct": 36.985100788781764,
             "months": 19
           }
         },
@@ -387,16 +501,16 @@
           },
           "NOAA20": {
             "total_prod": 16095,
-            "total_mask": 15512,
-            "total_pct": -3.6222429325877603,
+            "total_mask": 15501,
+            "total_pct": -3.6905871388629996,
             "median_abs_monthly_pct": 4.833333333333334,
             "max_abs_monthly_pct": 25.510204081632647,
             "months": 19
           },
           "SNPP": {
             "total_prod": 14526,
-            "total_mask": 13644,
-            "total_pct": -6.0718711276332105,
+            "total_mask": 13635,
+            "total_pct": -6.133828996282531,
             "median_abs_monthly_pct": 4.86486486486486,
             "max_abs_monthly_pct": 24.0,
             "months": 19

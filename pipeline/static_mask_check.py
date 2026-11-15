@@ -3,10 +3,11 @@
 Train: mask built ONLY from archive rows (they carry `type`) dated before mask_check.split (2025-01-01).
 Test:  archive rows from split to mask_check.test_end (2026-07-31), never seen when building the mask.
  * detection level: does "in a masked cell" catch type = 2 (static land source)? precision, recall, F1
-   - production mask (type-2 rule, built from the last cleaning.static_mask.recent_years years before the split),
-     and for comparison the C2 mask (both rules, all history), the type-2 rule on all history, the persistent rule
+   - production mask (as configured: type rule on the last recent_years + all history, static_site rule),
+     and for comparison the previous production mask (type-2 rule, last 5 y), the C2 mask (both rules, all
+     history), the type-2 rule on all history, the persistent rule
  * monthly totals: cell-days per month if the mask REPLACED `type` (drop masked cells, ignore type) vs the
-   production rule (keep type = 0); % change per country and sensor.
+   production rule (keep type = 0, and outside masked cells when static_mask.drop_all_rows); % change.
 Outputs reports/static_mask_check.json and .md.   python -m pipeline.static_mask_check
 """
 import pandas as pd
@@ -32,10 +33,11 @@ def pr(con, test, mask_tbl):
             "test_rows": n, "test_type2_rows": n2, "type2_share": n2 / n if n else None}
 
 
-def monthly_change(con, test, mask_tbl):
+def monthly_change(con, test, mask_tbl, drop_all=False):
     """Cell-days per month and sensor group: production (type = 0) vs mask instead of type."""
+    outside = f"AND h3_cell NOT IN (SELECT h3_cell FROM {mask_tbl})" if drop_all else ""
     q = f"""
-        WITH a AS (SELECT * FROM {test} WHERE type = 0),
+        WITH a AS (SELECT * FROM {test} WHERE type = 0 {outside}),
              b AS (SELECT * FROM {test} WHERE h3_cell NOT IN (SELECT h3_cell FROM {mask_tbl}))
         SELECT x.year, x.month, x.grp, x.n AS prod, coalesce(y.n, 0) AS mask FROM
           (SELECT year, month, CASE WHEN sensor = 'MODIS' THEN 'MODIS' ELSE platform END AS grp,
@@ -58,10 +60,12 @@ def monthly_change(con, test, mask_tbl):
     return out
 
 
-MASKS = {"mask": "mask", "c2_both_rules_all_history": "mask_c2", "type2_all_history": "mask_type2_all",
-         "persistent_rule_only": "mask_persistent"}
-LABELS = {"mask": "production: type-2 rule, last 5 y", "c2_both_rules_all_history": "C2 mask (both rules, all history)",
-          "type2_all_history": "type-2 rule, all history", "persistent_rule_only": "persistent rule only"}
+MASKS = {"mask": "mask", "previous_type2_last5y": "mask_prev", "c2_both_rules_all_history": "mask_c2",
+         "type2_all_history": "mask_type2_all", "persistent_rule_only": "mask_persistent"}
+LABELS = {"mask": "production: type rule (last 5 y + all history) + static_site",
+          "previous_type2_last5y": "previous production: type-2 rule, last 5 y",
+          "c2_both_rules_all_history": "C2 mask (both rules, all history)",
+          "type2_all_history": "type rule, all history", "persistent_rule_only": "persistent rule only"}
 
 
 def check_country(cfg, man, country):
@@ -75,6 +79,7 @@ def check_country(cfg, man, country):
         sp = mc["split"]
         q = lambda **k: ingest.static_mask_sql(cfg, "t1", before=sp, **k)  # noqa: E731
         con.execute(f"CREATE TABLE mask AS {q()}")                                    # production (as configured)
+        con.execute(f"CREATE TABLE mask_prev AS {q(rules=['type2'], recent_years=5)}")
         con.execute(f"CREATE TABLE mask_c2 AS {q(rules=['type2', 'persistent'], recent_years=None)}")
         con.execute(f"CREATE TABLE mask_type2_all AS {q(rules=['type2'], recent_years=None)}")
         con.execute(f"CREATE TABLE mask_persistent AS {q(rules=['persistent'], recent_years=None)}")
@@ -83,7 +88,9 @@ def check_country(cfg, man, country):
         res = {"mask_cells": {k: con.execute(f"SELECT count(*) FROM {t}").fetchall()[0][0]
                               for k, t in MASKS.items()},
                "detection": {k: pr(con, "test", t) for k, t in MASKS.items()},
-               "monthly": {k: monthly_change(con, "test", t) for k, t in MASKS.items() if k != "persistent_rule_only"}}
+               "monthly": {k: monthly_change(con, "test", t,
+                                             drop_all=k == "mask" and cfg["cleaning"]["static_mask"].get("drop_all_rows"))
+                           for k, t in MASKS.items() if k != "persistent_rule_only"}}
     finally:
         con.close()
         ingest.remove_work(path)
@@ -112,7 +119,7 @@ def write_md(cfg, R):
             L.append(f"| {c} | {lab} | {fmt(d['precision'], pct=True)} | {fmt(d['recall'], pct=True)} | "
                      f"{fmt(d['f1'], 3)} | {d['test_rows']:,} | {d['test_type2_rows']:,} ({fmt(d['type2_share'], pct=True)}) |")
     L += ["", "## If the mask replaced `type`: change in monthly cell-days", "",
-          "Production keeps `type = 0`; the alternative drops masked cells and ignores `type`. "
+          "Production keeps `type = 0` (outside masked cells, as production now drops every row there); the alternative drops masked cells and ignores `type`. "
           "Positive = the mask lets through more than `type` does (missed flares, or real fires `type` drops).", "",
           "| country | rule | sensor | total change | median monthly abs. change | worst month |", "|---|---|---|---|---|---|"]
     for c, r in R.items():

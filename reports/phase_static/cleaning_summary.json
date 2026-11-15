@@ -1,0 +1,98 @@
+{
+  "role": "train",
+  "level": "cell",
+  "files": [
+    {
+      "request_id": 847148,
+      "file": "fire_archive_M-C61_847148.csv",
+      "rows": 777034
+    },
+    {
+      "request_id": 847158,
+      "file": "fire_archive_M-C61_847158.csv",
+      "rows": 258020
+    },
+    {
+      "request_id": 847199,
+      "file": "fire_archive_M-C61_847199.csv",
+      "rows": 221560
+    },
+    {
+      "request_id": 847199,
+      "file": "fire_nrt_M-C61_847199.csv",
+      "rows": 4449
+    },
+    {
+      "request_id": 847159,
+      "file": "fire_archive_SV-C2_847159.csv",
+      "rows": 933875
+    },
+    {
+      "request_id": 847181,
+      "file": "fire_archive_SV-C2_847181.csv",
+      "rows": 833595
+    },
+    {
+      "request_id": 847181,
+      "file": "fire_nrt_SV-C2_847181.csv",
+      "rows": 29625
+    },
+    {
+      "request_id": 847180,
+      "file": "fire_archive_J1V-C2_847180.csv",
+      "rows": 830218
+    },
+    {
+      "request_id": 847180,
+      "file": "fire_nrt_J1V-C2_847180.csv",
+      "rows": 31181
+    }
+  ],
+  "steps": [
+    {
+      "step": "unknown_platform",
+      "rows_in": 3919557,
+      "rows_out": 3919557,
+      "removed": 0
+    },
+    {
+      "step": "confidence",
+      "rows_in": 3919557,
+      "rows_out": 3667872,
+      "removed": 251685
+    },
+    {
+      "step": "type_not_vegetation",
+      "rows_in": 3667872,
+      "rows_out": 3185020,
+      "removed": 482852
+    },
+    {
+      "step": "static_mask",
+      "rows_in": 3185020,
+      "rows_out": 3107590,
+      "removed": 77430
+    },
+    {
+      "step": "exact_duplicates",
+      "rows_in": 3107590,
+      "rows_out": 3107590,
+      "removed": 0
+    },
+    {
+      "step": "nrt_overlaps_sp",
+      "rows_in": 3107590,
+      "rows_out": 3107590,
+      "removed": 0
+    }
+  ],
+  "static_mask_cells": 424,
+  "rows_by_platform": {
+    "Aqua": 532954,
+    "NOAA20": 645898,
+    "SNPP": 1367094,
+    "Terra": 561644
+  },
+  "first_date": "2000-11-01",
+  "last_date": "2026-11-13"
+}
