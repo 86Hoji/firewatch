@@ -10,9 +10,9 @@ translation on data it never saw, and serves the result as a monthly fire calend
 
 | | before | after |
 |---|---|---|
-| **Honest uncertainty.** Share of held-out region-months inside the 90% interval (Kazakhstan, leave-one-region-out) | 50% | **92%** |
-| **No 2012 jump.** Step in annual fire activity 2009–11 → 2012–14 (MODIS alone changes ×1.38 in Uzbekistan, ×1.21 in Turkmenistan) | naive splice: Uzbekistan ×4.32, Turkmenistan ×3.48 | harmonized: **×1.24**, **×1.15** |
-| **Consistent with burned area.** Step at 2012 in fire cell-days once monthly MODIS burned area (MCD64A1) is accounted for; ≈ 1 means no break | naive: Uzbekistan ×3.87, Turkmenistan ×3.93 | harmonized: **×1.04** (95% CI 0.80–1.35), **×1.14** (0.87–1.49) |
+| **Honest uncertainty.** Share of held-out region-months inside the 90% interval (Kazakhstan, leave-one-region-out) | 48% | **92%** |
+| **No 2012 jump.** Step in annual fire activity 2009–11 → 2012–14 (MODIS alone changes ×1.37 in Uzbekistan, ×1.21 in Turkmenistan) | naive splice: Uzbekistan ×4.40, Turkmenistan ×3.65 | harmonized: **×1.19**, **×1.08** |
+| **Consistent with burned area.** Step at 2012 in fire cell-days once monthly MODIS burned area (MCD64A1) is accounted for; ≈ 1 means no break | naive: Uzbekistan ×3.96, Turkmenistan ×3.97 | harmonized: **×0.99** (95% CI 0.77–1.27), **×0.98** (0.78–1.24) |
 
 Uzbekistan and Turkmenistan use coefficients fitted on their own 2012–2019 overlap (the Kazakh coefficients do not
 transfer — see below). Full numbers: [`reports/VALIDATION.md`](reports/VALIDATION.md) (machine-readable:
@@ -28,29 +28,29 @@ transfer — see below). Full numbers: [`reports/VALIDATION.md`](reports/VALIDAT
 3. **Calibrate on the overlap, apply backwards.** In 2012–2019 both sensors fly; a Poisson model
    `E[VIIRS] = exp(a)·(MODIS+1)^b` per season is chosen among 8 candidates by a protocol fixed before the run, then
    applied to 2000–2011. 2020+ is held out (MODIS orbit drift).
-4. **Test on what the model never saw.** Back-cast (fit 2016–19 → predict 2012–15): 7.0% monthly error in
+4. **Test on what the model never saw.** Back-cast (fit 2016–19 → predict 2012–15): 6.9% monthly error in
    Kazakhstan; leave-one-year-out 6.4%; leave-one-region-out 13.5% (median of 13 oblasts); held-out 2020–2025:
-   9.8%, bias −0.9%. 90% intervals are sized at the level shown (country or region) from held-out errors.
+   10.0%, bias −2.6%. 90% intervals are sized at the level shown (country or region) from held-out errors.
 
 ## Honest limitations
 
 - **2002–2004 is extrapolation.** Kazakhstan's MODIS activity in 2002–2004 (51k–57k cell-days a year) exceeds every
   calibration year (max 36k), so those years rely on the fitted curve beyond its range. An extrapolation test
-  (fit on the quieter years of each month, predict the busier ones) gives 7.3% error and +3.7% bias for the chosen
-  model vs +10.4% bias for a constant ratio ([`docs/HARMONIZATION_REVIEW.md`](docs/HARMONIZATION_REVIEW.md) §2.1),
+  (fit on the quieter years of each month, predict the busier ones) gives 7.2% error and +3.5% bias for the chosen
+  model vs +10.6% bias for a constant ratio ([`docs/HARMONIZATION_REVIEW.md`](docs/HARMONIZATION_REVIEW.md) §2.1),
   but the far tail is still untested.
 - **Known fires rank by count, not intensity.** Events are ranked by excess fire cell-days in a ~40 km hexagon.
-  A compact, intense forest fire is small in counts: the Abai (Semey Ormany) fire of June 2023 ranks 231 of 1,183
+  A compact, intense forest fire is small in counts: the Abai (Semey Ormany) fire of June 2023 ranks 233 of 1,191
   events. Ranking by intensity (fire radiative power) is the natural next step.
 - **A new industrial site in Uzbekistan is not caught by FIRMS labels.** A heat source near 38.1°N 67.3°E appears
   in 2025; FIRMS labels 92% of its VIIRS detections as vegetation fire, so `type` cannot remove it and it inflates
   Uzbekistan's 2025–26 VIIRS counts.
 - **The burned-area check has limited resolution.** MODIS alone, which has no sensor change in 2012, also shifts
-  against burned area (Kyrgyzstan ×0.62, Turkmenistan ×1.44; 95% CI excludes 1), so there the check is inconclusive (few fires in
+  against burned area (Kyrgyzstan ×0.61, Turkmenistan ×1.44; 95% CI excludes 1), so there the check is inconclusive (few fires in
   Kyrgyzstan). It shows that the ×2–4 seam is gone, not ±10% accuracy; accuracy comes from the held-out tests above.
-- **Coefficients are local.** The Kazakh model applied unchanged elsewhere is off by 26–63% (it cannot know a
+- **Coefficients are local.** The Kazakh model applied unchanged elsewhere is off by 26–64% (it cannot know a
   country's VIIRS/MODIS ratio, ×1.5 in Portugal to ×4.5 in India); refitted on each country's own overlap the same
-  method gets 5–39%. The method transfers, the coefficients do not.
+  method gets 5–42%. The method transfers, the coefficients do not.
 
 ## Run it
 

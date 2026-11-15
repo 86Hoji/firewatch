@@ -6,7 +6,7 @@ No land-cover strata exist, so a country's monthly totals are predicted directly
 country's own monthly MODIS total, as for any region in production).
 
 Target ("actual") for every country = its S-NPP cell-days + its own NOAA-20 fill on satellite-wide outage days
-(NOAA-20 -> S-NPP ratio fitted on that country, config calibration.noaa20_period).
+(NOAA-20 -> S-NPP ratio fitted on that country, config calibration.noaa20_period from noaa20_start).
 
 Tests
   1 UZ independent test   KZ model applied to UZ: 2012 step ratios naive vs harmonized; overlap 2012-2019; holdout
@@ -41,10 +41,19 @@ def country_months(c, cfg):
     """Monthly totals of one country with v_target (its own NOAA-20 fill)."""
     cm = pd.read_parquet(AGG / "country_month" / f"{c}.parquet").sort_values(["year", "month"]).reset_index(drop=True)
     cm = cm.drop(columns=[x for x in ("country",) if x in cm])
-    n20, _ = calib.fit(cm, "n_viirs_snpp", "n_viirs_noaa20", tuple(cfg["calibration"]["noaa20_period"]), cfg,
-                       intervals=False)
+    n20, _ = calib.fit_noaa20(cm, cfg)
     cm["v_target"] = cm["n_viirs_snpp"] + calib.predict(cm, "n_viirs_noaa20_gap", n20)["pred"]
     return cm
+
+
+def own_coefs(cm, cfg, model):
+    """The production model form with ALL coefficients refitted on one country (what the website uses outside KZ):
+    Terra->Terra+Aqua, NOAA-20->S-NPP and the main MODIS->VIIRS model on the country's own overlap."""
+    k = cfg["calibration"]
+    terra, _ = calib.fit(cm, "n_modis", "n_modis_terra", tuple(k["terra_aqua_period"]), cfg, intervals=False)
+    n20, _ = calib.fit_noaa20(cm, cfg)
+    main, _ = calib.fit_point(cm, "v_target", "n_modis", tuple(cfg["package"]["overlap"]), cfg, model, n_boot=0)
+    return {"main": main, "terra": terra, "noaa20": n20}
 
 
 def last_full_year(cm):
@@ -147,14 +156,25 @@ def country_test(c, coefs, cfg, iv, model):
 
 # ---------------------------------------------------------------- tests
 
-def annual_test(c, coefs, cfg, iv):
+def _annual(df):
+    a = df.groupby("year")[["actual", "pred"]].sum()
+    r = series_metrics(a["actual"], a["pred"])
+    return {"years": [int(a.index.min()), int(a.index.max())], "mae_pct_of_mean": r["mae_pct_of_mean"],
+            "bias_total_pct": r["bias_total_pct"]}
+
+
+def annual_test(c, coefs, cfg, iv, model):
+    """KZ coefficients as-is (headline, unchanged) + 'local': the country's own refit, as on the website —
+    leave-one-year-out inside the overlap and fit-on-overlap -> holdout, both scored on annual totals."""
     pk = cfg["package"]
     cm = country_months(c, cfg)
     y1 = min(last_full_year(cm), pk["holdout"][1])
     ai = between(as_is(cm, coefs, iv), (pk["overlap"][0], y1))
     a = ai.groupby("year")[["actual", "pred", "n_modis"]].sum()
     r = series_metrics(a["actual"], a["pred"])
-    return {"years": [int(a.index.min()), int(a.index.max())],
+    local = {"loyo": _annual(local_loyo(cm, cfg, model, pk["overlap"])),
+             "holdout": _annual(local_holdout(cm, cfg, model, pk["overlap"], (pk["holdout"][0], y1)))}
+    return {"years": [int(a.index.min()), int(a.index.max())], "local": local,
             "mae_pct_of_mean": r["mae_pct_of_mean"], "bias_total_pct": r["bias_total_pct"],
             "pearson_r": r["pearson_r"], "naive_modis_bias_pct": float(100 * (a["n_modis"].sum() / a["actual"].sum() - 1)),
             "mean_annual_cell_days": float(a["actual"].mean()),
@@ -316,7 +336,9 @@ def write_md(R, cfg):
          f"Kazakhstan {pk['overlap'][0]}–{pk['overlap'][1]} and applied unchanged everywhere below unless a row says "
          "\"local\". Error = mean absolute error as % of the mean month (MAE %); bias = total predicted vs actual. "
          "Actual = S-NPP cell-days (+ NOAA-20 on satellite-wide S-NPP outage days). Machine-readable: "
-         "[validation.json](validation.json). Kazakhstan technical report: [validation_kz.md](validation_kz.md).", ""]
+         "[validation.json](validation.json). Kazakhstan technical report: [validation_kz.md](validation_kz.md).", "",
+         "*January 2012 is incomplete:* the S-NPP archive starts on 2012-01-20, so that month has about a third of its "
+         "observations (it is inside the 2012 step windows and the 2012–2019 overlap as recorded).", ""]
     if R["pending_countries"]:
         L += [f"> **Provisional:** {', '.join(R['pending_countries'])} still re-ingesting; their rows are missing and the "
               "S-NPP outage list was built without them.", ""]
@@ -362,12 +384,17 @@ def write_md(R, cfg):
     country_block("2. Turkmenistan — stress test (gas flares)", "TKM", t, extra)
 
     L.extend(["## 3. Kyrgyzstan and Tajikistan — annual totals", "",
-              "| country | years | mean actual cell-days / year | MAE % (annual) | bias % | R | naive MODIS bias % |",
-              "|---|---|---|---|---|---|---|"])
+              "KZ coefficients as-is, and *local* = the country's own refit (what the website uses): leave-one-year-out "
+              f"in {pk['overlap'][0]}–{pk['overlap'][1]} and fit on the overlap → holdout.", "",
+              "| country | years | mean actual cell-days / year | MAE % (annual), KZ as-is | bias % | R | naive MODIS bias % "
+              "| local LOYO MAE % / bias % | local holdout MAE % / bias % |",
+              "|---|---|---|---|---|---|---|---|---|"])
     for c, x in R["annual"].items():
+        lo, ho = x["local"]["loyo"], x["local"]["holdout"]
         L.append(f"| {c} | {x['years'][0]}–{x['years'][1]} | {f(x['mean_annual_cell_days'], 0)} | "
                  f"{f(x['mae_pct_of_mean'])} | {f(x['bias_total_pct'], 1, True)} | {f(x['pearson_r'], 3)} | "
-                 f"{f(x['naive_modis_bias_pct'], 0, True)} |")
+                 f"{f(x['naive_modis_bias_pct'], 0, True)} | {f(lo['mae_pct_of_mean'])} / {f(lo['bias_total_pct'], 1, True)} "
+                 f"| {f(ho['mae_pct_of_mean'])} / {f(ho['bias_total_pct'], 1, True)} ({ho['years'][0]}–{ho['years'][1]}) |")
     L.extend(["", f"**Takeaway.** {TAKE['annual']}", ""])
 
     L.extend(["## 4. Transfer table — does the Kazakh model work elsewhere?", "",
@@ -408,7 +435,8 @@ def write_md(R, cfg):
               f"Event = far more fire than usual for that place and month: harmonized cell-days in an H3 res-{ev['h3_res']} "
               "hexagon (~40 km across) minus its normal (median of the same hexagon and calendar month, "
               f"{ev['years'][0]}–{ev['years'][1]}); ranked by that excess; one per region and year in the top list. "
-              "Region = ADM1 (pre-2022 boundaries).", "",
+              "Region = ADM1 (pre-2022 boundaries). Coefficients as on the website: Kazakhstan production, every other "
+              "country its own refit.", "",
               "| country | rank | region | month | cell-days | normal | excess |", "|---|---|---|---|---|---|---|"])
     for c, x in R["events"].items():
         for e in x["top"]:
@@ -509,14 +537,17 @@ def main():
     R["uz_test"], _, _, harm[pk["test_country"]] = country_test(pk["test_country"], coefs, cfg, iv, model)
     R["tm_stress"], _, _, harm[pk["stress_country"]] = country_test(pk["stress_country"], coefs, cfg, iv, model)
     R["flare_load"] = flare_load(cfg, [cfg["train_country"], pk["test_country"], pk["stress_country"]])
-    R["annual"] = {c: annual_test(c, coefs, cfg, iv) for c in pk["annual_countries"]}
+    R["annual"] = {c: annual_test(c, coefs, cfg, iv, model) for c in pk["annual_countries"]}
     R["transfer"] = transfer_table(cfg, coefs, iv, model, man)
     for c in pk["burned_area"]["names"].values():
         if c not in harm:
             cm = country_months(c, cfg)
             _, harm[c] = steps(cm, coefs, cfg, min(last_full_year(cm), pk["holdout"][1]), model)
     R["burned_area"] = burned_area(cfg, harm)
-    R["events"] = events(cfg, coefs, ingest.countries(cfg, man, "cell"))
+    R["events"] = {}
+    for c in ingest.countries(cfg, man, "cell"):     # each country with the coefficients the website uses
+        R["events"].update(events(cfg, coefs if c == cfg["train_country"] else own_coefs(country_months(c, cfg), cfg, model),
+                                  [c]))
     takeaways(R, cfg)
     R["takeaways"] = TAKE
     write_json(REPORTS / "validation.json", R)

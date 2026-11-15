@@ -1,55 +1,55 @@
 {
   "KAZ": {
     "cells": {
-      "inside": 240428,
+      "inside": 240566,
       "nearest": 1211,
       "outside": 24
     },
     "modis_cell_days": {
-      "inside": 646011,
+      "inside": 646361,
       "nearest": 3022,
       "outside": 41
     }
   },
   "UZB": {
     "cells": {
-      "inside": 15157,
-      "nearest": 436,
+      "inside": 15250,
+      "nearest": 439,
       "outside": 2
     },
     "modis_cell_days": {
-      "inside": 38702,
+      "inside": 39030,
       "nearest": 898,
       "outside": 2
     }
   },
   "TKM": {
     "cells": {
-      "inside": 13870,
+      "inside": 14006,
       "nearest": 253
     },
     "modis_cell_days": {
-      "inside": 32816,
+      "inside": 33046,
       "nearest": 651
     }
   },
   "KGZ": {
     "cells": {
-      "inside": 5035,
+      "inside": 5042,
       "nearest": 134
     },
     "modis_cell_days": {
-      "inside": 9375,
+      "inside": 9379,
       "nearest": 256
     }
   },
   "TJK": {
     "cells": {
-      "inside": 2577,
+      "inside": 2582,
       "nearest": 168
     },
     "modis_cell_days": {
-      "inside": 2258,
+      "inside": 2276,
       "nearest": 219
     }
   }

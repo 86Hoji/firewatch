@@ -79,7 +79,7 @@ def test_static_mask_removes_nrt_detections_at_flares(cfg):
     n = 12
     rows = {"sensor": ["VIIRS"] * (n + 2), "platform": ["SNPP"] * (n + 2),
             "lat": [flare[0]] * (n + 1) + [field[0]], "lon": [flare[1]] * (n + 1) + [field[1]],
-            "datetime_utc": pd.date_range("2025-01-01", periods=n + 2, freq="D"),
+            "datetime_utc": pd.date_range("2019-01-01", periods=n + 2, freq="D"),
             "confidence": ["n"] * (n + 2), "confidence_norm": ["n"] * (n + 2), "frp": [5.0] * (n + 2),
             "type": [2.0] * n + [np.nan, np.nan], "processing": ["SP"] * n + ["NRT", "NRT"], "daynight": ["N"] * (n + 2)}
     df = pd.DataFrame(rows)
@@ -95,7 +95,7 @@ def test_static_mask_drops_mislabelled_archive_rows_at_flares(cfg):
     n = 12
     rows = {"sensor": ["VIIRS"] * (n + 2), "platform": ["SNPP"] * (n + 2),
             "lat": [flare[0]] * (n + 1) + [field[0]], "lon": [flare[1]] * (n + 1) + [field[1]],
-            "datetime_utc": pd.date_range("2024-01-01", periods=n + 2, freq="D"),
+            "datetime_utc": pd.date_range("2019-03-01", periods=n + 2, freq="D"),
             "confidence": ["n"] * (n + 2), "confidence_norm": ["n"] * (n + 2), "frp": [5.0] * (n + 2),
             "type": [2.0] * n + [0.0, 0.0], "processing": ["SP"] * (n + 2), "daynight": ["N"] * (n + 2)}
     df = pd.DataFrame(rows)

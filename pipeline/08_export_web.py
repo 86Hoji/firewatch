@@ -3,7 +3,7 @@
   meta.json                     countries [{code, name, bbox, center}], first_ym, last_ym, model, generated_at
   series/{CC}.json              monthly country series, all countries
   regions/{CC}.json             monthly ADM1 series, cell-level countries
-  hex/{CC}/r5|r7/{YYYY}.json    harmonized cell-days per H3 cell and month (config web.hex_countries + HEX_EXTRA)
+  hex/{CC}/r5|r7/{YYYY}.json    harmonized cell-days per H3 cell and month (config web.hex_countries)
   anomalies.json                top events (07b_validation_package) incl. the known events
   validation.json               copy of reports/validation.json
   boundaries/{CC}_adm1.geojson  simplified ADM1 polygons (shapeName, shapeISO)
@@ -34,10 +34,9 @@ from pipeline.common import AGG, REPORTS, ROOT, get_logger, load_config
 CAL = importlib.import_module("pipeline.05_calibrate")
 PKG = importlib.import_module("pipeline.07b_validation_package")
 log = get_logger("export_web")
+JAN_2012_NOTE = ("January 2012 is incomplete: the S-NPP archive starts on 2012-01-20, so that month has about a third "
+                 "of its observations")
 EVENTS_DOC = {"countries": ["KAZ", "UZB"], "top_n": 5}     # docs/EVENTS.md (demo-event shortlist)
-# hex files also for the other Central Asian countries (each with its own coefficients); kept here, not in config.yaml,
-# because that export change was scoped to pipeline/ and web/public/data/
-HEX_EXTRA = ["TKM", "KGZ", "TJK"]
 # heat sources found in this project that are NOT fires (docs/PHASE_C.md, C2); flagged in docs/EVENTS.md
 NOT_FIRE = [{"lat": 38.1, "lon": 67.3, "radius_deg": 0.25, "from_year": 2025,
              "note": "NOT A FIRE: new industrial heat source found in C2 (FIRMS labels it vegetation)"}]
@@ -109,15 +108,11 @@ def country_coefs(cfg, c, kz, iv, model):
     (same model form and periods as production), interval from c's own leave-one-year-out errors."""
     if c == cfg["train_country"]:
         return kz, iv["country"], "production (fitted on Kazakhstan)"
-    k = cfg["calibration"]
     cm = PKG.country_months(c, cfg)
-    terra, _ = calib.fit(cm, "n_modis", "n_modis_terra", tuple(k["terra_aqua_period"]), cfg, intervals=False)
-    n20, _ = calib.fit(cm, "n_viirs_snpp", "n_viirs_noaa20", tuple(k["noaa20_period"]), cfg, intervals=False)
     ov = tuple(cfg["package"]["overlap"])
-    main, _ = calib.fit_point(cm, "v_target", "n_modis", ov, cfg, model, n_boot=0)
     loyo = PKG.local_loyo(cm, cfg, model, ov)
-    ivc = intervals.fit_hetero(loyo["actual"], loyo["pred"], iv["level"])
-    return {"main": main, "terra": terra, "noaa20": n20}, ivc, f"refitted on own {ov[0]}–{ov[1]} overlap"
+    ivc = intervals.fit_hetero(loyo["actual"], loyo["pred"], iv["level"], cfg["intervals"]["zero_min_n"])
+    return PKG.own_coefs(cm, cfg, model), ivc, f"refitted on own {ov[0]}–{ov[1]} overlap"
 
 
 def series(cfg, c, coefs, ivc, periods, yms):
@@ -319,10 +314,11 @@ def main():
             "model": {"name": f"{card['selected']} — {card['label']}", "id": card["production_model"],
                       "trained_on": card["train_country"],
                       "calibration": f"{cfg['calibration']['period'][0]}–{cfg['calibration']['period'][1]}",
-                      "holdout": f"{cfg['calibration']['holdout_start']}–{last.year}",
+                      "holdout": f"{cfg['package']['holdout'][0]}–{cfg['package']['holdout'][1]}",
                       "interval": f"{int(100 * iv['level'])}% conformal, sized at country / region level",
                       "coefficients": {}},
             "pending_countries": val.get("pending_countries", []),
+            "notes": [JAN_2012_NOTE],
             "generated_at": dt.datetime.now().isoformat(timespec="seconds")}
     coefs, ivc = {}, {}
     for c in countries:
@@ -340,7 +336,7 @@ def main():
                                                          last.year * 100 + last.month)]
         cells[c] = cm
         dump(out / "regions" / f"{c}.json", regions(cfg, cm, iv, periods, yms))
-        if c in w["hex_countries"] or c in HEX_EXTRA:
+        if c in w["hex_countries"]:
             n = hexes(cfg, c, cm, out / "hex", last)
             log.info("%s: %d hex files", c, n)
     dump(out / "anomalies.json", anomalies(cfg, events, cells))

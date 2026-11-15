@@ -30,8 +30,7 @@ PRODUCTION = {"identity": "ratio", "log": "poisson_log", "ols_log1p": "loglog"}
 
 def prepare(cfg):
     cm = CAL.load_cell_month()
-    n20, _ = calib.fit(cm, "n_viirs_snpp", "n_viirs_noaa20", tuple(cfg["calibration"]["noaa20_period"]), cfg,
-                       intervals=False)
+    n20, _ = calib.fit_noaa20(cm, cfg)
     cm["v_target"] = CAL.target_viirs(cm, n20)
     cm["sub"] = cm["adm1_id"]
     return cm, CAL.last_full_year(cm)

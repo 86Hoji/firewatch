@@ -27,145 +27,145 @@
     {
       "date": "2022-07-27",
       "snpp": 0,
-      "noaa20": 8478,
+      "noaa20": 8493,
       "countries_with_noaa20": 8
     },
     {
       "date": "2022-07-28",
       "snpp": 0,
-      "noaa20": 9525,
+      "noaa20": 9536,
       "countries_with_noaa20": 8
     },
     {
       "date": "2022-07-29",
       "snpp": 0,
-      "noaa20": 9571,
+      "noaa20": 9587,
       "countries_with_noaa20": 9
     },
     {
       "date": "2022-07-30",
       "snpp": 0,
-      "noaa20": 8394,
+      "noaa20": 8406,
       "countries_with_noaa20": 9
     },
     {
       "date": "2022-07-31",
       "snpp": 0,
-      "noaa20": 8108,
+      "noaa20": 8119,
       "countries_with_noaa20": 10
     },
     {
       "date": "2022-08-01",
       "snpp": 0,
-      "noaa20": 5929,
+      "noaa20": 5944,
       "countries_with_noaa20": 10
     },
     {
       "date": "2022-08-02",
       "snpp": 0,
-      "noaa20": 7525,
-      "countries_with_noaa20": 9
+      "noaa20": 7551,
+      "countries_with_noaa20": 10
     },
     {
       "date": "2022-08-03",
       "snpp": 0,
-      "noaa20": 8559,
-      "countries_with_noaa20": 9
+      "noaa20": 8576,
+      "countries_with_noaa20": 10
     },
     {
       "date": "2022-08-04",
       "snpp": 0,
-      "noaa20": 9019,
+      "noaa20": 9035,
       "countries_with_noaa20": 10
     },
     {
       "date": "2022-08-05",
       "snpp": 0,
-      "noaa20": 6464,
+      "noaa20": 6476,
       "countries_with_noaa20": 9
     },
     {
       "date": "2022-08-06",
       "snpp": 0,
-      "noaa20": 5810,
+      "noaa20": 5827,
       "countries_with_noaa20": 10
     },
     {
       "date": "2022-08-07",
       "snpp": 0,
-      "noaa20": 6294,
+      "noaa20": 6319,
       "countries_with_noaa20": 10
     },
     {
       "date": "2022-08-08",
       "snpp": 0,
-      "noaa20": 6125,
+      "noaa20": 6143,
       "countries_with_noaa20": 8
     },
     {
       "date": "2022-08-09",
       "snpp": 0,
-      "noaa20": 7347,
-      "countries_with_noaa20": 9
+      "noaa20": 7369,
+      "countries_with_noaa20": 10
     },
     {
       "date": "2022-08-10",
       "snpp": 0,
-      "noaa20": 7508,
+      "noaa20": 7523,
       "countries_with_noaa20": 10
     },
     {
       "date": "2023-07-26",
       "snpp": 15,
-      "noaa20": 7981,
+      "noaa20": 7993,
       "countries_with_noaa20": 10
     },
     {
       "date": "2024-05-30",
       "snpp": 0,
-      "noaa20": 5030,
-      "countries_with_noaa20": 8
+      "noaa20": 5054,
+      "countries_with_noaa20": 9
     },
     {
       "date": "2024-05-31",
       "snpp": 0,
-      "noaa20": 5206,
+      "noaa20": 5225,
       "countries_with_noaa20": 8
     },
     {
       "date": "2024-06-01",
       "snpp": 0,
-      "noaa20": 4810,
+      "noaa20": 4827,
       "countries_with_noaa20": 8
     },
     {
       "date": "2024-06-02",
       "snpp": 0,
-      "noaa20": 3600,
+      "noaa20": 3608,
       "countries_with_noaa20": 9
     },
     {
       "date": "2024-06-03",
       "snpp": 0,
-      "noaa20": 2969,
+      "noaa20": 2986,
       "countries_with_noaa20": 7
     },
     {
       "date": "2024-07-10",
       "snpp": 0,
-      "noaa20": 6981,
+      "noaa20": 7001,
       "countries_with_noaa20": 9
     },
     {
       "date": "2024-07-11",
       "snpp": 0,
-      "noaa20": 5644,
+      "noaa20": 5662,
       "countries_with_noaa20": 9
     },
     {
       "date": "2024-07-12",
       "snpp": 0,
-      "noaa20": 6037,
+      "noaa20": 6038,
       "countries_with_noaa20": 9
     },
     {
@@ -177,43 +177,43 @@
     {
       "date": "2024-07-14",
       "snpp": 0,
-      "noaa20": 5518,
-      "countries_with_noaa20": 9
+      "noaa20": 5520,
+      "countries_with_noaa20": 10
     },
     {
       "date": "2024-07-15",
       "snpp": 0,
-      "noaa20": 6736,
+      "noaa20": 6748,
       "countries_with_noaa20": 8
     },
     {
       "date": "2024-07-25",
       "snpp": 0,
-      "noaa20": 14374,
+      "noaa20": 14382,
       "countries_with_noaa20": 9
     },
     {
       "date": "2024-07-26",
       "snpp": 0,
-      "noaa20": 13924,
+      "noaa20": 13935,
       "countries_with_noaa20": 9
     },
     {
       "date": "2024-07-27",
       "snpp": 0,
-      "noaa20": 12839,
-      "countries_with_noaa20": 7
+      "noaa20": 12852,
+      "countries_with_noaa20": 8
     },
     {
       "date": "2024-07-28",
       "snpp": 0,
-      "noaa20": 12276,
+      "noaa20": 12279,
       "countries_with_noaa20": 9
     },
     {
       "date": "2024-09-26",
       "snpp": 0,
-      "noaa20": 12411,
+      "noaa20": 12418,
       "countries_with_noaa20": 8
     },
     {
@@ -231,7 +231,7 @@
     {
       "date": "2024-11-05",
       "snpp": 0,
-      "noaa20": 17948,
+      "noaa20": 17947,
       "countries_with_noaa20": 7
     },
     {
@@ -243,115 +243,115 @@
     {
       "date": "2026-03-11",
       "snpp": 0,
-      "noaa20": 6158,
+      "noaa20": 6160,
       "countries_with_noaa20": 9
     },
     {
       "date": "2026-03-12",
       "snpp": 0,
-      "noaa20": 8519,
+      "noaa20": 8522,
       "countries_with_noaa20": 9
     },
     {
       "date": "2026-04-28",
       "snpp": 0,
-      "noaa20": 7877,
+      "noaa20": 7896,
       "countries_with_noaa20": 9
     },
     {
       "date": "2026-04-29",
       "snpp": 0,
-      "noaa20": 8474,
+      "noaa20": 8486,
       "countries_with_noaa20": 8
     },
     {
       "date": "2026-04-30",
       "snpp": 0,
-      "noaa20": 6921,
+      "noaa20": 6929,
       "countries_with_noaa20": 9
     },
     {
       "date": "2026-06-01",
       "snpp": 0,
-      "noaa20": 3249,
+      "noaa20": 3252,
       "countries_with_noaa20": 9
     },
     {
       "date": "2026-06-02",
       "snpp": 0,
-      "noaa20": 5110,
+      "noaa20": 5123,
       "countries_with_noaa20": 8
     },
     {
       "date": "2026-07-11",
       "snpp": 0,
-      "noaa20": 4531,
+      "noaa20": 4547,
       "countries_with_noaa20": 9
     },
     {
       "date": "2026-07-12",
       "snpp": 0,
-      "noaa20": 4576,
+      "noaa20": 4590,
       "countries_with_noaa20": 9
     },
     {
       "date": "2026-07-13",
       "snpp": 0,
-      "noaa20": 5074,
-      "countries_with_noaa20": 9
+      "noaa20": 5079,
+      "countries_with_noaa20": 8
     },
     {
       "date": "2026-07-14",
       "snpp": 0,
-      "noaa20": 6554,
+      "noaa20": 6558,
       "countries_with_noaa20": 8
     },
     {
       "date": "2026-07-15",
       "snpp": 0,
-      "noaa20": 8863,
+      "noaa20": 8876,
       "countries_with_noaa20": 10
     },
     {
       "date": "2026-07-16",
       "snpp": 0,
-      "noaa20": 9330,
+      "noaa20": 9343,
       "countries_with_noaa20": 10
     },
     {
       "date": "2026-08-03",
       "snpp": 8,
-      "noaa20": 8009,
-      "countries_with_noaa20": 8
+      "noaa20": 8044,
+      "countries_with_noaa20": 9
     },
     {
       "date": "2026-11-03",
       "snpp": 0,
-      "noaa20": 9280,
+      "noaa20": 9288,
       "countries_with_noaa20": 9
     },
     {
       "date": "2026-11-04",
       "snpp": 0,
-      "noaa20": 13198,
-      "countries_with_noaa20": 8
+      "noaa20": 13205,
+      "countries_with_noaa20": 9
     },
     {
       "date": "2026-11-05",
       "snpp": 0,
-      "noaa20": 14777,
+      "noaa20": 14794,
       "countries_with_noaa20": 8
     },
     {
       "date": "2026-11-06",
       "snpp": 0,
-      "noaa20": 13248,
+      "noaa20": 13261,
       "countries_with_noaa20": 9
     },
     {
       "date": "2026-11-07",
       "snpp": 0,
-      "noaa20": 18845,
+      "noaa20": 18858,
       "countries_with_noaa20": 8
     },
     {
@@ -363,32 +363,32 @@
     {
       "date": "2026-11-09",
       "snpp": 0,
-      "noaa20": 16361,
+      "noaa20": 16364,
       "countries_with_noaa20": 9
     },
     {
       "date": "2026-11-10",
       "snpp": 0,
-      "noaa20": 13381,
+      "noaa20": 13385,
       "countries_with_noaa20": 7
     },
     {
       "date": "2026-11-11",
       "snpp": 0,
-      "noaa20": 12352,
-      "countries_with_noaa20": 6
+      "noaa20": 12359,
+      "countries_with_noaa20": 7
     },
     {
       "date": "2026-11-12",
       "snpp": 0,
-      "noaa20": 11751,
+      "noaa20": 11752,
       "countries_with_noaa20": 8
     },
     {
       "date": "2026-11-13",
       "snpp": 0,
-      "noaa20": 11344,
-      "countries_with_noaa20": 8
+      "noaa20": 11354,
+      "countries_with_noaa20": 9
     }
   ],
   "partial_days_not_counted": [
@@ -398,23 +398,23 @@
     },
     {
       "date": "2022-06-28",
-      "snpp_share": 0.209
+      "snpp_share": 0.212
     },
     {
       "date": "2023-07-27",
-      "snpp_share": 0.076
+      "snpp_share": 0.077
     },
     {
       "date": "2024-07-16",
-      "snpp_share": 0.073
+      "snpp_share": 0.074
     },
     {
       "date": "2024-07-24",
-      "snpp_share": 0.252
+      "snpp_share": 0.251
     },
     {
       "date": "2024-09-27",
-      "snpp_share": 0.251
+      "snpp_share": 0.254
     },
     {
       "date": "2024-11-06",

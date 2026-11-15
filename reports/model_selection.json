@@ -7,36 +7,36 @@
   "results": {
     "ratio": {
       "n_months": 72,
-      "mae": 215.8964300304654,
-      "mae_pct_of_mean": 12.269459833498395,
-      "bias_total_pct": -6.746570882274674,
-      "bias_median_rel_pct": -11.243036385592337,
-      "pearson_r": 0.9815709210516514,
-      "spearman_rho": 0.993230858410537,
-      "coverage": 0.75,
-      "coverage_ci": 0.2777777777777778
+      "mae": 241.32978276530002,
+      "mae_pct_of_mean": 13.359204223566387,
+      "bias_total_pct": -8.485112692087643,
+      "bias_median_rel_pct": -13.100807604498934,
+      "pearson_r": 0.9809225706317368,
+      "spearman_rho": 0.9904167743737183,
+      "coverage": 0.6944444444444444,
+      "coverage_ci": 0.19444444444444445
     },
     "loglog": {
       "n_months": 72,
-      "mae": 179.32877933093215,
-      "mae_pct_of_mean": 10.19130911372961,
-      "bias_total_pct": -1.105449237680052,
-      "bias_median_rel_pct": 0.40480436698003397,
-      "pearson_r": 0.9835327155270549,
-      "spearman_rho": 0.9941392118084029,
-      "coverage": 0.9027777777777778,
-      "coverage_ci": 0.25
+      "mae": 187.67468411003574,
+      "mae_pct_of_mean": 10.389038617158926,
+      "bias_total_pct": -2.749673976546015,
+      "bias_median_rel_pct": -1.6551978555733635,
+      "pearson_r": 0.9830002034159718,
+      "spearman_rho": 0.9917593243118468,
+      "coverage": 0.875,
+      "coverage_ci": 0.2361111111111111
     },
     "poisson_log": {
       "n_months": 72,
-      "mae": 171.87231619920294,
-      "mae_pct_of_mean": 9.767556044344426,
-      "bias_total_pct": -0.9272217801195329,
-      "bias_median_rel_pct": -0.11835531497224885,
-      "pearson_r": 0.9845605927856231,
-      "spearman_rho": 0.9951039506053736,
-      "coverage": 0.9027777777777778,
-      "coverage_ci": 0.25
+      "mae": 180.34880264613867,
+      "mae_pct_of_mean": 9.98350248534622,
+      "bias_total_pct": -2.5920011186738376,
+      "bias_median_rel_pct": -1.8048082925703535,
+      "pearson_r": 0.9841282047578693,
+      "spearman_rho": 0.9931421499395453,
+      "coverage": 0.8611111111111112,
+      "coverage_ci": 0.2222222222222222
     }
   },
   "selected": "poisson_log",

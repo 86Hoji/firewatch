@@ -53,7 +53,7 @@ def fit_all(cm, cfg, years=None, totals=None):
     years = years or tuple(c["period"])
     coefs, draws = {}, {}
     coefs["terra"], _ = calib.fit(cm, "n_modis", "n_modis_terra", tuple(c["terra_aqua_period"]), cfg, intervals=False)
-    coefs["noaa20"], _ = calib.fit(cm, "n_viirs_snpp", "n_viirs_noaa20", tuple(c["noaa20_period"]), cfg, intervals=False)
+    coefs["noaa20"], _ = calib.fit_noaa20(cm, cfg)
     cm = cm.assign(v_target=target_viirs(cm, coefs["noaa20"]))
     for model in c["models"]:
         coefs[model], draws[model] = calib.fit(cm, "v_target", "n_modis", years, cfg, model=model, totals=totals)

@@ -20,14 +20,18 @@ def _q(level):
     return (1 - level) / 2, 1 - (1 - level) / 2
 
 
-def fit_hetero(actual, pred, level=0.90):
+def fit_hetero(actual, pred, level=0.90, zero_min_n=5):
+    """zero_hi: interval [0, zero_hi] for a prediction of 0 (MODIS saw nothing): the upper quantile of the held-out
+    actual VIIRS in months predicted 0 (their max if fewer than zero_min_n such months; 0 if none)."""
     a, p = np.asarray(actual, float), np.asarray(pred, float)
     ok = (a > 0) & (p > 0)
     r = np.log(a[ok] / p[ok])
     med = float(np.median(p[ok]))
     lo, hi = np.quantile(r * np.sqrt(p[ok] / med), _q(level))
+    z = a[p <= 0]
+    zero_hi = float(np.quantile(z, _q(level)[1])) if len(z) >= zero_min_n else float(z.max()) if len(z) else 0.0
     return {"method": "hetero_log_ratio", "level": level, "q_lo": float(lo), "q_hi": float(hi), "median_pred": med,
-            "n": int(ok.sum())}
+            "n": int(ok.sum()), "zero_hi": zero_hi, "n_zero": int(len(z))}
 
 
 def fit_binned(actual, pred, inner_edges, level=0.90, min_n=30):
@@ -60,7 +64,7 @@ def bounds(pred, params):
         s = np.sqrt(params["median_pred"] / np.maximum(p, 1e-9))
         with np.errstate(over="ignore", invalid="ignore"):       # p ~ 0 -> huge s; those rows are set to 0 below
             lo, hi = p * np.exp(params["q_lo"] * s), p * np.exp(params["q_hi"] * s)
-        lo, hi = np.where(p > 0, lo, 0.0), np.where(p > 0, hi, 0.0)
+        lo, hi = np.where(p > 0, lo, 0.0), np.where(p > 0, hi, params.get("zero_hi", 0.0))
     elif params["method"] == "binned_log1p":
         b = _bin(p, params["inner_edges"])
         ql, qh = np.asarray(params["q_lo"])[b], np.asarray(params["q_hi"])[b]

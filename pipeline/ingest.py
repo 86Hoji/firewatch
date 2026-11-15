@@ -232,7 +232,8 @@ def clean(con, cfg, src="raw"):
     exact duplicates (first by source order kept) -> NRT rows on a day that has SP data for the same satellite."""
     n_raw, n_plat = con.execute(f"SELECT count(*), count(platform) FROM {src}").fetchall()[0]
     confident(con, cfg, src)
-    con.execute(f"CREATE OR REPLACE TABLE static_mask AS {static_mask_sql(cfg, 't1')}")
+    before = cfg["cleaning"]["static_mask"].get("build_before")       # no post-holdout data in the mask
+    con.execute(f"CREATE OR REPLACE TABLE static_mask AS {static_mask_sql(cfg, 't1', before=before)}")
     con.execute(f"""CREATE OR REPLACE VIEW t2 AS SELECT * FROM t1 WHERE {type_ok_sql(cfg)}""")
     which = "true" if cfg["cleaning"]["static_mask"].get("drop_all_rows") else "type IS NULL"
     con.execute(f"""CREATE OR REPLACE VIEW t3 AS SELECT * FROM t2

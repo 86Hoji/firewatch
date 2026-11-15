@@ -63,6 +63,7 @@ cleaning:
     rules: [type2, static_site]   # 'persistent' (C2) removed real recurring farm fires (TM -18%): not used
     recent_years: 5          # type2 rule on the last 5 years of SP data each run (new sites, e.g. UZ 2025); null = all
     type_all_history: true   # ...and also on all history (flare sites that changed or stopped)
+    build_before: "2020-01-01"  # mask built ONLY from data before the holdout (audit fix 2: no post-2020 leak)
     drop_all_rows: true      # drop EVERY row in masked cells (FIRMS calls 1-8% of flare detections type 0: they leaked)
     static_site:             # static source that FIRMS labels type 0: all-year, mostly-night VIIRS activity
       min_months: 36         # active in >= 36 distinct months (of ~170 VIIRS months, all history)
@@ -93,6 +94,8 @@ mask_check:
 intervals:
   region_bin_edges: [5, 20, 100, 500]   # bins: 0, (0,5], (5,20], (20,100], (100,500], >500 cell-days/month
   min_bin_n: 30                         # a sparser bin borrows from the next-smaller bins
+  zero_min_n: 5                         # country interval at pred = 0: upper bound = held-out VIIRS quantile
+                                        # at MODIS = 0 (max if fewer than this many such months)
 
 # C3: ADM1 region per H3 cell (centre in polygon, else nearest within nearest_km, else 'outside')
 regions:
@@ -112,6 +115,7 @@ calibration:
   terra_only_until: "2002-06"     # inclusive, Aqua data starts July 2002
   terra_aqua_period: [2003, 2011]
   noaa20_period: [2018, 2019]
+  noaa20_start: "2018-04"     # NOAA-20 archive starts 2018-04: Jan-Mar 2018 have S-NPP only (audit fix 1)
   interval_level: 0.90
   loglog_min_points: 12     # min (year, month) points to fit log-log regression in a stratum
   models: [ratio, loglog, poisson_log]
@@ -164,7 +168,7 @@ api:
 web:
   out_dir: web/public/data
   first_ym: "2001-01"          # first full year of MODIS Terra (Nov 2000 start is partial)
-  hex_countries: [KAZ, UZB]
+  hex_countries: [KAZ, UZB, TKM, KGZ, TJK]
   hex_res: [5, 7]
   simplify_deg: 0.01           # ~1 km; boundaries are for display only
   coord_decimals_geom: 3       # ~100 m (3 significant digits would move borders by ~10 km)
@@ -185,4 +189,4 @@ web:
 
 # Regression reference for KZ (pipeline/regression_check.py); phase_b = before Phase C (history)
 regression:
-  snapshot: phase_static   # after the static-site fix (reports/phase_c4 kept: before it)
+  snapshot: phase_audit    # after the audit fixes (NOAA-20 from 2018-04, mask built < 2020); phase_static kept

@@ -243,6 +243,15 @@ def fit(cm, v_col, m_col, years, cfg, model="ratio", seed=None, intervals=True, 
     return coef, draws
 
 
+def fit_noaa20(cm, cfg):
+    """NOAA-20 -> S-NPP bridge, fitted only on months with NOAA-20 archive data (calibration.noaa20_start):
+    Jan-Mar 2018 have S-NPP but no NOAA-20 and would inflate the ratio of those calendar months."""
+    k = cfg["calibration"]
+    st = pd.Period(k.get("noaa20_start", f"{k['noaa20_period'][0]}-01"), freq="M")
+    d = cm[cm["year"] * 100 + cm["month"] >= st.year * 100 + st.month]
+    return fit(d, "n_viirs_snpp", "n_viirs_noaa20", tuple(k["noaa20_period"]), cfg, intervals=False)
+
+
 def terra_only_mask(df, cfg):
     y, m = map(int, cfg["calibration"]["terra_only_until"].split("-"))
     return (df["year"] < y) | ((df["year"] == y) & (df["month"] <= m))

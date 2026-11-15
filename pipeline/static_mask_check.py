@@ -62,7 +62,7 @@ def monthly_change(con, test, mask_tbl, drop_all=False):
 
 MASKS = {"mask": "mask", "previous_type2_last5y": "mask_prev", "c2_both_rules_all_history": "mask_c2",
          "type2_all_history": "mask_type2_all", "persistent_rule_only": "mask_persistent"}
-LABELS = {"mask": "production: type rule (last 5 y + all history) + static_site",
+LABELS = {"mask": "production: type rule (last 5 y + all history) + static_site, built < 2020",
           "previous_type2_last5y": "previous production: type-2 rule, last 5 y",
           "c2_both_rules_all_history": "C2 mask (both rules, all history)",
           "type2_all_history": "type rule, all history", "persistent_rule_only": "persistent rule only"}
@@ -78,7 +78,9 @@ def check_country(cfg, man, country):
         ingest.confident(con, cfg)
         sp = mc["split"]
         q = lambda **k: ingest.static_mask_sql(cfg, "t1", before=sp, **k)  # noqa: E731
-        con.execute(f"CREATE TABLE mask AS {q()}")                                    # production (as configured)
+        bb = cfg["cleaning"]["static_mask"].get("build_before")
+        prod_before = min(bb, sp) if bb else sp                       # production mask: built before 2020
+        con.execute(f"CREATE TABLE mask AS {ingest.static_mask_sql(cfg, 't1', before=prod_before)}")
         con.execute(f"CREATE TABLE mask_prev AS {q(rules=['type2'], recent_years=5)}")
         con.execute(f"CREATE TABLE mask_c2 AS {q(rules=['type2', 'persistent'], recent_years=None)}")
         con.execute(f"CREATE TABLE mask_type2_all AS {q(rules=['type2'], recent_years=None)}")
