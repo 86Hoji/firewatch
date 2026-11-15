@@ -50,17 +50,18 @@ export interface EngineCallbacks {
  * Screen space taken by page UI on the right (desktop only), so framing centres on what is left.
  * Pages set it on mount; the engine reads it whenever it frames the camera.
  */
-export const frame = { right: 0 };
+export const frame = { left: 0, right: 0 };
 
 function finalCamera(w: number, h: number): CameraSpec {
   // Kazakhstan + Uzbekistan framed under the dateline and above the time bar.
   if (w < 768) return { center: [67.6, 47.4], zoom: 2.92 + Math.log2(Math.min(w, 430) / 390), pitch: 45, bearing: -12 };
-  const usable = w - frame.right;
-  const z = 4.3 + Math.log2(Math.min((usable + frame.right * 0.25) / 1440, h / 900));
+  const inset = frame.left + frame.right;
+  const usable = w - inset;
+  const z = 4.3 + Math.log2(Math.min((usable + inset * 0.25) / 1440, h / 900));
   const zoom = Math.max(3.4, z);
   // Shift the centre east by half the inset, converted to degrees at this zoom.
   const pxPerDeg = (512 * 2 ** zoom) / 360;
-  return { center: [67.4 + frame.right / 2 / pxPerDeg, 45.9], zoom, pitch: 45, bearing: -12 };
+  return { center: [67.4 + (frame.right - frame.left) / 2 / pxPerDeg, 45.9], zoom, pitch: 45, bearing: -12 };
 }
 
 function buildStyle(): StyleSpecification {
@@ -483,7 +484,7 @@ export class MapEngine {
     const w = this.container.clientWidth;
     return w < 768
       ? { top: 170, bottom: 190, left: 24, right: 24 }
-      : { top: 200, bottom: 170, left: 80, right: 80 + frame.right };
+      : { top: 200, bottom: 170, left: 80 + frame.left, right: 80 + frame.right };
   }
 
   private bindEvents() {

@@ -122,5 +122,10 @@ if (which === 'all' || which === 'f2') {
     },
   });
 }
+if (which === 'landing') {
+  await shoot('landing-desktop', desktop, '/');
+  await shoot('landing-mobile', mobile, '/');
+}
+if (which === 'validation') await shoot('validation-desktop', desktop, '/validation', { wait: 3000 });
 await browser.close();
 console.log('saved to', fileURLToPath(out));

@@ -1,4 +1,5 @@
 import { useLayoutEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Dateline } from '../components/Dateline';
 import { TimeBar } from '../components/TimeBar';
 import { RegionTooltip } from '../components/RegionTooltip';
@@ -27,9 +28,9 @@ export function Explore() {
         className="absolute left-[var(--gutter)] right-[var(--gutter)] top-[22px] flex items-baseline justify-between"
         style={{ opacity: shown ? 1 : 0, transition: 'opacity 600ms var(--ease)' }}
       >
-        <a href="/" className="display pointer-events-auto text-[22px] text-text no-underline">
+        <Link to="/" className="display pointer-events-auto text-[22px] text-text no-underline">
           Firewatch
-        </a>
+        </Link>
       </header>
       <Dateline />
       <RegionTooltip />

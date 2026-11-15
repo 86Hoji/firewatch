@@ -4,6 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './styles.css';
 import { MapStage } from './map/MapStage';
 import { Explore } from './pages/Explore';
+import { Landing } from './pages/Landing';
 
 function App() {
   return (
@@ -11,9 +12,9 @@ function App() {
       {/* One persistent map behind every page. */}
       <MapStage />
       <Routes>
+        <Route path="/" element={<Landing />} />
         <Route path="/explore" element={<Explore />} />
-        {/* F1: the map is the whole site for now; the landing replaces this in F3. */}
-        <Route path="*" element={<Navigate to={`/explore${location.search}`} replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );
