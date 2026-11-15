@@ -477,6 +477,21 @@ export class MapEngine {
     if (this.ym && this.introFinished) this.setMonth(this.ym, 0);
   }
 
+  /** The framed home camera for the current viewport and page insets. */
+  homeCamera(): CameraSpec {
+    return finalCamera(this.container.clientWidth, this.container.clientHeight);
+  }
+
+  /** True once the opening flight has landed (scroll may drive the camera after this). */
+  get ready() {
+    return this.introFinished;
+  }
+
+  /** Immediate camera move, for scroll-driven scenes. */
+  setCamera(c: CameraSpec) {
+    this.map.jumpTo(c);
+  }
+
   /** Re-frame the home view after the page's UI inset changed (no-op until the intro is done). */
   reframe() {
     if (!this.introFinished) return;

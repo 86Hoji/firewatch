@@ -170,6 +170,36 @@ if (which === 'evidence') {
   await fullPage('evidence-desktop', desktop, '/evidence');
   await fullPage('evidence-mobile', mobile, '/evidence');
 }
+async function scenes(tag, viewport) {
+  const ctx = await browser.newContext({ viewport, deviceScaleFactor: 1, hasTouch: viewport.width < 768 });
+  const page = await ctx.newPage();
+  page.on('pageerror', (e) => console.log(tag, 'pageerror', e.message));
+  await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
+  await page.waitForTimeout(11000);
+  await page.screenshot({ path: fileURLToPath(new URL(`${tag}-0-hero.png`, out)) });
+  const stops = await page.evaluate(() => {
+    const w = document.querySelector('.overflow-y-auto');
+    const secs = [...document.querySelectorAll('section[aria-label]')];
+    const vh = w.clientHeight;
+    const a = secs[0], b = secs[1];
+    return [
+      ['1-step', a.offsetTop + (a.offsetHeight - vh) * 0.15],
+      ['2-morph', a.offsetTop + (a.offsetHeight - vh) * 0.95],
+      ['3-event', b.offsetTop + vh * 0.3],
+      ['4-proof', w.scrollHeight],
+    ];
+  });
+  for (const [name, y] of stops) {
+    await page.evaluate((y) => document.querySelector('.overflow-y-auto').scrollTo(0, y), y);
+    await page.waitForTimeout(name === '3-event' ? 3500 : 2200);
+    await page.screenshot({ path: fileURLToPath(new URL(`${tag}-${name}.png`, out)) });
+  }
+  await ctx.close();
+}
+if (which === 'scenes') {
+  await scenes('desk', desktop);
+  await scenes('mob', mobile);
+}
 if (which === 'validation') await shoot('validation-desktop', desktop, '/validation', { wait: 3000 });
 await browser.close();
 console.log('saved to', fileURLToPath(out));
