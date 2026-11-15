@@ -4,8 +4,10 @@
 
 **Finished:** both C3-review changes, the full re-run of all 10 countries, C4 (`reports/VALIDATION.md`), the KZ
 before/after table (`reports/kz_before_after.md`), Phase D export (`web/public/data/`, 37.6 MB hex + < 1 MB rest,
-no file > 5 MB, largest 2.1 MB). 39 tests pass; regression check OK against the new `reports/phase_c4` snapshot.
-Committed and pushed.
+no file > 5 MB, largest 2.1 MB). Regression check OK against the new `reports/phase_c4` snapshot. Committed and
+pushed (`0ebf1e6`), rebased onto the teammate PR #1 that landed overnight (API interval fix + `docs/HARMONIZATION_REVIEW.md`);
+one import conflict in `api/main.py` resolved, 40 tests pass after the rebase. The review's §2.3 ("no independent
+check of the product before 2012") is partly answered by the C4 burned-area test (§5 of `reports/VALIDATION.md`).
 
 **Key numbers**
 * Satellite-wide S-NPP outage days: **61** (all 10 countries combined; 9 partial days deliberately excluded).
