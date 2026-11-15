@@ -3,7 +3,7 @@
   meta.json                     countries [{code, name, bbox, center}], first_ym, last_ym, model, generated_at
   series/{CC}.json              monthly country series, all countries
   regions/{CC}.json             monthly ADM1 series, cell-level countries
-  hex/{CC}/r5|r7/{YYYY}.json    harmonized cell-days per H3 cell and month (config web.hex_countries)
+  hex/{CC}/r5|r7/{YYYY}.json    harmonized cell-days per H3 cell and month (config web.hex_countries + HEX_EXTRA)
   anomalies.json                top events (07b_validation_package) incl. the known events
   validation.json               copy of reports/validation.json
   boundaries/{CC}_adm1.geojson  simplified ADM1 polygons (shapeName, shapeISO)
@@ -35,6 +35,9 @@ CAL = importlib.import_module("pipeline.05_calibrate")
 PKG = importlib.import_module("pipeline.07b_validation_package")
 log = get_logger("export_web")
 EVENTS_DOC = {"countries": ["KAZ", "UZB"], "top_n": 5}     # docs/EVENTS.md (demo-event shortlist)
+# hex files also for the other Central Asian countries (each with its own coefficients); kept here, not in config.yaml,
+# because that export change was scoped to pipeline/ and web/public/data/
+HEX_EXTRA = ["TKM", "KGZ", "TJK"]
 # heat sources found in this project that are NOT fires (docs/PHASE_C.md, C2); flagged in docs/EVENTS.md
 NOT_FIRE = [{"lat": 38.1, "lon": 67.3, "radius_deg": 0.25, "from_year": 2025,
              "note": "NOT A FIRE: new industrial heat source found in C2 (FIRMS labels it vegetation)"}]
@@ -337,7 +340,7 @@ def main():
                                                          last.year * 100 + last.month)]
         cells[c] = cm
         dump(out / "regions" / f"{c}.json", regions(cfg, cm, iv, periods, yms))
-        if c in w["hex_countries"]:
+        if c in w["hex_countries"] or c in HEX_EXTRA:
             n = hexes(cfg, c, cm, out / "hex", last)
             log.info("%s: %d hex files", c, n)
     dump(out / "anomalies.json", anomalies(cfg, events, cells))
