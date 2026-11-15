@@ -86,6 +86,9 @@ def values(cfg):
         "t5_c2_mae": pct(t5["C2"]["mae_pct_of_mean"]), "t5_c2_bias": pct(t5["C2"]["bias_total_pct"], True),
         "t5_c0_bias": pct(t5["C0"]["bias_total_pct"], True),
         "abai_rank": str(abai["rank"]), "abai_of": f"{abai['of']:,}",
+        "ba_shifted": ", ".join(f"{NAMES.get(c, c)} ×{x(r['modis_only']['step_given_burned_area']['step_factor'])}"
+                                for c, r in ba.items() if "modis_only" in r
+                                and not r["modis_only"]["step_given_burned_area"]["ci_includes_1"]),
         "asis_range": f"{min(asis):.0f}–{max(asis):.0f}", "local_range": f"{min(local):.0f}–{max(local):.0f}",
         "ratio_min": f"{ratio[rmin]:.1f}", "ratio_min_c": NAMES.get(rmin, rmin),
         "ratio_max": f"{ratio[rmax]:.1f}", "ratio_max_c": NAMES.get(rmax, rmax),

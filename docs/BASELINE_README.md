@@ -1,5 +1,7 @@
 # Fire Regimes — a harmonized MODIS + VIIRS fire calendar
 
+> **Historical.** README of the imported baseline (`fire-regimes`, phase A). Its numbers and paths predate this project's changes; current numbers are in the [README](../README.md) and [reports/VALIDATION.md](../reports/VALIDATION.md).
+
 NASA Space Apps Challenge · *Fire regimes*. One comparable record of fire activity from 2000 to today, where the
 instrument no longer shapes the picture. Region in this build: **Kazakhstan** (any FIRMS country or bbox via `config.yaml`).
 

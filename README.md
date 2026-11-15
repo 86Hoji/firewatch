@@ -45,6 +45,9 @@ transfer — see below). Full numbers: [`reports/VALIDATION.md`](reports/VALIDAT
 - **A new industrial site in Uzbekistan is not caught by FIRMS labels.** A heat source near 38.1°N 67.3°E appears
   in 2025; FIRMS labels 92% of its VIIRS detections as vegetation fire, so `type` cannot remove it and it inflates
   Uzbekistan's 2025–26 VIIRS counts.
+- **The burned-area check has limited resolution.** MODIS alone, which has no sensor change in 2012, also shifts
+  against burned area (Kyrgyzstan ×0.62, Turkmenistan ×1.44; 95% CI excludes 1), so there the check is inconclusive (few fires in
+  Kyrgyzstan). It shows that the ×2–4 seam is gone, not ±10% accuracy; accuracy comes from the held-out tests above.
 - **Coefficients are local.** The Kazakh model applied unchanged elsewhere is off by 26–63% (it cannot know a
   country's VIIRS/MODIS ratio, ×1.5 in Portugal to ×4.5 in India); refitted on each country's own overlap the same
   method gets 5–39%. The method transfers, the coefficients do not.
