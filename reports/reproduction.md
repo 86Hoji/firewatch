@@ -1,5 +1,7 @@
 # Reproduction of the baseline — Kazakhstan
 
+> **Historical.** Phase B reproduction of the baseline on Kazakhstan. Superseded by later phases; current numbers are in the [README](../README.md) and [VALIDATION.md](VALIDATION.md).
+
 His numbers: `reports/baseline/`. Ours: `reports/`. Flag = difference > 2%.
 
 | metric | his | ours | diff % | > 2% |

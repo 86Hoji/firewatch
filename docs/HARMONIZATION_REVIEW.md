@@ -1,123 +1,104 @@
-# Аудит гармонизации MODIS → VIIRS (состояние после фазы C3)
+# Harmonization review: MODIS → VIIRS (after phase C3, updated with checks on real data)
 
-Разбор методологии, по которой MODIS переводится в шкалу VIIRS S-NPP: что сделано на уровне лучших практик, где
-есть риск для главного продукта (ряд 2000–2011) и что улучшить в проекте в целом. Ссылки на код даны по ветке `main`
-на коммите `80a8a68`. Цифры взяты из `reports/` либо пересчитаны по `reports/phase_b/kz_cell_month_yearly.csv`.
+A review of the method that puts MODIS on the VIIRS S-NPP scale: what follows best practice, where the main product
+(the 2000–2011 series) is at risk, and what to improve in the project as a whole. Written against `main` at
+`80a8a68`; updated on 2026-11-15 with results on the real data (§2.1, §6). Numbers come from `reports/` or are
+recomputed from the exported series and `cell_month_all.parquet`.
 
 ---
 
-## 0. Вердикт
+## 0. Verdict
 
-**Инженерная и валидационная часть заметно сильнее типичного хакатонного проекта.** В её пользу говорят:
-клетко-дни вместо точек; стабильная эталонная шкала; калибровка в окне без дрейфа орбит; протокол выбора модели,
-записанный до запуска; конформные интервалы с кросс-фиттингом; регрессионная проверка с точностью 1e-9 и честно
-описанные слабые места.
+**The engineering and validation are well above a typical hackathon project:** cell-days instead of points, a stable
+reference scale, calibration in a window without orbit drift, a model-selection protocol fixed before the run,
+cross-fitted conformal intervals, a regression check at 1e-9, and weak spots stated openly.
 
-**Главный риск лежит в самом продукте, а не в коде.** Ряд 2000–2011 — это экстраполяция модели за пределы данных,
-на которых она обучена. Ни один из тестов T1–T4 такую экстраполяцию не проверял. Выбор функциональной формы меняет
-уровень 2002–2004 годов на 11–20%, а опубликованный 90% интервал на год — около ±8%.
+**The main risk was in the product, not in the code.** The 2000–2011 series is the model applied beyond the data it
+was fitted on, and none of the tests T1–T4 checked that. The choice of model form moves 2002–2004 by 11–20%, while the
+published yearly 90% interval is about ±8%.
 
-> **Обновление (15.11, реальные месячные ряды из `web/public/data/series/`).** Тест T5 этот риск **в основном
-> снял**. На более активных годах C2 ошибается на 7.3% со смещением +3.7%. Постоянный множитель C0 даёт 10.7%
-> и +10.4%, и почти на столько же (+8.9%) он завышал бы уровень 2003–2011 годов. Данные отвергают C0, а не C2.
-> Подробности в §2.1. Остаётся только оговорка про месяцы далеко за диапазоном калибровки.
+> **Update (2026-11-15, real data).** The extrapolation test T5 **largely removes this risk**. On the busier years the
+> chosen model C2 errs by 7.3% with +3.7% bias; a constant ratio (C0) gives 10.7% and +10.4%, and would raise the
+> 2003–2011 level by almost as much (+8.9%). The data reject C0, not C2 (§2.1, §6.2). Only months far outside the
+> calibration range remain a caveat.
 
-| аспект | оценка | коротко |
+| aspect | rating | in short |
 |---|---|---|
-| Единица учёта (клетко-дни H3) | ★★★★★ | Убирает около половины разрыва в разрешении ещё до статистики |
-| Эталонная шкала (только S-NPP, NOAA-20 только для пропусков) | ★★★★★ | Правильный выбор стабильного эталона |
-| Окно калибровки и направление теста | ★★★★☆ | 2012–2019 без дрейфа, T1 проверяет «назад во времени», но не «за пределы диапазона» |
-| Функциональная форма модели | ★★★★☆ | Степенной закон выдержал тест на экстраполяцию T5 на реальных данных; ratio-модель его провалила (§2.1) |
-| Пространственная достоверность | ★★☆☆☆ | Карта — это MODIS, умноженный на одно число на страну и месяц (§2.2) |
-| Интервалы | ★★★★☆ | Конформные и кросс-фиттинговые, но не учитывают всю цепочку (§2.4) |
-| Независимая проверка до 2012 | ★☆☆☆☆ | Её нет, хотя данные для неё уже лежат в репозитории (§2.3) |
-| Воспроизводимость и прозрачность | ★★★★☆ | Отличный аудит-след, но нет CI, фиксации окружения и демо (§3) |
+| Unit (H3 cell-days) | ★★★★★ | Removes about half of the resolution gap before any statistics |
+| Reference scale (S-NPP only, NOAA-20 only for outages) | ★★★★★ | The right stable reference |
+| Calibration window and test direction | ★★★★☆ | 2012–2019 is drift-free; T1 tests "backwards in time"; T5 now tests "beyond the range" |
+| Model form | ★★★★☆ | The power law passed T5 on real data; the constant ratio failed (§2.1) |
+| Spatial fidelity | ★★☆☆☆ | The map is MODIS times one number per country and season (§2.2) |
+| Intervals | ★★★★☆ | Conformal and cross-fitted, but they do not cover the whole chain (§2.4) |
+| Independent check before 2012 | ★★★☆☆ | Burned-area test (C4) with a MODIS-only control; it can show the seam is gone, not ±10% accuracy (§2.3, §6.4) |
+| Reproducibility and transparency | ★★★★☆ | Excellent audit trail; no CI or pinned environment yet (§3) |
 
 ---
 
-## 1. Что сделано хорошо (сохранить)
+## 1. What is done well (keep)
 
-1. **Клетко-дни H3 res-7.** Наивный скачок в 2012 году на точках составляет ×2.81, на клетко-днях ×1.63: половина
-   разницы в разрешении снимается без какой-либо модели.
-2. **Цель — только S-NPP**, NOAA-20 лишь заполняет дни сбоев с отдельным коэффициентом. Так рядом с 2018 годом
-   (запуск NOAA-20) не возникает второго шва.
-3. **Калибровка 2012–2019, отложенная выборка 2020+.** Дрейф орбит Terra и Aqua честно назван и измерен:
-   соотношение Terra/Aqua 0.86–1.02 до 2021 года, затем 1.36 → 0.62.
-4. **T1 backcast (2016–19 → 2012–15)** воспроизводит реальное направление применения модели — назад во времени.
-5. **Протокол выбора модели** с правилом экономности (при ничьей в пределах 0.5 п.п. побеждает модель с меньшим
-   числом параметров). Защищает от подгонки под результат.
-6. **Интервалы на уровне предсказания (C3).** Покрытие по регионам выросло с 44% до 91%, всё кросс-фиттинговое.
-7. **Один источник истины** — [`reports/model_card.json`](../reports/model_card.json). Шаг 06 отказывается
-   работать при рассогласовании.
-8. **Регрессионные проверки и аудит-след.** Например, найдено переразмечивание MODIS 6.03/6.2 на стороне FIRMS,
-   и оно объяснено, а не скрыто.
+1. **H3 res-7 cell-days.** The naive 2012 jump is ×2.81 in points and ×1.63 in cell-days: half of the resolution gap
+   goes away without any model.
+2. **Target = S-NPP only**; NOAA-20 only fills outage days, with its own coefficient, so there is no second seam at
+   2018 (NOAA-20 launch).
+3. **Calibration 2012–2019, holdout 2020+.** MODIS orbit drift is named and measured: Terra/Aqua cell-day ratio
+   0.86–1.02 until 2021, then 1.36 → 0.62.
+4. **T1 backcast (2016–19 → 2012–15)** reproduces the real direction of use: backwards in time.
+5. **Selection protocol** with a parsimony rule (within 0.5 points the model with fewer parameters wins), which guards
+   against tuning to the result.
+6. **Intervals at the level predicted (C3).** Region coverage of the 90% interval went from 50% to 92% (current
+   reports), all cross-fitted.
+7. **One source of truth:** [`reports/model_card.json`](../reports/model_card.json); step 06 refuses to run on a
+   mismatch.
+8. **Regression checks and audit trail.** For example, FIRMS re-labelling MODIS 6.03/6.2 was found and explained, not
+   hidden.
 
 ---
 
-## 2. Проблемы гармонизации (по убыванию важности)
+## 2. Harmonization issues (most important first)
 
-### 2.1 🟠 Ряд 2000–2011 — экстраполяция (проверена T5, см. результат на реальных данных)
+### 2.1 🟠 The 2000–2011 series is extrapolation (now tested by T5)
 
-**Факт.** MODIS в 2002–2004 годах давал 51–57 тыс. клетко-дней в год. Максимум в годах калибровки — 36 тыс.
-(2017). В пиковых месяцах выход за диапазон ещё больше.
+**Fact.** MODIS gave 51–57k cell-days a year in 2002–2004; the busiest calibration year has 36k (2017). Peak months
+lie even further out.
 
-| год | MODIS, клетко-дни | множитель гармонизации | при постоянном 1.80 (среднее 2012–19) | разница |
+| year | MODIS cell-days | harmonization multiplier | with a constant 1.80 (2012–19 mean) | difference |
 |---|---|---|---|---|
-| 2002 | 53 732 | 1.59 | ≈96 700 | **+13%** |
-| 2003 | 56 768 | 1.50 | ≈102 100 | **+20%** |
-| 2004 | 51 477 | 1.62 | ≈92 600 | **+11%** |
-| 2008 | 41 862 | 1.70 | ≈75 300 | +6% |
-| 2011 | 13 330 | 1.92 | ≈24 000 | −6% |
+| 2002 | 53,732 | 1.59 | ≈96,700 | **+13%** |
+| 2003 | 56,768 | 1.50 | ≈102,100 | **+20%** |
+| 2004 | 51,477 | 1.62 | ≈92,600 | **+11%** |
+| 2008 | 41,862 | 1.70 | ≈75,300 | +6% |
+| 2011 | 13,330 | 1.92 | ≈24,000 | −6% |
 
-Годовые множители в 2012–2019 годах лежат в диапазоне 1.67–2.07. Модель C2 (`exp(a)·(M+1)^b`, b < 1) снижает
-множитель по мере роста активности и в 2003 году даёт 1.50, то есть ниже всего, что наблюдалось. Опубликованный
-90% интервал на 2003 год — 79–92 тыс. (±8%). Разница между двумя правдоподобными моделями (C0 и C2) **больше
-самого интервала**. Оценка грубая: она сделана по годовым отношениям, а C0 калибруется помесячно.
+Annual multipliers in 2012–2019 lie between 1.67 and 2.07. C2 (`exp(a)·(M+1)^b`, b < 1) lowers the multiplier as
+activity grows and gives 1.50 in 2003, below anything observed. The published 2003 interval is 79–92k (±8%), so the
+difference between two plausible models (C0 and C2) was larger than the interval. (Rough: annual ratios, while C0 is
+calibrated per month.)
 
-**Почему тесты это не ловят.** T1 обучается на 2016–19 годах (12–36 тыс. в год) и предсказывает 2012–15
-(9.5–30 тыс.). Это интерполяция внутри диапазона. T3 и T4 работают внутри 2012–2019. T2 проверяет годы с меньшей
-активностью и к тому же искажён дрейфом орбит.
+**Why T1–T4 do not catch it.** T1 fits 2016–19 (12–36k a year) and predicts 2012–15 (9.5–30k): interpolation. T3 and
+T4 stay inside 2012–2019. T2 tests quieter years and is distorted by orbit drift.
 
-**Что делать:**
-- **Тест на экстраполяцию по диапазону.** Для каждого календарного месяца обучать модель на годах с M ниже p75
-  и проверять на годах выше. Это прямой аналог реального применения модели. Его нужно добавить в протокол как T5
-  и прогнать для всех кандидатов.
-- **Ограничить экстраполяцию.** При M больше максимума калибровки фиксировать множитель на краю диапазона
-  `w(M_max)` либо плавно смешивать его с ratio-моделью. Решение записать в карточку модели.
-- **Учитывать структурную неопределённость.** Показывать оболочку C0/C1/C2 как «неопределённость модели» или
-  использовать stacking или байесовское усреднение моделей с весами из кросс-валидации.
-- **Перейти к физической ковариате (см. §2.2).** Множитель зависит не от суммы по стране как таковой, а от размера
-  пожаров. Сравнение стран в C1 это показывает: 1.6–2.0 для крупных степных и лесных пожаров (PRT, KAZ, AUS)
-  и 3.9–4.5 для мелких сельхозпалов (UZB, TKM, IND).
+**Code note.** C2 is fitted **per season**, not per month. Log-link models need at least `loglog_min_points = 12`
+points per stratum and a month has 8 in 2012–2019, so `models.fit` and `calib._resolve` always fall back to the season
+(24 points); the ratio model C0 is fitted per month. Checked for both implementations. So C2 is 4 power laws with
+2 parameters each, and within a season the seasonal cycle enters only through M. [AUDIT.md](AUDIT.md) §2 says
+"for each calendar month … on the 8 yearly values", which is not exact.
 
-**Уточнение к коду.** C2 подгоняется не по месяцам, а **по сезонам**. У моделей с лог-связью страта должна иметь
-не меньше `loglog_min_points = 12` точек, а у отдельного месяца за 2012–2019 годы их 8. Поэтому `models.fit`
-и `calib._resolve` всегда откатываются на уровень сезона (24 точки). Ratio-модель C0 работает помесячно. Это
-проверено на синтетике для обеих реализаций. Значит, C2 — это 4 степенных закона (по 2 параметра), а сезонный ход
-внутри сезона он передаёт только через M. В [AUDIT.md](AUDIT.md) §2 сказано «for each calendar month … on the 8 yearly
-values» — это неточно.
+**Done (in `main`).** [`pipeline/experiments.py`](../pipeline/experiments.py) now reports:
+- **T5:** for each calendar month, fit on the 2012–2019 years whose MODIS total is at or below that month's 75th
+  percentile, test on the two busiest years. Reported only; the protocol and the score are unchanged.
+- **`range_stats`:** share of 2003–2011 months above the same month's calibration maximum, with median and maximum
+  ratio; per-month flags in [`reports/extrapolation_flags.json`](../reports/extrapolation_flags.json).
+- **`sensitivity`:** 2003–2011 annual totals of all 8 candidates vs the selected one (structural uncertainty). Years
+  before July 2002 are excluded: they need the Terra → Terra∪Aqua bridge.
+- **`score_bootstrap`:** paired bootstrap over years of the selection score (§2.6).
 
-**Сделано (ветка `feat/t5-extrapolation-test`).** В [`experiments.py`](../pipeline/experiments.py) добавлено:
-- **T5:** для каждого календарного месяца обучение на годах 2012–2019 с суммой MODIS не выше p75 этого месяца,
-  проверка на двух самых активных годах. T5 только отчётный, протокол и балл не менялись.
-- **`range_stats`:** доля месяцев 2003–2011, где MODIS выше максимума того же месяца в годах калибровки, медиана
-  и максимум этого отношения.
-- **`sensitivity`:** годовые суммы 2003–2011 по каждой из 8 моделей-кандидатов и их разница с выбранной моделью.
-  Это структурная неопределённость. Годы до июля 2002 исключены: им нужен мост Terra → Terra∪Aqua.
-- **`score_bootstrap`:** парный бутстрэп по годам для балла выбора (§2.6).
+Unit tests on synthetic data live on the branch `feat/t5-extrapolation-test` (`tests/test_extrapolation.py`).
 
-Всё это попадает в `model_comparison.{md,json}` и `model_card.json`. Тесты на синтетике
-([`tests/test_extrapolation.py`](../tests/test_extrapolation.py)) проверяют четыре вещи:
-- T5 отличает истинный степенной закон от постоянного множителя;
-- быстрый бутстрэп на исходных годах в точности даёт балл протокола;
-- для лучшей модели доля побед равна 1, а худшая отстаёт с интервалом разницы выше 0;
-- `range_stats` и `sensitivity` дают ожидаемые величины.
+**Result on real data** (each country fitted on its own 2012–2019 data; exported country series after `33b7d7d`,
+values rounded to 3 significant digits):
 
-**Результат на реальных данных.** Использованы месячные суммы по стране из `web/public/data/series/{CC}.json`
-(экспорт команды после коммита `33b7d7d`, 15.11 10:22: `modis_only` = клетко-дни MODIS, `viirs` = S-NPP + NOAA-20 в дни сбоев, значения
-округлены до 3 значащих цифр). В каждой стране модели обучались на её собственных данных 2012–2019 годов.
-
-| страна | T5 C0: MAE / смещение | T5 C1 | T5 C2 | насколько тест выходит за диапазон (медиана) | 2003–11: C0 к C2 | доля месяцев 2003–11 выше максимума калибровки |
+| country | T5 C0: MAE / bias | T5 C1 | T5 C2 | how far the test leaves the range (median) | 2003–11: C0 vs C2 | 2003–11 months above calibration max |
 |---|---|---|---|---|---|---|
 | **KAZ** | 10.7% / **+10.4%** | 8.1% / +3.1% | **7.3% / +3.7%** | ×1.32 | **+8.9%** | 32% |
 | UZB | 38.9% / +35.9% | 20.9% / +0.5% | 17.7% / −1.6% | ×1.53 | +3.1% | 16% |
@@ -130,291 +111,238 @@ values» — это неточно.
 | USA | 14.7% / +13.7% | 10.9% / −3.0% | 10.9% / −2.5% | ×1.14 | +2.4% | 13% |
 | IND | 8.9% / +6.6% | 9.0% / +2.1% | 8.1% / +2.6% | ×1.21 | −1.7% | 7% |
 
-**Вывод (исправляет первоначальную оценку этого раздела):**
-- На тесте, который имитирует применение модели к более активным годам, **C2 лучший или в пределах 0.1 п.п. от
-  лучшего в 9 из 10 стран**. Исключение — Кыргызстан: там C1 точнее (19.5% против 24.5%), хотя у C2 меньше
-  смещение. **C0 завышает во всех 10 странах** (+4…+68%).
-- В Казахстане завышение C0 на T5 (+10.4%) почти равно тому, на сколько C0 поднял бы уровень 2003–2011 годов
-  (+8.9%). Разница C0 и C2 до 2012 года — не неопределённость, а ошибка C0. Данные отвергают постоянный множитель.
-- C1 и C2 до 2012 года почти совпадают (−0.1% в Казахстане), так что выбор между двумя степенными моделями
-  на уровень не влияет.
-- Помесячно выход за диапазон меньше, чем казалось по годовым суммам. Выше максимума калибровки только 32% месяцев
-  2003–2011 годов в Казахстане, медиана — ×0.66 от максимума. Сильные выходы (до ×10–17) — это месяцы, где
-  в годах калибровки почти не было пожаров (малые абсолютные числа).
-- **Сверка двух реализаций.** C2 из `models.py` и продуктовый ряд из `calib.py` (`harmonized` в экспорте)
-  по годовым суммам 2003–2011 в Казахстане расходятся на −0.13…+0.14%, это уровень округления экспорта.
-- Тест по выгоревшей площади (×1.16, 0.88–1.53; совпадает и с независимой месячной оценкой команды в
-  `reports/VALIDATION.md` §5) с этим не спорит: интервал включает 1.
+**Conclusions** (these correct the first estimate in this section):
+- On the test that mimics applying the model to busier years, **C2 is best or within 0.1 points of the best in 9 of
+  10 countries**. The exception is Kyrgyzstan, where C1 is more accurate (19.5% vs 24.5%) though C2 has less bias.
+  **C0 over-predicts in all 10 countries** (+4…+68%).
+- In Kazakhstan C0's T5 over-prediction (+10.4%) almost equals how much C0 would raise the 2003–2011 level (+8.9%).
+  The C0–C2 difference before 2012 is C0's error, not uncertainty.
+- C1 and C2 give nearly the same level before 2012 (−0.1% in Kazakhstan), so the choice between the two power laws
+  does not move the product.
+- Month by month the excursion is smaller than annual totals suggest: 32% of 2003–2011 months in Kazakhstan exceed
+  the calibration maximum, median ×0.66 of it. Large ratios (up to ×10–17) are months with almost no fire in the
+  calibration years (small absolute numbers).
+- **Two implementations agree.** C2 in `models.py` and the published series from `calib.py` differ by −0.13…+0.14% in
+  Kazakhstan's 2003–2011 annual totals, which is the export rounding.
 
-**Что осталось:** T5 проверяет выход примерно до ×1.3–1.7. Для месяцев намного дальше рекомендация ограничить
-множитель на краю диапазона остаётся в силе. Чтобы T5 попал в `model_comparison.md`, нужен полный прогон
-`experiments`. Он требует данных уровня клеток (для T3 и Aqua-кандидатов), а здесь использованы только суммы
-по стране и только кандидаты C0–C2.
+**Still open:** T5 tests excursions up to about ×1.3–1.7. For months much further out, capping the multiplier at the
+edge of the calibration range remains a recommendation.
 
-**Полный прогон на сырых данных не делался** (в клоне нет `data/raw`): нужно выполнить
-`python -m pipeline.run_all experiments`, а затем `python -m pipeline.regression_check`. Регрессия должна пройти:
-новые ключи сравнение пропускает, старые числа не меняются.
+### 2.2 🔴 The map is MODIS times one number
 
-### 2.2 🔴 Пространственная картина — это MODIS, умноженный на одно число
+The multiplier comes from the country total of the month and is the same for every cell. C3 fixed the interval width
+for regions, not the bias: median region error 13.5% (current reports), region biases from −15% to +13.5% (phase C3).
 
-Множитель вычисляется по сумме страны за месяц и одинаков для всех клеток. C3 исправил ширину интервалов,
-но не смещение. Медианная ошибка по регионам — 18.5%, смещение по отдельным регионам — от −15% (Актобе, Павлодар)
-до +13.5% (Западно-Казахстанская область).
-
-**Что делать (лучшая практика — иерархическая модель с частичным объединением):**
+**Best practice: a hierarchical model with partial pooling.**
 
 ```
 V_rm ~ NegBin(μ_rm, φ)
 log μ_rm = a_month(m) + b · log(M_rm + 1) + u_region + β · x_rm
-u_region ~ N(0, σ²)                       # стягивается к стране при малом объёме данных
-x_rm: признаки, видимые MODIS и до 2012 года:
-      точек на клетко-день (p_modis / n_modis) — прокси размера пожара,
-      медианная FRP, доля детекций с низкой уверенностью, доля ночных детекций,
-      класс покрова (MCD12Q1), широта
+u_region ~ N(0, σ²)                       # shrinks to the country when data are sparse
+x_rm: features MODIS sees before 2012 too:
+      points per cell-day (p_modis / n_modis) as a fire-size proxy,
+      median FRP, low-confidence share, night share, land cover (MCD12Q1), latitude
 ```
 
-- Признаки x наблюдаемы и до 2012 года. Поэтому экстраполяция становится проверяемой: достаточно сравнить
-  распределения x в 2001–11 и 2012–19 годах (adversarial validation или тест на сдвиг ковариат).
-- Объединение 10 стран (C1 уже даёт данные) и **leave-one-country-out** — это сильнейший тест переносимости
-  и естественное содержание фазы C4.
-- Моделировать сезонность как гладкую циклическую функцию (сплайн по месяцам) или как случайный эффект месяца.
-  Сейчас вместо этого жёсткий откат месяц → сезон → страна, и для C2 он всегда срабатывает на уровне сезона
-  (уточнение в §2.1).
+- x is observable before 2012, so extrapolation becomes checkable (compare x in 2001–11 vs 2012–19).
+- Pooling the 10 countries and **leave-one-country-out** is the strongest transfer test (phase C4).
+- Model seasonality as a smooth cyclic function or a month random effect instead of the hard month → season →
+  country fallback (which for C2 always lands on the season, §2.1).
 
-### 2.3 🟠 Нет независимой проверки самого продукта до 2012 года
+A first implementation was tried and **did not beat C2 on real data** (§6.3).
 
-Все тесты сравнивают модель с VIIRS, а до 2012 года VIIRS нет. Сейчас «скачок после гармонизации ×0.92»
-во многом получается по построению (AUDIT §5.5).
+### 2.3 🟠 Independent check of the product before 2012
 
-**Готовый и дешёвый шаг.** Файл [`data/external/burned_area.csv`](../data/external/burned_area.csv) с ежемесячной
-выгоревшей площадью MCD64A1 по KAZ/UZB/TKM/KGZ/TJK лежит в репозитории с фазы 0, **но его не читает ни один
-скрипт**. `07_validate.py` ищет `burned_area_monthly.parquet` из HDF-тайлов, а этот шаг не запускался. Предлагаемый
-тест: отношение `n_harm / burned_ha` не должно скачкообразно меняться на шве 2012 года. Это тест Петтитта и
-регрессия со ступенькой, которые уже есть в `07_validate.py`. Наивная склейка такой скачок даст, корректная
-гармонизация — нет. Оговорка: MCD64A1 тоже снят MODIS, но алгоритм другой (следы гари, а не тепловые аномалии)
-и от шва VIIRS он не зависит.
+All model tests compare with VIIRS, which does not exist before 2012, so the "harmonized step ×0.92" is largely true
+by construction (AUDIT §5.5). An independent check needs another data source.
 
-**Первая проверка по годовым данным (сделана в этой сессии).** Считалось отношение клетко-дней к выгоревшей
-площади (KAZ, MCD64A1 из CSV), сравнивались 2012–2019 и 2003–2011 годы: среднее геометрическое и бутстрэп по годам,
-5000 повторов.
+**Burned area (MCD64A1).** [`data/external/burned_area.csv`](../data/external/burned_area.csv) (monthly, KAZ/UZB/TKM/KGZ/TJK)
+is now used by the C4 package (`07b`): the step at 2012 in fire cell-days given burned area. MCD64A1 is also MODIS,
+but a different algorithm (burn scars, not thermal anomalies), and it does not depend on the VIIRS seam.
 
-| ряд | после / до 2012 | 90% интервал |
+A first annual check (Kazakhstan, cell-days per burned hectare, 2012–2019 vs 2003–2011, geometric means, 5,000
+bootstrap draws over years):
+
+| series | after / before 2012 | 90% interval |
 |---|---|---|
-| только MODIS (один сенсор, шва нет) | 1.07 | 0.84–1.36 |
-| наивная склейка | **1.96** | 1.51–2.55 |
-| гармонизированный | 1.16 | 0.89–1.52 |
+| MODIS alone (one sensor, no seam) | 1.07 | 0.84–1.36 |
+| naive splice | **1.96** | 1.51–2.55 |
+| harmonized | 1.16 | 0.89–1.52 |
 
-Вывод:
-- Наивный скачок выгоревшая площадь подтверждает уверенно, и гармонизация его убирает: интервал включает 1.
-- По годовым данным нельзя отличить C2 от постоянного множителя. Разница между ними 10–20%, а ширина интервала
-  около ±30%. Если опираться на выгоревшую площадь, множитель на 2003–2011 годы выходит 1.96 против применённых
-  1.68. Это указывает в ту же сторону, что §2.1, но статистически не значимо.
-- Месячный тест со ступенькой и поправкой Newey-West должен быть точнее (он реализуется отдельно в `07_validate`).
-- Корреляция годовых логарифмов с выгоревшей площадью: 0.91 у гармонизированного ряда, 0.92 у MODIS.
+The naive jump is confirmed and removed; annual data cannot tell C2 from a constant ratio (±30% interval). The monthly
+test in `07b` agrees (Kazakhstan ×1.16, 0.88–1.53). The MODIS-only control and its limits are in §6.4.
 
-**Дальше:** полностью независимые по сенсору продукты — ESA FireCCILT11 (AVHRR-LTDR, 1982–2018) и ряды выгоревшей
-площади по Landsat 30 м (например, GABAM). Отдельно — сравнение с известными событиями до 2012 года, а не только
-после 2022.
+**Next:** sensor-independent products — ESA FireCCILT11 (AVHRR-LTDR, 1982–2018), Landsat 30 m burned area (e.g.
+GABAM) — and known events before 2012, not only after 2022.
 
-### 2.4 🟠 Неопределённость не проходит по всей цепочке
+### 2.4 🟠 Uncertainty does not cover the whole chain
 
-Интервал строится только по остаткам основной модели при исключении одного года. В него не попадают:
+The interval comes only from the leave-one-year-out residuals of the main model. Not included:
 
-| источник | где | эффект |
+| source | where | effect |
 |---|---|---|
-| Мост Terra → Terra∪Aqua (ноябрь 2000 – июнь 2002, 20 месяцев) | `calib.modis_effective` | Интервал этих месяцев занижен |
-| Структура модели (§2.1) | — | ±11–20% в пиковые годы |
-| Всего 8 лет калибровки | бутстрэп по годам | Хвосты распределения коэффициентов неустойчивы |
-| Сбои S-NPP 2012–2017 остаются нулями (NOAA-20 ещё нет) | `03_grid` | Цель калибровки занижена, множитель тоже |
-| Годовой интервал = сумма месячных 90% границ | `07_validate.jump_test`, `api/yearly` | Это не 90% интервал на год; покрытие для годовых сумм не проверено |
+| Terra → Terra∪Aqua bridge (Nov 2000 – Jun 2002, 20 months) | `calib.modis_effective` | interval too narrow for those months |
+| Model structure (§2.1) | — | now small between C1 and C2; C0 rejected by T5 |
+| Only 8 calibration years | bootstrap over years | unstable tails of the coefficient distribution |
+| S-NPP outages 2012–2017 left as zero (no NOAA-20 yet) | `03_grid` | calibration target and multiplier slightly low |
+| Yearly interval = sum of monthly 90% bounds | `07_validate.jump_test`, API `/yearly` | not a 90% annual interval; on real data it covers 99% of held-out years at about twice the needed width (§6) |
 
-**Лучшая практика — ансамбль Монте-Карло.** Нужно сгенерировать K = 200–500 реализаций всего ряда:
-бутстрэп коэффициентов, затем мост Terra, затем коэффициенты NOAA-20, затем конформный остаток. Хранить реализации
-на уровне регион × месяц. Тогда любой агрегат (год, область, тренд, ранг года) получает честные квантили из
-ансамбля. Это также окончательно закрывает вопрос агрегации интервалов в API. Покрытие годовых интервалов
-проверять отдельно, исключая по одному году на годовых суммах.
+**Best practice: a Monte Carlo ensemble.** 200–500 members of the whole series (coefficient bootstrap → Terra bridge →
+NOAA-20 coefficient → conformal residual), stored per region × month, so any aggregate (year, area, trend, rank) gets
+honest quantiles. A version exists on a side branch; on real country totals its annual interval covers 82% at half
+the width, so it needs calibration before use.
 
-### 2.5 🟠 Сезоны: зима и весна
+### 2.5 🟠 Seasons: winter and spring
 
-Отложенная выборка по сезонам: смещение зимой +26%, покрытие весной 56% при номинальных 90%
-([`validation.md`](../reports/validation.md), §1). Весна — сезон сельхозпалов, у которых другое распределение
-размеров пожаров, то есть та же причина, что в §2.2. Нужны конформные интервалы отдельно по сезону (Mondrian
-conformal) и признак размера пожара в модели.
+Holdout by season: winter bias +26%, spring coverage 56% at a nominal 90% (KZ report, §1). Spring is the season of
+farm burning, with a different fire-size distribution — the same cause as in §2.2. Per-season (Mondrian) conformal
+intervals and a fire-size feature would address it.
 
-### 2.6 🟠 Метрики и выбор модели
+### 2.6 🟠 Metrics and model selection
 
-- **MAE в % от среднего определяется пиковыми месяцами.** Стоит добавить ошибки на лог-шкале (MASE или
-  `|log(1+a) − log(1+p)|`), а для интервалов — interval/Winkler score или CRPS: они учитывают и покрытие,
-  и ширину.
-- **У различий в баллах нет неопределённости.** C2 10.63, C1 10.97, C0 11.79 — нужен бутстрэп по годам
-  или тест Диболда–Мариано. Иначе вопрос жюри «а это значимо?» останется без ответа. *Сделано:*
-  `score_bootstrap` в `experiments.py` — парный бутстрэп по годам 2012–2019. Он даёт интервал разницы баллов
-  и долю побед каждой модели; результат попадает в раздел «How sure is the choice?» в `model_comparison.md`.
-- **Тест на ступеньку слишком часто находит ступеньку там, где её нет.** `metrics.step_test` строит интервал
-  Newey-West с 12 лагами на ~200 месячных точках. Субагент, делавший тест по выгоревшей площади, проверил это на
-  синтетическом шуме без ступеньки: интервал исключает 1 примерно в 9% случаев при номинальных 5%. Если
-  пропущенные месяцы выпадают, частота доходит до ~18%. Поэтому интервал, который едва исключает 1, — слабое
-  доказательство ступеньки, а «шва нет» нельзя утверждать сильнее, чем позволяет тест. Что сделать: правило лагов
-  `floor(4·(n/100)^(2/9))` либо блочный бутстрэп по годам для интервала ступеньки.
-- **Оптимизм от выбора.** T1, T3 и T4 используются и для выбора модели, и для отчёта о её качестве. Об этом нужно
-  сказать прямо или использовать вложенную схему.
-- **Несогласованность в T3.** Модель обучается на суммах страны *без* региона, а множитель вычисляется на сумме
-  *всей* страны. Для нелинейной связи (b ≠ 1) это небольшой сдвиг. Нужно задокументировать или вычислять
-  множитель на обучающей сумме.
-- **Ошибка в подписи.** [`model_comparison.md`](../reports/model_comparison.md) называет интервалы «negative
-  binomial at the predicted level», хотя метод — эмпирические конформные квантили по бинам
-  ([`intervals.py`](../pipeline/intervals.py)). Заголовок формирует
-  [`experiments.py`](../pipeline/experiments.py) в функции `write()`. *Исправлено* в ветке
-  `feat/t5-extrapolation-test`: теперь «conformal, sized at the predicted level». Сам `.md` обновится при следующем
-  запуске `experiments`.
+- **MAE as % of the mean is driven by peak months.** Add log-scale errors (MASE or `|log(1+a) − log(1+p)|`) and, for
+  intervals, an interval/Winkler score or CRPS, which reward both coverage and width.
+- **Score differences had no uncertainty.** *Done:* `score_bootstrap` gives the interval of each candidate's score
+  difference from the winner and its share of wins ("How sure is the choice?" in `model_comparison.md`). On real data
+  C2 wins 62% of draws and C1 32% (difference interval includes 0); C0 is significantly worse (§6.2).
+- **The step test over-rejects.** `metrics.step_test` uses Newey-West with 12 lags on ~200 monthly points; on
+  synthetic noise without a step it excludes 1 in about 9% of cases at a nominal 5% (up to ~18% when months are
+  dropped). A CI that barely excludes 1 is weak evidence. Fix: lags `floor(4·(n/100)^(2/9))` or a block bootstrap over
+  years.
+- **Selection optimism.** T1, T3 and T4 both select the model and report its quality; say so, or use a nested scheme.
+- **T3 inconsistency.** The model is fitted on country totals *without* the region, while the multiplier is evaluated
+  at the *whole* country total; for b ≠ 1 this is a small shift. Document it or evaluate at the training total.
+- **Interval label.** `model_comparison.md` called the intervals "negative binomial at the predicted level"; they are
+  empirical conformal quantiles by bin ([`intervals.py`](../pipeline/intervals.py)). *Fixed:* "conformal, sized at
+  the predicted level".
 
-### 2.7 🟡 Чувствительность к определениям
+### 2.7 🟡 Sensitivity to definitions
 
-- **Разрешение H3.** Не проверялось, как множитель и скачок 2012 года меняются при res 6 и res 8.
-- **Угол сканирования.** Пиксель MODIS к краю полосы обзора растёт примерно до 2 × 4.8 км, а VIIRS 375 м остаётся
-  меньше ~0.8 км. Вероятность обнаружения зависит от угла. Колонки `scan`/`track` в FIRMS есть: их можно добавить
-  как признак или провести тест только на снимках, близких к надиру.
-- **Даты в UTC.** Ночной пролёт около полуночи по местному времени попадает на соседние сутки. Смещения между
-  сенсорами это не даёт, но в методике стоит упомянуть.
-- **Ждут решения** (PHASE_C): единый глобальный список дней сбоев S-NPP; маска только по правилу доли type-2.
+- **H3 resolution:** how the multiplier and the 2012 step change at res 6 and 8 is not tested yet.
+- **Scan angle:** the MODIS pixel grows to about 2 × 4.8 km at the swath edge while VIIRS 375 m stays under ~0.8 km,
+  and detection depends on it. FIRMS has `scan`/`track`; use them as a feature or test near-nadir data only. Code for
+  both checks exists on a side branch; it needs the cleaned points or raw zips.
+- **UTC dates:** a night pass near local midnight falls on the neighbouring day. No bias between sensors, but worth a
+  line in the method.
 
 ---
 
-## 3. Проект в целом
+## 3. The project as a whole
 
-### 3.1 Продукт и подача (то, что видит жюри)
+### 3.1 Product and presentation
 
-| что | сейчас | что сделать |
+| item | state | next |
 |---|---|---|
-| Корневой README | Одна строка `# firewatch` | Лендинг: картинка «до/после», 3 ключевые цифры, честные ограничения, запуск в 3 командах, ссылка на демо |
-| Фронтенд `web/` и `Dockerfile` | Нет в репозитории, хотя README базового кода на них ссылается | Добавить, чтобы демо было воспроизводимым |
-| Живое демо | — | Развернуть (README базового кода упоминает Docker на порту 7860, это похоже на Hugging Face Spaces) |
-| Набор данных | Только внутри конвейера | Опубликовать ряд (Parquet/CSV, словарь данных, лицензия, DOI на Zenodo) с версией модели |
-| История | Разбросана по PHASE_*.md | Одна страница «Метод и ограничения» для пользователя и карточка модели простым языком |
-| Визуализация неопределённости | Границы low/high | Веер квантилей ансамбля, отметка «экстраполяция» на годах вне диапазона |
+| Root README | done: summary, three numbers, limitations, run, credits, generated from the reports | keep it generated (`python -m pipeline.readme_numbers`) |
+| Website `web/` | done (MapLibre + deck.gl, validation page) | — |
+| Dataset | inside the pipeline only | publish the series (Parquet/CSV, data dictionary, license, DOI) with the model version |
+| Uncertainty on the site | low/high bounds | ensemble quantile fan; mark extrapolated months (`reports/extrapolation_flags.json`) |
 
-### 3.2 Инженерия
+### 3.2 Engineering
 
-- **CI**: GitHub Actions с `pytest` и `ruff` на каждый PR. Сейчас регрессионная проверка запускается только вручную.
-- **Окружение**: зафиксировать версию Python (`.python-version`, 3.11–3.12) и lock-файл (uv или pip-tools).
-  На Python 3.15 у `h3` нет готовых сборок, и установка падает (проверено в этой сессии). В документации
-  пути только для Windows (`.venv/Scripts`).
-- **Происхождение данных**: в `manifest.csv` есть только id запроса. Стоит добавить sha256 архива, дату выгрузки
-  и версию FIRMS. Вариант — DVC для данных и этапов с кэшированием.
-- **Две реализации модели** (`models.py` для выбора и `calib.py` для продукта). Карточка модели защищает от
-  расхождения в названии, но не в математике. Нужен тест эквивалентности предсказаний на синтетике или слияние
-  двух реализаций.
-- **Структура**: модули с числовыми именами (`01_download.py`) требуют `importlib`. Лучше `pipeline/steps/*.py`
-  и CLI, либо оркестратор (Snakemake или DVC pipelines) с пропуском неизменившихся шагов.
-- **Тесты**: нет сквозного теста на маленьком реальном фрагменте (например, одна область за один год) и нет тестов
-  на `07_validate` и `experiments`.
-- **API**: `on_event` устарел, лучше `lifespan`; `CORS *`; SQL собирается f-строками (значения — int,
-  но лучше параметры).
+- **CI:** GitHub Actions with `pytest` and `ruff` on every PR (prepared on a side branch, not merged).
+- **Environment:** pin Python 3.11–3.12 and a lock file (uv). On Python 3.15 `h3` has no wheels and installation fails.
+- **Data provenance:** `manifest.csv` holds only the request id; add the archive sha256, download date and FIRMS
+  version.
+- **Two model implementations** (`models.py` for selection, `calib.py` for the product): add an equivalence test or
+  merge them. On real data they agree to export rounding (§2.1).
+- **Tests:** no end-to-end test on a small real sample; no tests for `07_validate` and `experiments`.
+- **API:** `on_event` is deprecated (use `lifespan`); `CORS *`; SQL built with f-strings (ints, but parameters are
+  safer).
 
-### 3.3 Дорожная карта по приоритету
+### 3.3 Roadmap
 
-| # | шаг | трудозатраты | влияние |
+| # | step | status |
+|---|---|---|
+| 1 | T5 extrapolation test (§2.1) | done; capping the multiplier still open |
+| 2 | Burned-area seam test (§2.3) | done in `07b`, with a MODIS-only control |
+| 3 | Interval label, README, website (§2.6, §3.1) | done |
+| 4 | Hierarchical model with fire-size features, leave-one-country-out (§2.2) | tried, not better (§6.3) |
+| 5 | Monte Carlo ensemble (§2.4) | side branch, needs calibration |
+| 6 | H3 / scan-angle sensitivity (§2.7), FireCCILT11 (§2.3) | code on a side branch, needs raw data |
+| 7 | CI, lock file, checksums, model equivalence test (§3.2) | side branch, not merged |
+
+---
+
+## 4. Fixed along the way
+
+**The API summed per-cell intervals** (`sum(n_harm_low)` / `sum(n_harm_high)`), which
+[`06_harmonize.py`](../pipeline/06_harmonize.py) explicitly forbids. A cell predicted at 2 gets [0, 32], so for a
+country or large area the upper bound was inflated several times (the correct interval for a prediction of ~2,490 is
+[2,123, 2,921]). Fixed in PR #1: the interval is sized on the area's total, with country parameters for the whole
+territory and region parameters for any smaller area; a test covers it.
+
+---
+
+## 5. Comparison with other work
+
+No peer-reviewed harmonized MODIS+VIIRS *active-fire* record was found; the closest analogues are burned-area products
+and record-continuity studies.
+
+| question | literature | this project | conclusion |
 |---|---|---|---|
-| 1 | T5: тест экстраполяции и ограничение множителя или ансамбль моделей (§2.1) | ~1 день | Защищает главный результат |
-| 2 | Тест шва 2012 года по выгоревшей площади из готового CSV (§2.3) | ~0.5 дня | Первая независимая проверка продукта |
-| 3 | Подпись интервалов, README, `web/`, Docker, демо (§2.6, §3.1) | 1–2 дня | Подача |
-| 4 | Иерархическая NegBin-модель с признаками размера пожара, 10 стран, leave-one-country-out (§2.2, C4) | 3–5 дней | Главный научный шаг |
-| 5 | Ансамбль Монте-Карло для неопределённости всей цепочки (§2.4) | ~2 дня | Честные интервалы на любом уровне |
-| 6 | Чувствительность к разрешению H3 и углу сканирования (§2.7), FireCCILT11 (§2.3) | 1–2 дня | Устойчивость |
-| 7 | CI, lock-файл, контрольные суммы, тест эквивалентности моделей (§3.2) | ~1 день | Надёжность |
+| How many more fires VIIRS sees | Punjab: VIIRS 375 m ×4.8 vs Terra+Aqua, ×6.5 vs Aqua, because the I-band pixel is ~7× smaller and catches small farm fires [1] (but MODIS averaged over 2003–2016 and VIIRS over 2012–2016) | India: ×5.79 in points, ×4.54 in cell-days, same years 2013–2019 | Same order; the project compares like with like |
+| What drives the ratio | MODIS misses more in low-biomass land (crops, steppe, grass); detection rises with fire size [2, 3] | ×1.6–2.0 for large steppe/forest fires, ×3.9–4.5 for small farm fires | Supports §2.1–2.2: the multiplier should depend on fire size and land cover |
+| How an operational product converts VIIRS | GFED5 NRT calibrates VIIRS on burned area over 2012–2022 with multipliers per region × land-cover type (up to 224) and scan-angle lookup tables; it warns that country-level and finer uncertainty is "substantially higher" [4] | one multiplier per country and season, no scan angle | Best practice: land-cover/region strata and scan angle (§2.2, §2.7) |
+| MODIS orbit drift | GFED5 stops at 2022 because drift exceeded science-quality thresholds [4]; Terra lowered in Oct 2022, its overpass ~1.5 h earlier, Aqua later [5] | calibration 2012–2019, 2020+ treated as a drift test; Terra/Aqua 1.36 → 0.62 after 2021 | The window is right, stricter than GFED5 |
+| Regression over a sensor overlap | MODIS → VIIRS for volcano monitoring: per-target linear fits over 2012–2020, slopes 0.78–1.14 depending on local conditions [6] | one model per country; region spread −15…+13.5% | Per-target spread is normal: an argument for a region effect (§2.2) |
+| Trend in Kazakhstan | Northern Eurasia burned area (MODIS) fell 53% over 2002–2016, 84% of it from Kazakh steppe; drivers: wetter climate and grazing [7] | 2002 → 2016: MODIS −77% in cell-days, harmonized −71%, naive splice −54% | Same direction; magnitudes differ (area vs cell-days, different geography) |
 
----
+**Stricter than the literature:** same-year comparisons, separate drift and backcast tests, cross-fitted intervals.
+**Behind:** no land-cover/region strata, no scan-angle correction.
 
-## 4. Исправлено попутно
-
-**API суммировал поклеточные интервалы** (`sum(n_harm_low)` / `sum(n_harm_high)`), хотя
-[`06_harmonize.py`](../pipeline/06_harmonize.py) прямо запрещает так делать. Клетка с прогнозом 2 получает
-[0, 32], поэтому для страны или крупной области верхняя граница раздувалась в разы: правильный интервал для
-прогноза ~2490 — [2123, 2921]. Исправлено в ветке `fix/api-area-intervals`: интервал считается по сумме области,
-с параметрами страны для всей территории и параметрами региона для любой меньшей области. Добавлен тест.
-
----
-
-## 5. Сверка с другими работами
-
-Готового рецензируемого гармонизированного ряда *активных пожаров* MODIS+VIIRS в открытой литературе найти не
-удалось. Ближайшие аналоги — работы по выгоревшей площади и по продолжению рядов. Ниже показано, где проект
-согласуется с ними, а где расходится.
-
-| вопрос | что в литературе | что в проекте | вывод |
-|---|---|---|---|
-| Сколько VIIRS видит больше MODIS | Пенджаб: VIIRS 375 м даёт в 4.8 раза больше точек, чем Terra+Aqua, и в 6.5 раза больше, чем Aqua. Причина — пиксель I-диапазона в ~7 раз меньше, и VIIRS ловит мелкие сельхозпалы [1]. Но там MODIS усреднён за 2003–2016, а VIIRS за 2012–2016, то есть периоды разные | IND: 5.79 по точкам и 4.54 по клетко-дням, одни и те же годы 2013–2019 (PHASE_C, C1) | Порядок совпадает. У проекта сравнение строже: одинаковые годы |
-| От чего зависит соотношение | Пропуски MODIS сильнее на низкобиомассных землях (поля, степь, травы), и доля обнаружения растёт с размером пожара [2, 3] | Соотношение 1.6–2.0 для крупных степных и лесных пожаров и 3.9–4.5 для мелких сельхозпалов | Подтверждает §2.1 и §2.2: множитель должен зависеть от размера пожара и типа покрова, а не от суммы по стране |
-| Как переводят VIIRS на шкалу MODIS в промышленном продукте | GFED5 NRT калибрует VIIRS по выгоревшей площади на перекрытии 2012–2022. Множители заданы по *региону × типу покрова* (до 224), есть поправка на угол сканирования по справочным таблицам. Авторы предупреждают, что на уровне страны и ниже неопределённость «существенно выше» [4] | Один множитель на страну и сезон, угла сканирования нет | Лучшая практика — страты по покрову и регионам и учёт угла сканирования (§2.2, §2.7) |
-| Дрейф орбит MODIS | GFED5 обрывается на 2022 годе: дрейф орбит вышел за пороги качества научного продукта [4]. Орбиту Terra снижали в октябре 2022 года, время пролёта Terra сместилось примерно на 1.5 ч раньше, Aqua — позже [5] | Калибровка 2012–2019, отложенные 2020+ трактуются как проверка на дрейф; соотношение Terra/Aqua 1.36 → 0.62 после 2021 | Окно калибровки выбрано правильно, даже строже GFED5. Цифры 2020+ корректно названы проверкой на дрейф |
-| Регрессия по перекрытию двух сенсоров | Переход MODIS → VIIRS для мониторинга вулканов: линейная регрессия на перекрытии 2012–2020 отдельно для каждого объекта. Наклоны от 0.78 до 1.14 и зависят от местных условий [6] | Одна модель на страну, разброс по регионам −15…+13.5% | Разброс по объектам — общее явление. Это довод за случайный эффект региона (§2.2) |
-| Тренд в Казахстане | В северной Евразии выгоревшая площадь (MODIS) за 2002–2016 годы снизилась на 53%; на степные пожары Казахстана пришлось 84% снижения. Причины — более влажный климат и выпас [7] | Снижение 2002 → 2016: MODIS −77% по клетко-дням, гармонизированный ряд −71%, наивная склейка −54% | Направление совпадает. Величины разные, потому что разные единицы (площадь и клетко-дни) и разная география. Проверку уровня даёт только тест со ступенькой по выгоревшей площади (§2.3) |
-
-**Где проект строже литературы:**
-- сравнение по одинаковым годам;
-- отдельные тесты на дрейф и на направление «назад»;
-- интервалы с кросс-фиттингом.
-
-**Где отстаёт:**
-- нет страт по покрову и регионам;
-- нет поправки на угол сканирования;
-- нет учёта структурной неопределённости.
-
-Перед публикацией главного вывода нужно закрыть §2.1 (запустить T5 на реальных данных) и §2.3 (месячный тест со
-ступенькой по выгоревшей площади).
-
-**Источники**
+**Sources**
 1. Vadrevu, Lasko et al. 2018. *Intercomparison of MODIS AQUA and VIIRS I-Band Fires and Emissions in an Agricultural
-   Landscape* — https://pmc.ncbi.nlm.nih.gov/articles/PMC6108185/
+   Landscape*. https://pmc.ncbi.nlm.nih.gov/articles/PMC6108185/
 2. *Fire Detection and Fire Radiative Power in Forests and Low-Biomass Lands in Northeast Asia: MODIS versus VIIRS*,
-   Remote Sensing 2020 — https://www.mdpi.com/2072-4292/12/18/2870
-3. Schroeder et al. 2014. *The New VIIRS 375 m active fire detection data product* —
+   Remote Sensing 2020. https://www.mdpi.com/2072-4292/12/18/2870
+3. Schroeder et al. 2014. *The New VIIRS 375 m active fire detection data product*.
    https://www.earthdata.nasa.gov/sites/default/files/imported/Schroeder_et_al_2014b_RSE.pdf
-4. *Tracking recent extremes … near-real-time extension to GFED*, ESSD 18, 7535 (2026) —
-   https://essd.copernicus.org/articles/18/7535/2026/
-5. NASA LANCE UWG, ноябрь 2022 (дрейф орбит Terra/Aqua) —
+4. Near-real-time extension to GFED, ESSD 18, 7535 (2026). https://essd.copernicus.org/articles/18/7535/2026/
+5. NASA LANCE UWG, November 2022 (Terra/Aqua orbit drift).
    https://wiki.earthdata.nasa.gov/download/attachments/5702164/LANCE%20UWG%20Nov_2022_Final.pdf?api=v2
-6. *The Transition from MODIS to VIIRS for Global Volcano Thermal Monitoring* —
+6. *The Transition from MODIS to VIIRS for Global Volcano Thermal Monitoring*.
    https://pmc.ncbi.nlm.nih.gov/articles/PMC8914890/
 7. Hao et al. 2021. *Wetter environment and increased grazing reduced the area burned in northern Eurasia from 2002
-   to 2016*, Biogeosciences 18, 2559–2572, doi:10.5194/bg-18-2559-2021
+   to 2016*, Biogeosciences 18, 2559–2572, doi:10.5194/bg-18-2559-2021.
 
 ---
 
-## 6. Проверка на реальных поклеточных данных (15.11, 10:45–11:05)
+## 6. Checks on real cell-level data (2026-11-15)
 
-Входные данные: `cell_month_all.parquet` с машины, где идут прогоны (1 072 248 строк; KAZ, UZB, TKM, KGZ, TJK).
-Все прогоны шли во временной папке, отчёты в репозитории не перезаписывались.
+Input: `cell_month_all.parquet` from the machine that runs the pipeline (1,072,248 rows; KAZ, UZB, TKM, KGZ, TJK).
+All runs in a temporary folder; no report in the repository was overwritten by them.
 
-### 6.1 Воспроизведение отчётов команды (коммит `33b7d7d`)
-- `experiments` по Казахстану: `model_card.json` совпадает с относительной точностью до 2.3·10⁻⁵ (оптимизатор
-  scipy, Windows против macOS). Баллы всех 8 кандидатов совпадают до 4 знаков, кроме C7: 15.39 против 15.41. Это
-  4-параметрическая модель, оптимизатор на ней неустойчив; на ранжирование это не влияет.
-- Тест по площади гарей (`07b`, `burned_area`) по всем 5 странам совпадает в точности: множители и 95% интервалы.
+### 6.1 The team's reports reproduce (commit `33b7d7d`)
+- `experiments` for Kazakhstan: `model_card.json` matches to a relative 2.3·10⁻⁵ (scipy optimizer, Windows vs macOS).
+  All 8 candidate scores match to 4 decimals except C7 (15.39 vs 15.41), a 4-parameter model on which the optimizer
+  is unstable; the ranking is unchanged.
+- The burned-area test (`07b`) matches exactly for all 5 countries, factors and 95% intervals.
 
-### 6.2 T5 и устойчивость выбора (полный `experiments`, Казахстан)
-| модель | балл | T5 (экстраполяция) MAE / смещение | доля побед в бутстрэпе | балл − C2 (90% интервал) |
+### 6.2 T5 and robustness of the choice (full `experiments`, Kazakhstan)
+
+| model | score | T5 MAE / bias | share of bootstrap wins | score − C2 (90% interval) |
 |---|---|---|---|---|
-| C2 (выбрана) | 8.94 | **7.3% / +3.7%** | 62% | — |
+| C2 (selected) | 8.94 | **7.3% / +3.7%** | 62% | — |
 | C1 | 9.03 | 8.2% / +3.1% | 32% | +0.13 (−0.28 … +0.65) |
 | C0 | 9.91 | 10.7% / **+10.4%** | 2% | +0.94 (+0.14 … +1.68) |
 
-- C2 и C1 статистически неразличимы, но дают **одинаковую** сумму 2003–2011 (разница −0.0%). Значит, уровень
-  продукта до 2012 года от выбора между ними не зависит.
-- Постоянный множитель C0 значимо хуже. Его +9.0% к уровню 2003–2011 — ошибка, а не неопределённость.
-- Расчёт T5 по выгрузке сайта (суммы по стране) дал те же числа до десятых. Два независимых пути сходятся.
+- C2 and C1 are statistically tied but give the **same** 2003–2011 total (−0.0%), so the pre-2012 level does not
+  depend on the choice between them.
+- The constant ratio C0 is significantly worse; its +9.0% on the 2003–2011 level is error, not uncertainty.
+- T5 computed from the exported country totals gives the same numbers to one decimal: two independent paths agree.
 
-### 6.3 Иерархическая модель (ветка субагента, `pipeline/hier.py`): не подтвердилась
-На синтетике она выигрывала. На реальных данных проверка с исключением региона в Казахстане даёт 20.6%
-(смещение −18.7%) против 13.5% у C2. В UZB и TKM по регионам модель лучше (44.7% против 53.0%, 26.4% против
-32.5%). Но при переносе между странами и при обучении только на Казахстане она чаще хуже. Признак размера пожара
-получил слабый коэффициент (−0.17). В продукт не идёт.
+### 6.3 Hierarchical model (`pipeline/hier.py`, side branch): not confirmed
+It won on synthetic data. On real data, leave-one-region-out in Kazakhstan gives 20.6% (bias −18.7%) against 13.5% for
+C2. By region it is better in UZB and TKM (44.7% vs 53.0%, 26.4% vs 32.5%), but worse more often across countries and
+when trained on Kazakhstan only. The fire-size feature gets a weak coefficient (−0.17). Not for the product.
 
-### 6.4 Площадь гарей с контролем «только MODIS»
-У MODIS в 2012 году смены сенсора нет. Поэтому его «ступенька» относительно гарей показывает, насколько меняется сама
-связь пожаров с выгоревшей площадью. Это фон, на котором надо читать гармонизированный ряд.
+### 6.4 Burned area with a MODIS-only control
+MODIS has no sensor change in 2012, so its step against burned area measures how the link between fires and burned
+area itself changes. That is the background against which to read the harmonized series. (The MODIS-only row is now
+in `reports/VALIDATION.md` §5, commit `86fd3c3`.)
 
-| страна | окно | наивная склейка | гармонизированный (свои коэфф.) | только MODIS | гарм. / MODIS | наивн. / MODIS |
+| country | window | naive splice | harmonized (own coefficients) | MODIS alone | harmonized / MODIS | naive / MODIS |
 |---|---|---|---|---|---|---|
 | KAZ | 2003–2025 | ×2.41 | ×1.16 (0.88–1.53) | ×1.22 (0.82–1.83) | ×0.95 | ×1.97 |
 | UZB | 2003–2025 | ×3.87 | ×1.04 (0.80–1.35) | ×1.06 (0.77–1.46) | ×0.98 | ×3.66 |
@@ -427,26 +355,25 @@ conformal) и признак размера пожара в модели.
 | KGZ | 2003–2019 | ×2.00 | ×0.62 | ×0.59 | ×1.04 | ×3.39 |
 | TJK | 2003–2019 | ×3.05 | ×0.93 | ×0.94 | ×0.99 | ×3.25 |
 
-Выводы:
-- **Кыргызстан не «перекорректирован».** Его ×0.54 почти совпадает с ×0.62 у самого MODIS, а казахские
-  коэффициенты его скорее недооценивают (годовая проверка: −14%). Тест по гарям там просто неубедителен.
-- **Туркменистан:** контроль сам даёт ×1.44, то есть тест там не чистый.
-- **Гипотеза «ступенька у MODIS — от дрейфа орбит 2020+» подтвердилась только для Казахстана**
-  (×1.22 → ×0.96 на 2003–2019). Для UZB и KGZ — нет: там действительно меняется связь пожаров с выгоревшей площадью.
-- На окне без дрейфа гармонизированный ряд относительно MODIS укладывается в **×0.89–1.09 во всех 5 странах**,
-  наивная склейка — ×2.3–3.7.
-- **Разрешение теста:** отношение к MODIS частично выполняется по построению (модель подогнана на 2012–2019),
-  а сам MODIS относительно гарей «гуляет» на ±40%. Тест надёжно показывает «шов ×2–4 убран», но не «точность ±10%».
-  Точность доказывают T1, T4, T5 и проверка с исключением региона.
-- **Рекомендация для `07b`** (после сдачи, чтобы не разошлись README и сайт): окно 2003–2019 (те же причины, по
-  которым калибровка исключает 2020+) и строка «только MODIS» в таблице.
+- **Kyrgyzstan is not "over-corrected".** Its ×0.54 is close to MODIS alone (×0.62), and with Kazakh coefficients
+  Kyrgyzstan is rather under-estimated (annual check −14%). The burned-area test is simply inconclusive there.
+- **Turkmenistan:** the control itself shifts ×1.44, so the test is not clean there.
+- **"The MODIS step comes from 2020+ orbit drift"** holds only for Kazakhstan (×1.22 → ×0.96 on 2003–2019); in UZB and
+  KGZ the fire–burned-area link really changes.
+- On the drift-free window the harmonized series stays within **×0.89–1.09 of MODIS in all 5 countries**; the naive
+  splice is ×2.3–3.7.
+- **Resolution of the test:** the ratio to MODIS partly holds by construction (the model is fitted on 2012–2019), and
+  MODIS itself moves ±40% against burned area. The test reliably shows that the ×2–4 seam is gone, not ±10% accuracy;
+  accuracy is shown by T1, T4, T5 and leave-one-region-out.
+- **Suggestion for `07b`** (after the submission, so README and site stay in step): the 2003–2019 window, for the same
+  reason the calibration excludes 2020+.
 
-### 6.5 Гипотезы улучшения точности (зафиксированы до проверки)
-H1: свой свободный член на каждый месяц и общий наклон. H2: + log(точек MODIS на клетко-день). H3: + доля ночных
-детекций. H4: H1 + H2. Стенд сначала в точности воспроизвёл C2 (балл 8.945, T1 6.97, T3 13.49, T4 6.37,
-T2 9.77 / −0.9, T5 7.33 / +3.7).
+### 6.5 Accuracy hypotheses (fixed before testing)
+H1: a separate intercept per month with a shared slope. H2: + log(MODIS points per cell-day). H3: + night share.
+H4: H1 + H2. The harness first reproduced C2 exactly (score 8.945, T1 6.97, T3 13.49, T4 6.37, T2 9.77 / −0.9,
+T5 7.33 / +3.7).
 
-Балл протокола (меньше — лучше), обучение по каждой стране отдельно на её поклеточных данных:
+Protocol score (lower is better), each country fitted on its own cell-level data:
 
 | | KAZ | UZB | TKM | KGZ | TJK |
 |---|---|---|---|---|---|
@@ -456,19 +383,18 @@ T2 9.77 / −0.9, T5 7.33 / +3.7).
 | H3 | 9.21 | 28.42 | 21.93 | 36.94 | 47.84 |
 | H4 | **7.67** | **26.69** | 22.55 | 36.09 | 45.88 |
 
-H1 против C2 на суммах по стране для всех 10 стран (регионы так не проверить):
+H1 vs C2 on country totals for all 10 countries (regions cannot be tested this way):
 
-| тест | H1 точнее | среднее \|смещение\| C2 → H1 |
+| test | H1 more accurate | mean \|bias\| C2 → H1 |
 |---|---|---|
-| T2, отложенные 2020–2025 | **10 из 10** | 6.8% → 6.4% |
-| T4, исключение года | 8 из 10 | 0.6% → 0.4% |
-| T1, обратный прогноз (направление продукта) | 6 из 10 | 3.5% → **4.7%** |
-| T5, экстраполяция | 5 из 10 | 5.4% → 4.2% |
+| T2, holdout 2020–2025 | **10 of 10** | 6.8% → 6.4% |
+| T4, leave-one-year-out | 8 of 10 | 0.6% → 0.4% |
+| T1, backcast (direction of use) | 6 of 10 | 3.5% → **4.7%** |
+| T5, extrapolation | 5 of 10 | 5.4% → 4.2% |
 
-Вывод:
-- **H4 устойчиво не лучше C2:** она выигрывает в 3 странах из 5, а на отложенных годах в Казахстане смещение у неё
-  больше (−2.4% против −0.9%).
-- **H1 — реальный кандидат.** На отложенных годах она точнее везде (вероятность случайно выиграть 10 из 10 — около
-  0.2%). Но в направлении применения продукта (T1, T5) у неё ничья, а смещение в T1 больше.
-- H1 придумана после того, как стали видны результаты. Честный путь: внести её в протокол заранее и проверить
-  полностью, включая регионы. **До сдачи модель не меняется.**
+- **H4 is not robustly better than C2:** it wins in 3 of 5 countries and has more holdout bias in Kazakhstan (−2.4% vs
+  −0.9%).
+- **H1 is a real candidate:** more accurate on the holdout everywhere (10 of 10 by chance has p ≈ 0.002), but tied in
+  the direction the product is used (T1, T5) and with more T1 bias.
+- H1 was formulated after seeing results; the honest path is to add it to the protocol in advance and test it in full,
+  including regions. **The model is not changed for the submission.**

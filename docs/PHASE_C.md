@@ -1,5 +1,7 @@
 # Phase C — extend and improve
 
+> **Historical.** Phase C working notes (2026-11-15, before the final masking and C4 runs). Numbers here are superseded; current numbers are in the [README](../README.md) and [reports/VALIDATION.md](../reports/VALIDATION.md).
+
 ## C1 — multi-country ingestion
 
 ### What changed, in plain words
