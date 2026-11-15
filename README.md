@@ -1,4 +1,4 @@
-# FIREWATCH — one fire record from 2000 to today, independent of the satellite
+# FIREWATCH — one fire record from 2000 to today, independent of the satellite - https://firewatch-liard.vercel.app/
 
 MODIS (since 2000, 1 km pixels) and VIIRS (since 2012, 375 m pixels) see the same fires very differently: VIIRS
 finds several times more of them. Splice the two NASA records naively and fire activity "explodes" in 2012 — an
