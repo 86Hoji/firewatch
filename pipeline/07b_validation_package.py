@@ -235,7 +235,7 @@ def burned_area(cfg, harm_series):
     return out
 
 
-def events(cfg, coefs, countries):
+def events(cfg, coefs, countries, return_all=False):
     """Events = far more fire than usual for that PLACE and calendar month.
 
     Unit: H3 res-4 hexagon (~1,770 km2, ~40 km across: the size of a large fire) and month. Normal = median of the
@@ -276,6 +276,8 @@ def events(cfg, coefs, countries):
         top = cand.drop_duplicates(["adm1_id", "year"]).head(e["top_n"])
         out = {"unit": f"H3 res-{r} hexagon-month", "top": top[cols].to_dict(orient="records"),
                "candidates": int(len(cand))}
+        if return_all:                      # every region-month event, ranked (docs/EVENTS.md filters it)
+            out["all"] = cand[cols].to_dict(orient="records")
         checks = []
         for k in cfg["validation"].get("known_events", []):
             if c != train or "adm1" not in k:

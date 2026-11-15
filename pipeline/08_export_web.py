@@ -8,9 +8,13 @@
   validation.json               copy of reports/validation.json
   boundaries/{CC}_adm1.geojson  simplified ADM1 polygons (shapeName, shapeISO)
 
-Harmonized = the production model (fitted on Kazakhstan) exactly as in 06_harmonize: MODIS -> S-NPP equivalent before
-2012, S-NPP (+ NOAA-20 on satellite-wide S-NPP outage days) from 2012. lo90/hi90: C3 intervals at the level shown
-(country interval for series/, region interval for regions/); from 2012 the value is observed, so lo90 = hi90.
+Harmonized = the production model form (selected in experiments, reports/model_card.json): MODIS -> S-NPP equivalent
+before 2012, S-NPP (+ NOAA-20 on satellite-wide S-NPP outage days) from 2012. Coefficients: Kazakhstan = production
+coefficients (06_harmonize); every other country = the same model REFITTED on its own 2012-2019 overlap, because C4
+showed the KZ coefficients do not transfer (validation.json keeps the KZ-as-is numbers for the transfer table).
+lo90/hi90: country series = each country's own leave-one-year-out interval (KZ: the C3 country interval); regions =
+the C3 region interval (from KZ leave-one-region-out). From 2012 the value is observed, so lo90 = hi90.
+Also writes docs/EVENTS.md: top events per country (07b metric, same coefficients as the site).
 Numbers are rounded to <= 3 significant digits; coordinates to web.coord_decimals.   python -m pipeline.08_export_web
 """
 import datetime as dt
@@ -30,6 +34,10 @@ from pipeline.common import AGG, REPORTS, ROOT, get_logger, load_config
 CAL = importlib.import_module("pipeline.05_calibrate")
 PKG = importlib.import_module("pipeline.07b_validation_package")
 log = get_logger("export_web")
+EVENTS_DOC = {"countries": ["KAZ", "UZB"], "top_n": 5}     # docs/EVENTS.md (demo-event shortlist)
+# heat sources found in this project that are NOT fires (docs/PHASE_C.md, C2); flagged in docs/EVENTS.md
+NOT_FIRE = [{"lat": 38.1, "lon": 67.3, "radius_deg": 0.25, "from_year": 2025,
+             "note": "NOT A FIRE: new industrial heat source found in C2 (FIRMS labels it vegetation)"}]
 
 
 # ---------------------------------------------------------------- helpers
@@ -92,7 +100,24 @@ def country_info(cfg, c):
     return {"code": c, "name": w["name"], "bbox": bb, "center": [round(center[0], k), round(center[1], k)]}
 
 
-def series(cfg, c, coefs, iv, periods, yms):
+def country_coefs(cfg, c, kz, iv, model):
+    """(coefficients, country-interval params) used on the site for country c.
+    KZ: production coefficients + C3 country interval. Others: terra, NOAA-20 and main model refitted on c's own data
+    (same model form and periods as production), interval from c's own leave-one-year-out errors."""
+    if c == cfg["train_country"]:
+        return kz, iv["country"], "production (fitted on Kazakhstan)"
+    k = cfg["calibration"]
+    cm = PKG.country_months(c, cfg)
+    terra, _ = calib.fit(cm, "n_modis", "n_modis_terra", tuple(k["terra_aqua_period"]), cfg, intervals=False)
+    n20, _ = calib.fit(cm, "n_viirs_snpp", "n_viirs_noaa20", tuple(k["noaa20_period"]), cfg, intervals=False)
+    ov = tuple(cfg["package"]["overlap"])
+    main, _ = calib.fit_point(cm, "v_target", "n_modis", ov, cfg, model, n_boot=0)
+    loyo = PKG.local_loyo(cm, cfg, model, ov)
+    ivc = intervals.fit_hetero(loyo["actual"], loyo["pred"], iv["level"])
+    return {"main": main, "terra": terra, "noaa20": n20}, ivc, f"refitted on own {ov[0]}–{ov[1]} overlap"
+
+
+def series(cfg, c, coefs, ivc, periods, yms):
     cut = cfg["calibration"]["period"][0]
     cm = PKG.country_months(c, cfg)
     h = calib.harmonize(cm.assign(h3_cell="country"), coefs, cfg)
@@ -100,7 +125,7 @@ def series(cfg, c, coefs, iv, periods, yms):
     d = full_months(cm, periods, ["p_modis", "p_viirs_snpp", "n_modis", "n_viirs_snpp", "v_target", "n_harm"])
     pre = (d["year"] < cut).to_numpy()
     harm = np.where(pre, d["n_harm"], d["v_target"])
-    lo, hi = intervals.bounds(harm, iv["country"])
+    lo, hi = intervals.bounds(harm, ivc)
     return {"ym": yms,
             "naive_points": sig_list(np.where(pre, d["p_modis"], d["p_viirs_snpp"])),
             "naive_celldays": sig_list(np.where(pre, d["n_modis"], d["n_viirs_snpp"])),
@@ -153,12 +178,12 @@ def hexes(cfg, c, cm, out_dir, last):
     return files
 
 
-def anomalies(cfg, val, cells_by_country):
+def anomalies(cfg, events, cells_by_country):
     k = cfg["web"]["coord_decimals_meta"]
     known = {(e.get("adm1"), e["year"], e["month"]): e["name"] for e in cfg["validation"].get("known_events", [])}
     rows = []
-    for c, ev in val["events"].items():
-        items = list(ev["top"])
+    for c, ev in events.items():
+        items = [i for i in ev["top"] if not _note(i, [], {}).startswith("**NOT A FIRE")][:cfg["package"]["events"]["top_n"]]
         for kn in ev.get("known_events", []):
             if not any(i["adm1_id"] == kn["adm1_id"] and i["year"] == kn["year"] and i["month"] == kn["month"]
                        for i in items):
@@ -177,6 +202,66 @@ def anomalies(cfg, val, cells_by_country):
                          "anomaly_pct": sig(100 * (i["n_harm"] - i["expected"]) / max(i["expected"], cfg["web"]["anomaly_normal_floor"])),
                          "lat": round(float(i["lat"]), k), "lon": round(float(i["lon"]), k), "title": title})
     return sorted(rows, key=lambda r: (r["country"], -(r["anomaly_pct"] or 0)))
+
+
+def _note(e, rows, known):
+    for x in NOT_FIRE:
+        if e["year"] >= x["from_year"] and abs(e["lat"] - x["lat"]) <= x["radius_deg"] \
+                and abs(e["lon"] - x["lon"]) <= x["radius_deg"]:
+            return f"**{x['note']}**"
+    k = known.get((e["adm1_id"], e["year"], e["month"]))
+    if k:
+        return k
+    same = sorted({int(r["year"]) for r in rows if r["hex"] == e["hex"] and r["year"] != e["year"]})
+    return f"same hexagon also in {', '.join(map(str, same))} (recurring burn?)" if same else ""
+
+
+def _event_rows(rows, n, cut, known):
+    L = ["| # | place (ADM1) | month | lat, lon | cell-days | normal | excess | overall rank | data | note |",
+         "|---|---|---|---|---|---|---|---|---|---|"]
+    for i, e in enumerate(rows[:n], 1):
+        m = pd.Timestamp(year=int(e["year"]), month=int(e["month"]), day=1)
+        L.append(f"| {i} | {e['adm1_name']} | {m:%B %Y} | {e['lat']:.2f}, {e['lon']:.2f} | {e['n_harm']:.0f} | "
+                 f"{e['expected']:.0f} | {e['excess']:.0f} | {e['rank']} | "
+                 f"{'S-NPP observed' if e['year'] >= cut else 'MODIS → S-NPP (model)'} | {_note(e, rows[:n], known)} |")
+    return L
+
+
+def events_md(cfg, events, countries, n):
+    """docs/EVENTS.md: top-n events per country for choosing the demo event."""
+    cut = cfg["calibration"]["period"][0]
+    ev_cfg = cfg["package"]["events"]
+    known = {(e.get("adm1"), e["year"], e["month"]): e["name"] for e in cfg["validation"].get("known_events", [])}
+    L = ["# Fire events — candidates for the demo", "",
+         f"Metric (pipeline/07b_validation_package.py `events`): harmonized cell-days in an H3 res-{ev_cfg['h3_res']} "
+         "hexagon (~40 km across) in one month, minus that hexagon's normal for the same calendar month (median "
+         f"{ev_cfg['years'][0]}–{ev_cfg['years'][1]}); ranked by the excess; one event per region and year. Same "
+         "coefficients as the website (Kazakhstan: production; other countries: refitted on their own 2012–2019 overlap).",
+         "", "*Place* = ADM1 region (geoBoundaries, pre-2022: Abai oblast is inside East Kazakhstan, Jetisu inside "
+         "Almaty Region, Ulytau inside Karaganda). lat/lon = fire-weighted centre of the hexagon that month. "
+         f"*Data*: before {cut} = MODIS converted to S-NPP equivalent (modelled); from {cut} = S-NPP observed — "
+         "observed events are easier to defend in front of judges.", ""]
+    for c in countries:
+        ev = events[c]
+        name = cfg["web"]["countries"][c]["name"]
+        allev = pd.DataFrame(ev["all"])
+        names = dict(zip(allev["adm1_id"], allev["adm1_name"]))
+        obs = allev[allev["year"] >= cut].drop_duplicates(["adm1_id", "year"]).to_dict(orient="records")
+        L += [f"## {name}", "", f"### Top {n}, all years", ""] + _event_rows(ev["top"], n, cut, known)
+        L += ["", f"### Top {n} since {cut} (observed S-NPP only — same metric and normal, filtered)", ""] \
+            + _event_rows(obs, n, cut, known)
+        if ev.get("known_events"):
+            L += ["", f"### Known events in {name} (rank among all {ev['candidates']} region-month events)", "",
+                  "| event | place (ADM1) | month | cell-days | normal | excess | rank |", "|---|---|---|---|---|---|---|"]
+            for kn in ev["known_events"]:
+                m = pd.Timestamp(year=kn["year"], month=kn["month"], day=1)
+                L.append(f"| {kn['name']} | {names.get(kn['adm1_id'], kn['adm1_id'])} | {m:%B %Y} | {kn['n_harm']:.0f} | {kn['expected']:.0f} | "
+                         f"{kn['excess']:.0f} | {kn['rank'] if kn['rank'] else '–'} |")
+        L.append("")
+    L += ["Rank 1 is the largest local excess of fire *counts*. Big wildfires in forest (Abai 2023) rank lower than "
+          "large steppe/farm burns because the metric counts detections, not intensity or damage. Check any candidate "
+          "against news or burned-area imagery before the demo."]
+    (ROOT / "docs" / "EVENTS.md").write_text("\n".join(L) + "\n", encoding="utf-8")
 
 
 def boundaries(cfg, out_dir):
@@ -220,7 +305,7 @@ def main():
         shutil.rmtree(x) if x.is_dir() else x.unlink()
     card = CAL.read_model_card()
     iv = card["intervals"]
-    coefs = PKG.kz_coefs()
+    kz = PKG.kz_coefs()
     val = json.loads((REPORTS / "validation.json").read_text(encoding="utf-8"))
     countries = [c for c in ingest.countries(cfg, man) if c not in val.get("pending_countries", [])]
     last = last_complete_month(cfg, countries)
@@ -232,15 +317,22 @@ def main():
                       "trained_on": card["train_country"],
                       "calibration": f"{cfg['calibration']['period'][0]}–{cfg['calibration']['period'][1]}",
                       "holdout": f"{cfg['calibration']['holdout_start']}–{last.year}",
-                      "interval": f"{int(100 * iv['level'])}% conformal, sized at country / region level"},
+                      "interval": f"{int(100 * iv['level'])}% conformal, sized at country / region level",
+                      "coefficients": {}},
             "pending_countries": val.get("pending_countries", []),
             "generated_at": dt.datetime.now().isoformat(timespec="seconds")}
+    coefs, ivc = {}, {}
+    for c in countries:
+        coefs[c], ivc[c], meta["model"]["coefficients"][c] = country_coefs(cfg, c, kz, iv, card["production_model"])
+        log.info("%s coefficients: %s", c, meta["model"]["coefficients"][c])
     dump(out / "meta.json", meta)
     for c in countries:
-        dump(out / "series" / f"{c}.json", series(cfg, c, coefs, iv, periods, yms))
-    cells = {}
+        dump(out / "series" / f"{c}.json", series(cfg, c, coefs[c], ivc[c], periods, yms))
+    cells, events = {}, {}
+    ecfg = {**cfg, "package": {**cfg["package"], "events": {**cfg["package"]["events"], "top_n": EVENTS_DOC["top_n"]}}}
     for c in ingest.countries(cfg, man, "cell"):
-        cm = harmonized_cells(cfg, c, coefs)
+        events.update(PKG.events(ecfg, coefs[c], [c], return_all=True))
+        cm = harmonized_cells(cfg, c, coefs[c])
         cm = cm[(cm["year"] * 100 + cm["month"]).between(periods[0].year * 100 + periods[0].month,
                                                          last.year * 100 + last.month)]
         cells[c] = cm
@@ -248,7 +340,8 @@ def main():
         if c in w["hex_countries"]:
             n = hexes(cfg, c, cm, out / "hex", last)
             log.info("%s: %d hex files", c, n)
-    dump(out / "anomalies.json", anomalies(cfg, val, cells))
+    dump(out / "anomalies.json", anomalies(cfg, events, cells))
+    events_md(cfg, events, EVENTS_DOC["countries"], EVENTS_DOC["top_n"])
     shutil.copyfile(REPORTS / "validation.json", out / "validation.json")
     nb = boundaries(cfg, out / "boundaries")
     rep, big = sizes(out, w["warn_file_mb"])
