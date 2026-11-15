@@ -35,6 +35,7 @@ export interface Validation {
   burned_area: Record<string, Record<'naive' | 'harmonized' | 'harmonized_local', { r_log_all: number; step_given_burned_area: BAStep }> & { months: number }>;
   annual: Record<string, { mae_pct_of_mean: number; bias_total_pct: number; pearson_r: number; naive_modis_bias_pct: number }>;
   takeaways: Record<string, string>;
+  flare_load?: Record<string, FlareLoad>;
 }
 
 let p: Promise<Validation> | null = null;
@@ -44,4 +45,16 @@ export function loadValidation(): Promise<Validation> {
     return r.json();
   });
   return p;
+}
+
+/**
+ * Interval coverage before/after sizing the 90% ranges at the predicted level. Not exported to
+ * validation.json: it is the leave-one-region-out test in reports/validation_kz.md
+ * ("before 50%, after 92%" over the same region-months), kept here by hand.
+ */
+export const REGION_COVERAGE = { before: 50, after: 92 };
+
+export interface FlareLoad {
+  static_share_removed_pct: number;
+  mask_test: { precision: number; recall: number };
 }

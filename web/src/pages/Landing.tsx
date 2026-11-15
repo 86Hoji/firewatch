@@ -4,7 +4,7 @@ import { SiteNav } from '../components/SiteNav';
 import { useStore } from '../store';
 import { frame } from '../map/MapEngine';
 import { engine } from '../map/MapStage';
-import { loadValidation, type Validation } from '../lib/validation';
+import { loadValidation, REGION_COVERAGE as COVERAGE, type Validation } from '../lib/validation';
 
 /** Width of the text column plus gutter, kept clear when framing the globe. */
 const COLUMN_INSET = 520 + 28;
@@ -29,9 +29,7 @@ export function Landing() {
   }, []);
 
   // Numbers are read from data/validation.json; a sentence whose values are missing is left out.
-  // Exception: the interval coverage pair is not exported there. It is the leave-one-region-out test in
-  // reports/validation_kz.md ("before 50%, after 92%" over the same region-months), kept here by hand.
-  const COVERAGE = { before: 50, after: 92 };
+  // Exception: the interval coverage pair is not in validation.json (see REGION_COVERAGE).
   const uzNaive = v?.uz_test?.steps?.naive?.step_ratio;
   const uzLocal = v?.uz_test?.steps?.harmonized_local?.step_ratio;
   const baNaive = v?.burned_area?.KAZ?.naive?.step_given_burned_area?.step_factor;

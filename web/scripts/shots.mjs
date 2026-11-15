@@ -144,6 +144,32 @@ if (which === 'five') {
     });
   }
 }
+async function fullPage(name, viewport, path) {
+  const ctx = await browser.newContext({ viewport, deviceScaleFactor: 1, hasTouch: viewport.width < 768 });
+  const page = await ctx.newPage();
+  page.on('pageerror', (e) => console.log(name, 'pageerror', e.message));
+  await page.goto(base + path, { waitUntil: 'domcontentloaded' });
+  await page.waitForTimeout(2500);
+  // Scroll through so in-view animations run, then capture the tall scroll container.
+  const h = await page.evaluate(() => document.querySelector('.overflow-y-auto')?.scrollHeight ?? 0);
+  for (let y = 0; y < h; y += 400) {
+    await page.evaluate((y) => document.querySelector('.overflow-y-auto')?.scrollTo(0, y), y);
+    await page.waitForTimeout(350);
+  }
+  await page.waitForTimeout(1500);
+  await page.setViewportSize({ width: viewport.width, height: Math.min(h, 9000) });
+  await page.waitForTimeout(800);
+  await page.screenshot({ path: fileURLToPath(new URL(`${name}.png`, out)) });
+  await ctx.close();
+}
+if (which === 'method') {
+  await fullPage('method-desktop', desktop, '/method');
+  await fullPage('method-mobile', mobile, '/method');
+}
+if (which === 'evidence') {
+  await fullPage('evidence-desktop', desktop, '/evidence');
+  await fullPage('evidence-mobile', mobile, '/evidence');
+}
 if (which === 'validation') await shoot('validation-desktop', desktop, '/validation', { wait: 3000 });
 await browser.close();
 console.log('saved to', fileURLToPath(out));
