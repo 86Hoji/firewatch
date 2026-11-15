@@ -16,6 +16,8 @@ interface State {
   playing: boolean;
   speed: 1 | 2;
   country: CountryCode;
+  /** Countries with map data (see loadMapCountries). */
+  countries: CountryCode[];
   selected: string | null;
   hover: HoverInfo | null;
   introDone: boolean;
@@ -28,6 +30,7 @@ interface State {
   setPlaying: (p: boolean) => void;
   setSpeed: (s: 1 | 2) => void;
   setCountry: (c: CountryCode) => void;
+  setCountries: (c: CountryCode[]) => void;
   setSelected: (iso: string | null) => void;
   setHover: (h: HoverInfo | null) => void;
   setIntroDone: () => void;
@@ -44,6 +47,7 @@ export const useStore = create<State>((set, get) => ({
   playing: false,
   speed: 1,
   country: 'KAZ',
+  countries: ['KAZ', 'UZB'],
   selected: null,
   hover: null,
   introDone: false,
@@ -60,6 +64,7 @@ export const useStore = create<State>((set, get) => ({
   setPlaying: (playing) => set({ playing }),
   setSpeed: (speed) => set({ speed }),
   setCountry: (country) => set({ country }),
+  setCountries: (countries) => set({ countries }),
   setSelected: (selected) => set({ selected }),
   setHover: (hover) => set({ hover }),
   setIntroDone: () => set({ introDone: true }),

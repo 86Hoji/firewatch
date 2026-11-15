@@ -53,15 +53,15 @@ export interface EngineCallbacks {
 export const frame = { left: 0, right: 0 };
 
 function finalCamera(w: number, h: number): CameraSpec {
-  // Kazakhstan + Uzbekistan framed under the dateline and above the time bar.
-  if (w < 768) return { center: [67.6, 47.4], zoom: 2.92 + Math.log2(Math.min(w, 430) / 390), pitch: 45, bearing: -12 };
+  // The five Central Asian countries framed under the dateline and above the time bar.
+  if (w < 768) return { center: [67.4, 45.4], zoom: 2.8 + Math.log2(Math.min(w, 430) / 390), pitch: 45, bearing: -12 };
   const inset = frame.left + frame.right;
   const usable = w - inset;
-  const z = 4.3 + Math.log2(Math.min((usable + inset * 0.25) / 1440, h / 900));
+  const z = 4.12 + Math.log2(Math.min((usable + inset * 0.25) / 1440, h / 900));
   const zoom = Math.max(3.4, z);
   // Shift the centre east by half the inset, converted to degrees at this zoom.
   const pxPerDeg = (512 * 2 ** zoom) / 360;
-  return { center: [67.4 + (frame.right - frame.left) / 2 / pxPerDeg, 45.9], zoom, pitch: 45, bearing: -12 };
+  return { center: [67.0 + (frame.right - frame.left) / 2 / pxPerDeg, 44.2], zoom, pitch: 45, bearing: -12 };
 }
 
 function buildStyle(): StyleSpecification {
@@ -205,6 +205,7 @@ export class MapEngine {
   private introTimers: number[] = [];
   private destroyed = false;
   private introFinished = false;
+  private hexCountries: CountryCode[] = [...HEX_COUNTRIES];
   private bornAt = performance.now();
   /** True once the style has parsed (isStyleLoaded() also waits for every tile). */
   private styleReady = false;
@@ -302,7 +303,10 @@ export class MapEngine {
     const res = this.res;
     let years;
     try {
-      years = await Promise.all(HEX_COUNTRIES.map((cc) => loadHexYear(cc, res, year)));
+      // A country whose files are missing is skipped, not fatal.
+      years = (await Promise.all(this.hexCountries.map((cc) => loadHexYear(cc, res, year).catch(() => null)))).filter(
+        (y): y is NonNullable<typeof y> => y != null,
+      );
     } catch (err) {
       console.warn('hex load failed', err);
       return;
@@ -310,7 +314,7 @@ export class MapEngine {
     if (token !== this.reqToken || this.destroyed) return;
     this.ym = ym;
     // Prefetch next year at this resolution.
-    HEX_COUNTRIES.forEach((cc) => loadHexYear(cc, res, year + 1).catch(() => {}));
+    this.hexCountries.forEach((cc) => loadHexYear(cc, res, year + 1).catch(() => {}));
 
     const cur = this.currentValues();
     const ids: string[] = [];
@@ -467,6 +471,12 @@ export class MapEngine {
     if (cam) this.map.easeTo({ ...cam, pitch: 45, duration: this.reduced ? 0 : 1000, easing: easeOut });
   }
 
+  /** Which countries draw hexagons; re-renders the current month. */
+  setCountries(list: CountryCode[]) {
+    this.hexCountries = list;
+    if (this.ym && this.introFinished) this.setMonth(this.ym, 0);
+  }
+
   /** Re-frame the home view after the page's UI inset changed (no-op until the intro is done). */
   reframe() {
     if (!this.introFinished) return;
@@ -585,7 +595,7 @@ export class MapEngine {
     const c = this.map.getCanvas();
     const inView = p.x > 0 && p.y > 0 && p.x < c.clientWidth && p.y < c.clientHeight;
     ev.el.classList.toggle('is-live', inView && !this.reduced);
-    ev.el.classList.toggle('is-flipped', p.x > c.clientWidth - 240);
+    ev.el.classList.toggle('is-flipped', p.x > c.clientWidth - frame.right - 240);
   }
 
   private currentValues(): Map<string, number> {

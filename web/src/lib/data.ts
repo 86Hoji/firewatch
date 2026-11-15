@@ -3,6 +3,7 @@
 export type CountryCode = 'KAZ' | 'UZB' | 'TKM' | 'KGZ' | 'TJK' | 'PRT' | 'AUS' | 'BRA' | 'USA' | 'IND';
 
 export interface Meta {
+  pending_countries?: string[];
   countries: { code: CountryCode; name: string; bbox: [number, number, number, number]; center: [number, number] }[];
   first_ym: string;
   last_ym: string;
@@ -46,6 +47,41 @@ export interface Anomaly {
 export const HEX_COUNTRIES: CountryCode[] = ['KAZ', 'UZB'];
 /** Countries with ADM1 boundaries and region series. */
 export const REGION_COUNTRIES: CountryCode[] = ['KAZ', 'UZB', 'TKM', 'KGZ', 'TJK'];
+
+export const COUNTRY_NAMES: Record<string, string> = {
+  KAZ: 'Kazakhstan',
+  UZB: 'Uzbekistan',
+  TKM: 'Turkmenistan',
+  KGZ: 'Kyrgyzstan',
+  TJK: 'Tajikistan',
+  PRT: 'Portugal',
+  AUS: 'Australia',
+  BRA: 'Brazil',
+  USA: 'United States',
+  IND: 'India',
+};
+export const COUNTRY_SHORT: Record<string, string> = { KAZ: 'KZ', UZB: 'UZ', TKM: 'TM', KGZ: 'KG', TJK: 'TJ' };
+/** ADM1 code prefix (KZ-, UZ-…) to country. */
+export const ISO_PREFIX: Record<string, CountryCode> = { KZ: 'KAZ', UZ: 'UZB', TM: 'TKM', KG: 'KGZ', TJ: 'TJK' };
+
+/**
+ * Central Asian countries the map can show: listed in meta.json, not pending export, and with a
+ * series file that actually loads. Anything missing is simply left out.
+ */
+export async function loadMapCountries(): Promise<CountryCode[]> {
+  const meta = await loadMeta();
+  const listed = new Set(meta.countries.map((c) => c.code));
+  const pending = new Set(meta.pending_countries ?? []);
+  const cand = REGION_COUNTRIES.filter((c) => listed.has(c) && !pending.has(c));
+  const ok = await Promise.all(
+    cand.map((c) =>
+      fetch(hexUrl(c, 'r5', Number(meta.first_ym.slice(0, 4))), { method: 'HEAD' })
+        .then((r) => r.ok && !(r.headers.get('content-type') ?? '').includes('text/html'))
+        .catch(() => false),
+    ),
+  );
+  return cand.filter((_, i) => ok[i]);
+}
 
 const base = `${import.meta.env.BASE_URL}data`;
 const cache = new Map<string, Promise<unknown>>();

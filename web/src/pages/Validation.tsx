@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { SiteNav } from '../components/SiteNav';
 import { loadValidation, type Validation as V } from '../lib/validation';
 
 const NAMES: Record<string, string> = {
@@ -93,13 +93,8 @@ export function Validation() {
   return (
     <div className="fixed inset-0 z-10 overflow-y-auto bg-deep">
       <div className="mx-auto max-w-[920px] px-[var(--gutter)] pb-24 pt-[22px]">
-        <header className="flex items-baseline justify-between">
-          <Link to="/" className="display text-[22px] text-text no-underline">
-            Firewatch
-          </Link>
-          <Link to="/explore" className="text-[15px] text-gold underline-offset-4 hover:underline">
-            Open the map
-          </Link>
+        <header>
+          <SiteNav onMap={false} />
         </header>
 
         <h1 className="display m-0 mt-16 text-[48px] leading-[1.05] tracking-[-0.01em] text-text md:text-[76px]">The evidence</h1>

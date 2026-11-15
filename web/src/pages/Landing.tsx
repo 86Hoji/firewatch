@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { SiteNav } from '../components/SiteNav';
 import { useStore } from '../store';
 import { frame } from '../map/MapEngine';
 import { engine } from '../map/MapStage';
@@ -61,7 +62,7 @@ export function Landing() {
       <div className="pointer-events-auto absolute inset-y-0 left-0 w-full overflow-y-auto overscroll-contain md:w-[calc(520px+2*var(--gutter))]">
         <div className="flex min-h-full flex-col gap-4 px-[var(--gutter)] pb-[var(--gutter)] pt-[22px]">
           <header>
-            <span className="display text-[22px] text-text">Firewatch</span>
+            <SiteNav />
           </header>
 
           <section
@@ -113,7 +114,7 @@ export function Landing() {
                 ))}
               </ul>
             )}
-            <Link to="/validation" className="mt-5 inline-block text-[15px] text-gold underline-offset-4 hover:underline">
+            <Link to="/evidence" className="mt-5 inline-block text-[15px] text-gold underline-offset-4 hover:underline">
               See the evidence
             </Link>
           </section>

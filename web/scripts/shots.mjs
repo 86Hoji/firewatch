@@ -132,6 +132,18 @@ if (which === 'verify') {
   await shoot('explore-desktop', desktop, '/explore');
   await shoot('validation-desktop', desktop, '/validation', { wait: 3000 });
 }
+if (which === 'five') {
+  await shoot('explore-desktop', desktop, '/explore');
+  await shoot('explore-mobile', mobile, '/explore');
+  for (const cc of ['TM', 'KG', 'TJ']) {
+    await shoot(`explore-${cc}`, desktop, '/explore', {
+      actions: async (p) => {
+        await p.getByRole('radio', { name: { TM: 'Turkmenistan', KG: 'Kyrgyzstan', TJ: 'Tajikistan' }[cc] }).click();
+        await p.waitForTimeout(2200);
+      },
+    });
+  }
+}
 if (which === 'validation') await shoot('validation-desktop', desktop, '/validation', { wait: 3000 });
 await browser.close();
 console.log('saved to', fileURLToPath(out));

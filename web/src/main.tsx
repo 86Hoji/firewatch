@@ -15,7 +15,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/explore" element={<Explore />} />
-        <Route path="/validation" element={<Validation />} />
+        <Route path="/evidence" element={<Validation />} />
+        <Route path="/validation" element={<Navigate to="/evidence" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

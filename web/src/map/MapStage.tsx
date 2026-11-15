@@ -4,7 +4,7 @@ import { Starfield } from './Starfield';
 import { mapEvents } from './mapEvents';
 import { pointer } from './pointer';
 import { useStore } from '../store';
-import { loadAdm1, loadAnomalies, loadMeta, loadSeries } from '../lib/data';
+import { ISO_PREFIX, loadAdm1, loadAnomalies, loadMapCountries, loadMeta, loadSeries } from '../lib/data';
 
 export let engine: MapEngine | null = null;
 
@@ -52,8 +52,8 @@ export function MapStage() {
         },
         onSelect: (iso) => {
           // Clicking a region in the other country moves the panels there too (no camera jump).
-          const cc = iso?.startsWith('UZ-') ? 'UZB' : iso?.startsWith('KZ-') ? 'KAZ' : null;
-          if (cc && cc !== st().country) st().setCountry(cc);
+          const cc = iso ? ISO_PREFIX[iso.slice(0, 2)] : undefined;
+          if (cc && st().countries.includes(cc) && cc !== st().country) st().setCountry(cc);
           st().setSelected(iso);
         },
         onIntroDone: () => st().setIntroDone(),
@@ -75,8 +75,13 @@ export function MapStage() {
     e.startIntro();
 
     let cancelled = false;
-    Promise.all([loadMeta(), loadSeries('KAZ'), loadAdm1(), loadAnomalies()]).then(([, kz, adm1, anomalies]) => {
+    Promise.all([loadMeta(), loadSeries('KAZ'), loadAdm1(), loadAnomalies(), loadMapCountries().catch(() => [])]).then(
+      ([, kz, adm1, anomalies, list]) => {
       if (cancelled) return;
+      if (list.length) {
+        st().setCountries(list);
+        e.setCountries(list);
+      }
       const yms = kz.ym;
       const start = startIndex(yms, kz.harmonized);
       st().setYms(yms, start);
@@ -84,7 +89,9 @@ export function MapStage() {
       const abai = anomalies.find((a) => /abai/i.test(a.title));
       if (abai) e.setEvent(abai);
       e.setFirstMonth(yms[start]);
-    });
+      },
+    );
+
 
     const unsubs = [
       useStore.subscribe((s, prev) => {

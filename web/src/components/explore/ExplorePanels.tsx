@@ -1,22 +1,32 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, type PanInfo } from 'framer-motion';
 import { useStore } from '../../store';
 import { useMediaQuery, useRegions, useSeries } from '../../lib/hooks';
 import { fmtCD, ymLong } from '../../lib/format';
+import { COUNTRY_NAMES } from '../../lib/data';
 import { CountrySwitch } from './CountrySwitch';
 import { ThisMonth } from './ThisMonth';
 import { BeforeAfter } from './BeforeAfter';
 import { FireCalendar } from './FireCalendar';
 
 const SPRING = { type: 'spring', stiffness: 260, damping: 30 } as const;
-const NAMES: Record<string, string> = { KAZ: 'Kazakhstan', UZB: 'Uzbekistan' };
 
 function Credits() {
   return (
-    <p className="m-0 px-1 pb-1 text-[13px] leading-[1.5] text-text-map-2">
-      Fire detections from NASA FIRMS, MODIS and VIIRS. Night lights from NASA Black Marble, made by the same VIIRS
-      instrument.
-    </p>
+    <div className="m-0 px-1 pb-1 text-[13px] leading-[1.5] text-text-map-2">
+      <p className="m-0">
+        Map covers five Central Asian countries. Five more are tested on the{' '}
+        <Link to="/evidence" className="text-text underline underline-offset-4 hover:text-gold-pale">
+          Evidence page
+        </Link>
+        .
+      </p>
+      <p className="m-0 mt-1.5">
+        Fire detections from NASA FIRMS, MODIS and VIIRS. Night lights from NASA Black Marble, made by the same VIIRS
+        instrument.
+      </p>
+    </div>
   );
 }
 
@@ -88,7 +98,7 @@ function Sheet({ shown, children }: { shown: boolean; children: React.ReactNode 
         <span aria-hidden className="mx-auto mb-2 h-1 w-9 rounded-full bg-[rgba(238,242,251,0.28)]" />
         <span className="flex items-baseline justify-between gap-3">
           <span className="truncate text-[15px] font-medium text-text">
-            {region?.name ?? NAMES[country]}
+            {region?.name ?? COUNTRY_NAMES[country]}
           </span>
           {ym && (
             <span className="num shrink-0 text-[13px] text-text-map-2">

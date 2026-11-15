@@ -2,11 +2,10 @@ import { useMemo } from 'react';
 import { useStore } from '../../store';
 import { monthlyNormal, useCount, useRegions } from '../../lib/hooks';
 import { fmtCD, fmtPct, ymLong } from '../../lib/format';
-import type { Series } from '../../lib/data';
+import { COUNTRY_NAMES, type Series } from '../../lib/data';
 import { InfoHint } from '../InfoHint';
 import { Panel } from './Panel';
 
-const NAMES: Record<string, string> = { KAZ: 'Kazakhstan', UZB: 'Uzbekistan' };
 
 interface Row {
   ym: string[];
@@ -60,7 +59,7 @@ export function ThisMonth({ series }: { series: Series | null }) {
   const shown = useCount(v, animate);
   const shownPct = useCount(pct ?? 0, animate);
   const observed = Number.isFinite(lo) && lo === hi;
-  const place = region ? region.name : NAMES[country] ?? country;
+  const place = region ? region.name : COUNTRY_NAMES[country] ?? country;
   const month = ym ? ymLong(ym).split(' ')[0] : '';
 
   return (
@@ -69,7 +68,7 @@ export function ThisMonth({ series }: { series: Series | null }) {
       aside={
         region ? (
           <button type="button" onClick={() => useStore.getState().setSelected(null)} className="text-[13px] text-text-map-2 underline-offset-4 hover:text-text hover:underline">
-            Back to {NAMES[country]}
+            Back to {COUNTRY_NAMES[country]}
           </button>
         ) : (
           ym && ymLong(ym)
@@ -104,7 +103,7 @@ export function ThisMonth({ series }: { series: Series | null }) {
           <path d="M7 1.5v8M3.8 6.6 7 9.8l3.2-3.2M2 12.5h10" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
         Download CSV
-        <span className="text-text-map-2">{region ? region.name : NAMES[country]}, monthly</span>
+        <span className="text-text-map-2">{region ? region.name : COUNTRY_NAMES[country]}, monthly</span>
       </button>
     </Panel>
   );

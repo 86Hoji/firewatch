@@ -2,11 +2,8 @@ import { useStore } from '../store';
 import { useCount, useSeries } from '../lib/hooks';
 import { fmtCD, ymLong } from '../lib/format';
 import { InfoHint } from './InfoHint';
+import { COUNTRY_NAMES } from '../lib/data';
 
-const NAMES = { KAZ: 'Kazakhstan', UZB: 'Uzbekistan', TKM: 'Turkmenistan', KGZ: 'Kyrgyzstan', TJK: 'Tajikistan' } as Record<
-  string,
-  string
->;
 
 /** "September 2023" set like a newspaper dateline, the country figure beneath it. */
 export function Dateline() {
@@ -34,7 +31,7 @@ export function Dateline() {
         {ym ? ymLong(ym) : ' '}
       </h1>
       <p className="num m-0 mt-2 text-[15px] leading-snug text-text-map-2 md:mt-3">
-        <span className="font-medium text-text">{NAMES[country] ?? country}</span>
+        <span className="font-medium text-text">{COUNTRY_NAMES[country] ?? country}</span>
         <span className="ml-3 text-text">{fmtCD(shown)}</span>
         <span className="ml-1">cell-days</span>
         <span className="ml-1.5">

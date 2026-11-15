@@ -2,10 +2,9 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useStore } from '../../store';
 import { echarts, C, axisLabel } from '../../lib/echarts';
 import { fmtCD, ymLong } from '../../lib/format';
-import { loadMeta, type Meta, type Series } from '../../lib/data';
+import { COUNTRY_NAMES, loadMeta, type Meta, type Series } from '../../lib/data';
 import { Panel } from './Panel';
 
-const NAMES: Record<string, string> = { KAZ: 'Kazakhstan', UZB: 'Uzbekistan' };
 
 /**
  * The naive MODIS→VIIRS splice (muted) against the harmonized record (gold, with its 90% range).
@@ -197,7 +196,7 @@ export function BeforeAfter({ series }: { series: Series | null }) {
           'Hover the chart to compare'
         )}
       </p>
-      <div ref={box} className="h-[150px] w-full" role="img" aria-label={`Naive and harmonized monthly fire activity for ${NAMES[country] ?? country}, 2001 to the present`} />
+      <div ref={box} className="h-[150px] w-full" role="img" aria-label={`Naive and harmonized monthly fire activity for ${COUNTRY_NAMES[country] ?? country}, 2001 to the present`} />
       <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-text-map-2">
         <span className="flex items-center gap-1.5">
           <span aria-hidden className="h-[2px] w-4 bg-text-3" />
@@ -212,7 +211,7 @@ export function BeforeAfter({ series }: { series: Series | null }) {
       </div>
       <p className="m-0 mt-2 text-[13px] leading-snug text-text-map-2">
         {fittedOwn
-          ? `Calibrated on ${NAMES[country] ?? country}'s own 2012–2019 overlap, when both satellites flew.`
+          ? `Calibrated on ${COUNTRY_NAMES[country] ?? country}'s own 2012–2019 overlap, when both satellites flew.`
           : 'Calibrated on the 2012–2019 overlap, when both satellites flew.'}
       </p>
     </Panel>
