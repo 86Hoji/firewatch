@@ -95,9 +95,12 @@ function buildStyle(): StyleSpecification {
         id: 'bm',
         type: 'raster',
         source: 'bm',
-        // ~35% toward navy: the background shows through, city lights stay faint.
-        paint: { 'raster-opacity': 0.62, 'raster-saturation': -0.3, 'raster-contrast': 0.1, 'raster-fade-duration': 400 },
+        // Opaque on purpose: at partial opacity, parent and child tiles that overlap while loading
+        // blend twice and show as lighter squares. The navy tint is a separate, even layer above.
+        paint: { 'raster-opacity': 1, 'raster-saturation': -0.3, 'raster-contrast': 0.1, 'raster-fade-duration': 0 },
       },
+      // ~38% toward navy, uniform over the whole globe: city lights stay faint.
+      { id: 'tint', type: 'background', paint: { 'background-color': '#0D1428', 'background-opacity': 0.38 } },
       {
         id: 'relief',
         type: 'hillshade',

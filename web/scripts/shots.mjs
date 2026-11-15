@@ -126,6 +126,12 @@ if (which === 'landing') {
   await shoot('landing-desktop', desktop, '/');
   await shoot('landing-mobile', mobile, '/');
 }
+if (which === 'verify') {
+  await shoot('landing-desktop', desktop, '/', { wait: [[3500, 't3.5'], [3000, 't6.5'], [5000, 't11']] });
+  await shoot('landing-how', desktop, '/', { actions: async (p) => { await p.getByRole('button', { name: 'How it works' }).click(); await p.waitForTimeout(1200); } });
+  await shoot('explore-desktop', desktop, '/explore');
+  await shoot('validation-desktop', desktop, '/validation', { wait: 3000 });
+}
 if (which === 'validation') await shoot('validation-desktop', desktop, '/validation', { wait: 3000 });
 await browser.close();
 console.log('saved to', fileURLToPath(out));

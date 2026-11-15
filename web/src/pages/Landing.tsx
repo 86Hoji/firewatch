@@ -4,15 +4,18 @@ import { useStore } from '../store';
 import { frame } from '../map/MapEngine';
 import { engine } from '../map/MapStage';
 import { loadValidation, type Validation } from '../lib/validation';
+import { loadMeta } from '../lib/data';
 
 /** Width of the text column plus gutter, kept clear when framing the globe. */
 const COLUMN_INSET = 520 + 28;
 
-const x2 = (v: number | undefined) => (v == null ? '…' : `×${v.toFixed(2)}`);
+const x2 = (v: number) => `×${v.toFixed(2)}`;
+const ok = (...xs: unknown[]) => xs.every((x) => typeof x === 'number' && Number.isFinite(x));
 
 export function Landing() {
   const shown = useStore((s) => s.introDone || s.reducedMotion);
   const [v, setV] = useState<Validation | null>(null);
+  const [holdout, setHoldout] = useState<string | null>(null);
   const how = useRef<HTMLElement>(null);
 
   useLayoutEffect(() => {
@@ -24,10 +27,34 @@ export function Landing() {
   }, []);
   useEffect(() => {
     loadValidation().then(setV).catch(() => {});
+    loadMeta()
+      .then((m) => setHoldout(typeof m.model.holdout === 'string' ? m.model.holdout : null))
+      .catch(() => {});
   }, []);
 
-  const uz = v?.uz_test.steps;
-  const ba = v?.burned_area.KAZ;
+  // Every number below is read from data/validation.json; a sentence whose values are missing is left out.
+  const cov = v?.transfer?.KAZ?.holdout_as_is?.coverage;
+  const uzNaive = v?.uz_test?.steps?.naive?.step_ratio;
+  const uzLocal = v?.uz_test?.steps?.harmonized_local?.step_ratio;
+  const baNaive = v?.burned_area?.KAZ?.naive?.step_given_burned_area?.step_factor;
+  const baHarm = v?.burned_area?.KAZ?.harmonized?.step_given_burned_area?.step_factor;
+  const proofs = [
+    ok(cov) &&
+      `On Kazakhstan’s ${holdout ? `${holdout} ` : ''}holdout, months the model never saw, the 90% ranges contain the true value ${Math.round((cov as number) * 100)}% of the time.`,
+    ok(uzNaive, uzLocal) && (
+      <>
+        In Uzbekistan the naive record jumps <span className="num text-gold-pale">{x2(uzNaive!)}</span> at 2012; ours
+        moves <span className="num text-gold-pale">{x2(uzLocal!)}</span>.
+      </>
+    ),
+    ok(baNaive, baHarm) && (
+      <>
+        Against MODIS burned area, an independent product, the naive record steps{' '}
+        <span className="num text-gold-pale">{x2(baNaive!)}</span> at 2012; the harmonized one stays continuous at{' '}
+        <span className="num text-gold-pale">{x2(baHarm!)}</span>.
+      </>
+    ),
+  ].filter(Boolean);
 
   return (
     <div className="pointer-events-none fixed inset-0">
@@ -75,23 +102,17 @@ export function Landing() {
               How it works
             </h2>
             <p className="m-0 mt-3 max-w-[60ch] text-[15px] leading-[1.6] text-text-map-2">
-              In 2012 the number of fires nearly tripled overnight. The fires didn’t change — the satellite did. During
+              In 2012 the number of fires jumped overnight. The fires didn’t change — the satellite did. During
               the eight years both satellites flew, we learn how VIIRS sees compared with MODIS, then carry that back to
               2000. Now a month in 2001 and a month in 2024 mean the same thing.
             </p>
-            <ul className="m-0 mt-5 flex list-none flex-col gap-3 p-0 text-[15px] leading-[1.6] text-text">
-              <li>The 90% ranges now contain the true value in 91% of test months, up from 41%.</li>
-              <li>
-                In Uzbekistan the naive record jumps <span className="num text-gold-pale">{x2(uz?.naive.step_ratio)}</span> at
-                2012; ours moves <span className="num text-gold-pale">{x2(uz?.harmonized_local.step_ratio)}</span>.
-              </li>
-              <li>
-                Against MODIS burned area, an independent product, the naive record steps{' '}
-                <span className="num text-gold-pale">{x2(ba?.naive.step_given_burned_area.step_factor)}</span> at 2012; the
-                harmonized one stays continuous at{' '}
-                <span className="num text-gold-pale">{x2(ba?.harmonized.step_given_burned_area.step_factor)}</span>.
-              </li>
-            </ul>
+            {proofs.length > 0 && (
+              <ul className="m-0 mt-5 flex list-none flex-col gap-3 p-0 text-[15px] leading-[1.6] text-text">
+                {proofs.map((p, i) => (
+                  <li key={i}>{p}</li>
+                ))}
+              </ul>
+            )}
             <Link to="/validation" className="mt-5 inline-block text-[15px] text-gold underline-offset-4 hover:underline">
               See the evidence
             </Link>
